@@ -1,6 +1,10 @@
 package bai4_rn.praktikum_01.command;
 
+import bai4_rn.praktikum_01.client.ClientData;
+
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by Andreas on 22.10.2015.
@@ -70,6 +74,11 @@ public enum ClientResponseEnum implements ClientResponse {
         @Override
         public void process() {
 
+            String from;
+            String to;
+            String subject;
+            String mimeVersion;
+            String ContentType;
         }
 
         @Override
@@ -90,6 +99,7 @@ public enum ClientResponseEnum implements ClientResponse {
         }
     };
 
+
     @Override
     public String getName() {
         return this.name();
@@ -101,4 +111,5 @@ public enum ClientResponseEnum implements ClientResponse {
                 "name='" + getName() + '\'' +
                 '}';
     }
+
 }
