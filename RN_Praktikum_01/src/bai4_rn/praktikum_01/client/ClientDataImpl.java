@@ -3,6 +3,7 @@ package bai4_rn.praktikum_01.client;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 final class ClientDataImpl implements ClientData {
@@ -17,14 +18,27 @@ final class ClientDataImpl implements ClientData {
     private String hostname;
     private int port;
 
-    public ClientDataImpl(String mailAddress, String username, String password, String hostname, int port) {
+    private ClientDataImpl(String mailAddress, String username, String password, String hostname, int port) throws IOException {
         this.serviceRequested = true;
-
         this.mailAddress = mailAddress;
         this.username = username;
         this.password = password;
         this.hostname = hostname;
         this.port = port;
+        initialize();
+    }
+
+    public static ClientDataImpl create(String mailAddress, String username, String password, String hostname, int port) throws IOException {
+        return new ClientDataImpl(mailAddress, username, password, hostname, port);
+    }
+
+    private void initialize() throws IOException {
+        Socket clientSocket = new Socket(getHostname(), getPort());
+        this.clientSocket = clientSocket;
+
+        /* Socket-Basisstreams durch spezielle Streams filtern */
+        this.outToServer = new DataOutputStream(clientSocket.getOutputStream());
+        this.inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
     @Override
@@ -76,15 +90,6 @@ final class ClientDataImpl implements ClientData {
     public void setPort(int port) {
         this.port = port;
     }
-    @Override
-    public void writeToServer(String request) throws IOException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String readFromServer() throws IOException {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -123,5 +128,20 @@ final class ClientDataImpl implements ClientData {
                 ", hostname='" + hostname + '\'' +
                 ", port=" + port +
                 '}';
+    }
+
+    @Override
+    public void writeToServer(String request) throws IOException {
+        /* Sende eine Zeile (mit CRLF) zum Server */
+        outToServer.writeBytes(request + '\r' + '\n');
+        System.out.println("TCP Client has sent the message: " + request);
+    }
+
+    @Override
+    public String readFromServer() throws IOException {
+        /* Lies die Antwort (reply) vom Server */
+        String reply = inFromServer.readLine();
+        System.out.println("TCP Client got from Server: " + reply);
+        return reply;
     }
 }
