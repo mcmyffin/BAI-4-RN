@@ -2,6 +2,7 @@ package bai4_rn.praktikum_01.client;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 public interface ClientData {
     public String getMailAddress();
@@ -17,4 +18,5 @@ public interface ClientData {
 
     public void writeToServer(String request) throws IOException;
     public String readFromServer() throws IOException;
+    public List<String> readRemainingFromServer() throws IOException;
 }

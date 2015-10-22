@@ -2,11 +2,9 @@ package bai4_rn.praktikum_01.command;
 
 import bai4_rn.praktikum_01.client.ClientData;
 import bai4_rn.praktikum_01.mail.Mail;
-import bai4_rn.praktikum_01.util.FileUtils;
+import bai4_rn.praktikum_01.util.EncodeUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -28,8 +26,13 @@ public enum ClientResponseEnum implements ClientResponse {
 
     EHLO {
         @Override
-        public ServerReply process() {
-            throw new UnsupportedOperationException();
+        public ServerReply process() throws IOException {
+
+            ClientData clientData = CommandUtils.getClientData();
+            clientData.writeToServer("EHLO " + clientData.getHostname());
+
+            String serverReply = clientData.readFromServer();
+            return CommandUtils.createServerReply(serverReply);
         }
     },
 
@@ -51,7 +54,7 @@ public enum ClientResponseEnum implements ClientResponse {
         public ServerReply process() throws IOException {
 
             ClientData clientData = CommandUtils.getClientData();
-            String loginBase64Data = FileUtils.encodeString(clientData.getMailAddress());
+            String loginBase64Data = EncodeUtils.encodeString(clientData.getMailAddress());
 
             clientData.writeToServer(loginBase64Data);
             String serverReply = clientData.readFromServer();
@@ -65,7 +68,7 @@ public enum ClientResponseEnum implements ClientResponse {
         public ServerReply process() throws IOException {
 
             ClientData clientData = CommandUtils.getClientData();
-            String loginBase64Data = FileUtils.encodeString(clientData.getPassword());
+            String loginBase64Data = EncodeUtils.encodeString(clientData.getPassword());
 
             clientData.writeToServer(loginBase64Data);
             String serverReply = clientData.readFromServer();

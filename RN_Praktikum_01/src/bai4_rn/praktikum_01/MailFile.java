@@ -3,9 +3,8 @@ package bai4_rn.praktikum_01;
 import bai4_rn.praktikum_01.client.ClientData;
 import bai4_rn.praktikum_01.client.ClientDataFactory;
 import bai4_rn.praktikum_01.command.CommandUtils;
-import bai4_rn.praktikum_01.mail.Mail;
-import bai4_rn.praktikum_01.mail.MailImpl;
-import bai4_rn.praktikum_01.mail.MailProcessorImpl;
+import bai4_rn.praktikum_01.mail.*;
+import bai4_rn.praktikum_01.util.EncodeUtils;
 import bai4_rn.praktikum_01.util.FileUtils;
 
 import java.io.FileInputStream;
@@ -52,9 +51,9 @@ public class MailFile {
             ClientData clientData = createClientData("config.xml");
             CommandUtils.setClientData(clientData);
 
-            String encodedAttachment = FileUtils.encodeFile(attachmentFilePath);
+            String encodedAttachment = EncodeUtils.encodeFile(attachmentFilePath);
             String contentType = FileUtils.getContentType(attachmentFilePath);
-            Mail mail = new MailImpl(
+            Mail mail = MailFactory.createMail(
                     clientData.getMailAddress(),
                     recipientMailAddress,
                     subject,
@@ -62,7 +61,7 @@ public class MailFile {
                     contentType);
             CommandUtils.setMail(mail);
 
-            MailProcessorImpl mailProcessor = new MailProcessorImpl(clientData);
+            MailProcessor mailProcessor = MailProcessorFactory.createMailProcessor(clientData);
             mailProcessor.run();
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,9 +8,9 @@ public enum ServerReplyEnum implements ServerReply {
     SERVICE_CLOSED(221),
     AUTH_SUCCESSFUL(235),
     REQUEST_OKAY(250),
-    AUTH_DATA_OKAY(334),
+    AUTH_DATA_OKAY(334), // TODO: maybe rename
     START_INPUT(354),
-    COMMAND_NOT_RECOGNIZED(502);
+    COMMAND_NOT_RECOGNIZED(502); // TODO: maybe rename
 
     private int statusCode;
 

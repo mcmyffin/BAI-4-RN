@@ -13,13 +13,16 @@ import static com.google.common.base.Preconditions.*;
 /**
  * Created by abp615 on 22.10.2015.
  */
-public class MailProcessorImpl implements MailProcessor {
+class MailProcessorImpl implements MailProcessor {
     private ClientData clientData;
 
-
-    public MailProcessorImpl(ClientData clientData) {
+    private MailProcessorImpl(ClientData clientData) {
         checkNotNull(clientData);
         this.clientData = clientData;
+    }
+
+    public static MailProcessor create(ClientData clientData) {
+        return new MailProcessorImpl(clientData);
     }
 
     public void error(String message) {
@@ -37,7 +40,7 @@ public class MailProcessorImpl implements MailProcessor {
             if (serverReply.getStatusCode() != 220)
                 error("Service is not ready!");
 
-            clientResponse = CommandUtils.createClientResponse("HELO");
+            clientResponse = CommandUtils.createClientResponse("EHLO");
             serverReply = clientResponse.process();
             if (serverReply.getStatusCode() != 250)
                 error("Invalid request!");

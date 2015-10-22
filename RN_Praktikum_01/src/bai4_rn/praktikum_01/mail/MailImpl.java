@@ -7,7 +7,7 @@ import static com.google.common.base.Preconditions.*;
 /**
  * Created by abp615 on 22.10.2015.
  */
-public class MailImpl implements Mail{
+class MailImpl implements Mail{
 
     private String mailFrom;
     private String mailTo;
@@ -33,8 +33,12 @@ public class MailImpl implements Mail{
         this.contentType = contentType;
     }
 
-    public MailImpl(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType){
-        this(mailFrom,mailTo,subject, new ArrayList(),fileAttachment, contentType);
+    private MailImpl(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType){
+        this(mailFrom,mailTo,subject, new ArrayList(), fileAttachment, contentType);
+    }
+
+    public static Mail create(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType) {
+        return new MailImpl(mailFrom, mailTo, subject, fileAttachment, contentType);
     }
 
     @Override

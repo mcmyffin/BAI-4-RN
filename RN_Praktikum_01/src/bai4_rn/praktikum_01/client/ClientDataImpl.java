@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 final class ClientDataImpl implements ClientData {
     private Socket clientSocket; // TCP-Standard-Socketklasse
@@ -143,5 +145,14 @@ final class ClientDataImpl implements ClientData {
         String reply = inFromServer.readLine();
         System.out.println("TCP Client got from Server: " + reply);
         return reply;
+    }
+
+    @Override
+    public List<String> readRemainingFromServer() throws IOException {
+        List<String> result = new ArrayList<>();
+        while (inFromServer.ready()) {
+            result.add(readFromServer());
+        }
+        return result;
     }
 }
