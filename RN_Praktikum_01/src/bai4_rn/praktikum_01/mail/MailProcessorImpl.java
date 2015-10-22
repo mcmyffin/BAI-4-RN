@@ -42,7 +42,17 @@ public class MailProcessorImpl implements MailProcessor {
             if (serverReply.getStatusCode() != 250)
                 error("Invalid request!");
 
-            clientResponse = CommandUtils.createClientResponse("AUTH");
+            clientResponse = CommandUtils.createClientResponse("AUTH_START");
+            serverReply = clientResponse.process();
+            if (serverReply.getStatusCode() != 334)
+                error("Authentication failed!");
+
+            clientResponse = CommandUtils.createClientResponse("AUTH_USERNAME");
+            serverReply = clientResponse.process();
+            if (serverReply.getStatusCode() != 334)
+                error("Authentication failed!");
+
+            clientResponse = CommandUtils.createClientResponse("AUTH_PASSWORD");
             serverReply = clientResponse.process();
             if (serverReply.getStatusCode() != 235)
                 error("Authentication failed!");

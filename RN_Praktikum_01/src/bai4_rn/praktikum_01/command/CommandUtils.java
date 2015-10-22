@@ -48,7 +48,7 @@ public class CommandUtils {
         String statusCodeStr = inputLine.substring(0,3);
 
         int statusCodeInt =  Integer.parseInt(statusCodeStr);
-        for (ServerReplayEnum elem : ServerReplayEnum.values()) {
+        for (ServerReplyEnum elem : ServerReplyEnum.values()) {
 
             if(elem.getStatusCode() == statusCodeInt) return elem;
         }

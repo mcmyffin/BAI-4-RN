@@ -3,16 +3,18 @@ package bai4_rn.praktikum_01.command;
 /**
  * Created by Andreas on 22.10.2015.
  */
-public enum ServerReplayEnum implements ServerReply {
+public enum ServerReplyEnum implements ServerReply {
     SERVICE_READY(220),
     SERVICE_CLOSED(221),
     AUTH_SUCCESSFUL(235),
     REQUEST_OKAY(250),
-    START_INPUT(354);
+    AUTH_DATA_OKAY(334),
+    START_INPUT(354),
+    COMMAND_NOT_RECOGNIZED(502);
 
     private int statusCode;
 
-    ServerReplayEnum(int statusCode) {
+    ServerReplyEnum(int statusCode) {
         this.statusCode = statusCode;
     }
 

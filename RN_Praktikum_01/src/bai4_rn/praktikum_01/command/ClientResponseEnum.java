@@ -19,7 +19,7 @@ public enum ClientResponseEnum implements ClientResponse {
         public ServerReply process() throws IOException {
 
             ClientData clientData = CommandUtils.getClientData();
-            clientData.writeToServer("HELO "+clientData.getHostname());
+            clientData.writeToServer("HELO " + clientData.getHostname());
 
             String serverReply = clientData.readFromServer();
             return CommandUtils.createServerReply(serverReply);
@@ -33,16 +33,41 @@ public enum ClientResponseEnum implements ClientResponse {
         }
     },
 
-    AUTH {
+    AUTH_START {
         @Override
         public ServerReply process() throws IOException {
 
             ClientData clientData = CommandUtils.getClientData();
 
-            String loginData = "\0" + clientData.getMailAddress() + "\0"  + clientData.getPassword();
-            String loginBase64Data = FileUtils.encodeString(loginData);
+            clientData.writeToServer("AUTH LOGIN");
+            String serverReply = clientData.readFromServer();
 
-            clientData.writeToServer("AUTH PLAIN " + loginBase64Data);
+            return CommandUtils.createServerReply(serverReply);
+        }
+    },
+
+    AUTH_USERNAME {
+        @Override
+        public ServerReply process() throws IOException {
+
+            ClientData clientData = CommandUtils.getClientData();
+            String loginBase64Data = FileUtils.encodeString(clientData.getMailAddress());
+
+            clientData.writeToServer(loginBase64Data);
+            String serverReply = clientData.readFromServer();
+
+            return CommandUtils.createServerReply(serverReply);
+        }
+    },
+
+    AUTH_PASSWORD {
+        @Override
+        public ServerReply process() throws IOException {
+
+            ClientData clientData = CommandUtils.getClientData();
+            String loginBase64Data = FileUtils.encodeString(clientData.getPassword());
+
+            clientData.writeToServer(loginBase64Data);
             String serverReply = clientData.readFromServer();
 
             return CommandUtils.createServerReply(serverReply);
