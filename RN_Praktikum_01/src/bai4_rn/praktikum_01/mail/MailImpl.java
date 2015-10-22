@@ -43,6 +43,11 @@ public class MailImpl implements Mail{
     }
 
     @Override
+    public String getAttachmentContentType() {
+        return contentType;
+    }
+
+    @Override
     public String getSubject() {
         return this.subject;
     }

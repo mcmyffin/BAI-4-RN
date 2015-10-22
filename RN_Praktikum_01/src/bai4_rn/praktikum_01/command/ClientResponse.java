@@ -1,5 +1,6 @@
 package bai4_rn.praktikum_01.command;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -7,6 +8,6 @@ import java.util.List;
  */
 public interface ClientResponse {
     String getName();
-    void process();
+    ServerReply process() throws IOException;
 //    List<ClientResponse> getPossibleSuccessors();
 }
