@@ -31,6 +31,7 @@ public enum ClientResponseEnum implements ClientResponse {
             ClientData clientData = CommandUtils.getClientData();
             clientData.writeToServer("EHLO " + clientData.getHostname());
 
+            clientData.readFromServer();
             String serverReply = clientData.readFromServer();
             return CommandUtils.createServerReply(serverReply);
         }
