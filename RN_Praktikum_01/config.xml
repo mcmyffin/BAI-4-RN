@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Configuration for SMTP-Client</comment>
+<entry key="port">25</entry>
+<entry key="hostname">mailgate.informatik.haw-hamburg.de</entry>
+<entry key="password">Aufgabe1</entry>
+<entry key="mailAddress">rnp2015@informatik.haw-hamburg.de</entry>
+<entry key="username">rnp2015</entry>
+</properties>
