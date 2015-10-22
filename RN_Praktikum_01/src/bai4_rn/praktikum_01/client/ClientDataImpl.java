@@ -82,8 +82,7 @@ final class ClientDataImpl implements ClientData {
         ClientDataImpl that = (ClientDataImpl) o;
 
         if (getPort() != that.getPort()) return false;
-        if (getClientSocket() != null ? !getClientSocket().equals(that.getClientSocket()) : that.getClientSocket() != null)
-            return false;
+        if (clientSocket != null ? !clientSocket.equals(that.clientSocket) : that.clientSocket != null) return false;
         if (getMailAddress() != null ? !getMailAddress().equals(that.getMailAddress()) : that.getMailAddress() != null)
             return false;
         if (getUsername() != null ? !getUsername().equals(that.getUsername()) : that.getUsername() != null)
@@ -96,7 +95,7 @@ final class ClientDataImpl implements ClientData {
 
     @Override
     public int hashCode() {
-        int result = getClientSocket() != null ? getClientSocket().hashCode() : 0;
+        int result = clientSocket != null ? clientSocket.hashCode() : 0;
         result = 31 * result + (getMailAddress() != null ? getMailAddress().hashCode() : 0);
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
