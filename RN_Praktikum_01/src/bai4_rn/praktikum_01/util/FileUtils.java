@@ -31,6 +31,15 @@ public class FileUtils {
     }
 
     /**
+     * Encodes an String with Base64
+     * @param string String object to encode
+     * @return encoded String data as String object
+     */
+    public static String encodeString(String string) {
+        return Base64.encode(string.getBytes());
+    }
+
+    /**
      * Decoded file data with Base64
      * @param encodedFile encoded file data
      * @return decoded file data as byte array

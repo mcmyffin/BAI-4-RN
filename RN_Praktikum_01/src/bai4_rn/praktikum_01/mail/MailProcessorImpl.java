@@ -5,6 +5,8 @@ import bai4_rn.praktikum_01.command.ClientResponse;
 import bai4_rn.praktikum_01.command.CommandUtils;
 import bai4_rn.praktikum_01.command.ServerReply;
 
+import java.io.IOException;
+
 import static com.google.common.base.Preconditions.*;
 
 /**
@@ -24,8 +26,17 @@ public class MailProcessorImpl implements MailProcessor {
         ClientResponse clientResponse = null;
         ServerReply serverReply = null;
 
-        clientResponse = CommandUtils.createClientResponse("HELO");
-        serverReply = clientResponse.process();
+        try {
+            clientResponse = CommandUtils.createClientResponse("HELO");
+            serverReply = clientResponse.process();
+
+            clientResponse = CommandUtils.createClientResponse("AUTH");
+            serverReply = clientResponse.process();
+
+            // TODO: ...
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         throw new UnsupportedOperationException();
     }
