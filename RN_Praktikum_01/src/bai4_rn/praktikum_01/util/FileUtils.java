@@ -39,4 +39,8 @@ public class FileUtils {
         checkNotNull(encodedFile);
         return Base64.decode(encodedFile);
     }
+
+    public static String getContentType(String filePath) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }
