@@ -28,7 +28,7 @@ final class ClientDataImpl implements ClientData {
         initialize();
     }
 
-    public static ClientDataImpl create(String mailAddress, String username, String password, String hostname, int port) throws IOException {
+    public static ClientData create(String mailAddress, String username, String password, String hostname, int port) throws IOException {
         return new ClientDataImpl(mailAddress, username, password, hostname, port);
     }
 
