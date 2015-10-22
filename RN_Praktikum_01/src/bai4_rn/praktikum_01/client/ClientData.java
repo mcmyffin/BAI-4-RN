@@ -1,10 +1,9 @@
 package bai4_rn.praktikum_01.client;
 
+import java.io.IOException;
 import java.net.Socket;
 
 public interface ClientData {
-    public Socket getClientSocket();
-    public void setClientSocket(Socket clientSocket);
     public String getMailAddress();
     public void setMailAddress(String mailAddress);
     public String getUsername();
@@ -15,4 +14,7 @@ public interface ClientData {
     public void setHostname(String hostname);
     public int getPort();
     public void setPort(int port);
+
+    public void writeToServer(String request) throws IOException;
+    public String readFromServer() throws IOException;
 }

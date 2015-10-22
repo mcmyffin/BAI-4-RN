@@ -1,3 +1,5 @@
+package bai4_rn.praktikum_01.util;
+
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
  * <p>Homepage: <a href="http://iharder.net/base64">http://iharder.net/base64</a>.</p>
@@ -145,7 +147,7 @@
  * @author rob@iharder.net
  * @version 2.3.7
  */
-public class Base64
+class Base64
 {
     
 /* ********  P U B L I C   F I E L D S  ******** */

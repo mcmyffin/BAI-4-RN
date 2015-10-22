@@ -1,5 +1,6 @@
 package bai4_rn.praktikum_01.client;
 
+import java.io.IOException;
 import java.net.Socket;
 
 final class ClientDataImpl implements ClientData {
@@ -11,16 +12,6 @@ final class ClientDataImpl implements ClientData {
     private int port;
 
     public ClientDataImpl() {
-    }
-
-    @Override
-    public Socket getClientSocket() {
-        return clientSocket;
-    }
-
-    @Override
-    public void setClientSocket(Socket clientSocket) {
-        this.clientSocket = clientSocket;
     }
 
     @Override
@@ -71,6 +62,16 @@ final class ClientDataImpl implements ClientData {
     @Override
     public void setPort(int port) {
         this.port = port;
+    }
+
+    @Override
+    public void writeToServer(String request) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String readFromServer() throws IOException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
