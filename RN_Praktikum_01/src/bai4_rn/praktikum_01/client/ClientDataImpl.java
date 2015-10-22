@@ -1,17 +1,30 @@
 package bai4_rn.praktikum_01.client;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 final class ClientDataImpl implements ClientData {
-    private Socket clientSocket;
+    private Socket clientSocket; // TCP-Standard-Socketklasse
+    private DataOutputStream outToServer; // Ausgabestream zum Server
+    private BufferedReader inFromServer; // Eingabestream vom Server
+    private boolean serviceRequested; // Client beenden?
+
     private String mailAddress;
     private String username;
     private String password;
     private String hostname;
     private int port;
 
-    public ClientDataImpl() {
+    public ClientDataImpl(String mailAddress, String username, String password, String hostname, int port) {
+        this.serviceRequested = true;
+
+        this.mailAddress = mailAddress;
+        this.username = username;
+        this.password = password;
+        this.hostname = hostname;
+        this.port = port;
     }
 
     @Override
@@ -63,7 +76,6 @@ final class ClientDataImpl implements ClientData {
     public void setPort(int port) {
         this.port = port;
     }
-
     @Override
     public void writeToServer(String request) throws IOException {
         throw new UnsupportedOperationException();
@@ -82,7 +94,6 @@ final class ClientDataImpl implements ClientData {
         ClientDataImpl that = (ClientDataImpl) o;
 
         if (getPort() != that.getPort()) return false;
-        if (clientSocket != null ? !clientSocket.equals(that.clientSocket) : that.clientSocket != null) return false;
         if (getMailAddress() != null ? !getMailAddress().equals(that.getMailAddress()) : that.getMailAddress() != null)
             return false;
         if (getUsername() != null ? !getUsername().equals(that.getUsername()) : that.getUsername() != null)
@@ -95,8 +106,7 @@ final class ClientDataImpl implements ClientData {
 
     @Override
     public int hashCode() {
-        int result = clientSocket != null ? clientSocket.hashCode() : 0;
-        result = 31 * result + (getMailAddress() != null ? getMailAddress().hashCode() : 0);
+        int result = getMailAddress() != null ? getMailAddress().hashCode() : 0;
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
         result = 31 * result + (getHostname() != null ? getHostname().hashCode() : 0);
@@ -107,8 +117,7 @@ final class ClientDataImpl implements ClientData {
     @Override
     public String toString() {
         return "ClientData{" +
-                "clientSocket=" + clientSocket +
-                ", mailAddress='" + mailAddress + '\'' +
+                "mailAddress='" + mailAddress + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", hostname='" + hostname + '\'' +
