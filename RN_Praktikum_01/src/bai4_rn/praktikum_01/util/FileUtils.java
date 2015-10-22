@@ -41,6 +41,7 @@ public class FileUtils {
     }
 
     public static String getContentType(String filePath) throws IOException {
-        throw new UnsupportedOperationException();
+        Path path = Paths.get(filePath);
+        return Files.probeContentType(path);
     }
 }
