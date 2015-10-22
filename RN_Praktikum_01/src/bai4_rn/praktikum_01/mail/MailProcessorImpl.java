@@ -11,22 +11,23 @@ import static com.google.common.base.Preconditions.*;
  * Created by abp615 on 22.10.2015.
  */
 public class MailProcessorImpl implements MailProcessor {
-
     private ClientData clientData;
 
 
-    public MailProcessorImpl(ClientData data) {
-
-        checkNotNull(data);
+    public MailProcessorImpl(ClientData clientData) {
+        checkNotNull(clientData);
         this.clientData = clientData;
     }
 
     @Override
     public void run() {
-        ClientResponse clientResponse = CommandUtils.createClientResponse("HELO");
-        ServerReply heloReply = clientResponse.process();
+        ClientResponse clientResponse = null;
+        ServerReply serverReply = null;
 
-        // TODO
+        clientResponse = CommandUtils.createClientResponse("HELO");
+        serverReply = clientResponse.process();
+
+        throw new UnsupportedOperationException();
     }
 
 
