@@ -30,7 +30,7 @@ public class CommandUtils {
         return ClientResponseEnum.valueOf(type);
     }
 
-    static ServerReply createServerReply(String inputLine) {
+    public static ServerReply createServerReply(String inputLine) {
         checkNotNull(inputLine);
         throw new UnsupportedOperationException();
     }

@@ -6,6 +6,7 @@ package bai4_rn.praktikum_01.command;
 public enum ServerReplayEnum implements ServerReply {
     SERVICE_READY(220),
     SERVICE_CLOSED(221),
+    AUTH_SUCCESSFUL(235),
     REQUEST_OKAY(250),
     START_INPUT(354);
 
