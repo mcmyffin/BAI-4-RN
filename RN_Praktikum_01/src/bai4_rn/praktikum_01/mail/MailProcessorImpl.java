@@ -77,6 +77,4 @@ public class MailProcessorImpl implements MailProcessor {
 
         throw new UnsupportedOperationException();
     }
-
-
 }

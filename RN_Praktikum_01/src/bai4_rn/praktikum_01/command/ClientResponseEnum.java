@@ -39,11 +39,10 @@ public enum ClientResponseEnum implements ClientResponse {
 
             ClientData clientData = CommandUtils.getClientData();
 
-
-            String loginData = "\0"+clientData.getUsername()+"\0"+clientData.getPassword();
+            String loginData = "\0" + clientData.getMailAddress() + "\0"  + clientData.getPassword();
             String loginBase64Data = FileUtils.encodeString(loginData);
 
-            clientData.writeToServer("AUTH PLAIN "+loginBase64Data);
+            clientData.writeToServer("AUTH PLAIN " + loginBase64Data);
             String serverReply = clientData.readFromServer();
 
             return CommandUtils.createServerReply(serverReply);
@@ -141,7 +140,6 @@ public enum ClientResponseEnum implements ClientResponse {
         }
     };
 
-
     @Override
     public String getName() {
         return this.name();
@@ -153,5 +151,4 @@ public enum ClientResponseEnum implements ClientResponse {
                 "name='" + getName() + '\'' +
                 '}';
     }
-
 }

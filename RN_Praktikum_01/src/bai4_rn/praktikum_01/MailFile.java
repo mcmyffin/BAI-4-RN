@@ -2,6 +2,7 @@ package bai4_rn.praktikum_01;
 
 import bai4_rn.praktikum_01.client.ClientData;
 import bai4_rn.praktikum_01.client.ClientDataFactory;
+import bai4_rn.praktikum_01.command.CommandUtils;
 import bai4_rn.praktikum_01.mail.Mail;
 import bai4_rn.praktikum_01.mail.MailImpl;
 import bai4_rn.praktikum_01.mail.MailProcessorImpl;
@@ -40,7 +41,7 @@ public class MailFile {
         String attachmentFilePath = null;
         String subject = "Im sending that file!";
 
-        if (args.length != 2) {
+        if (args.length == 2) {
             recipientMailAddress = args[0];
             attachmentFilePath = args[1];
         } else {
@@ -49,6 +50,8 @@ public class MailFile {
 
         try {
             ClientData clientData = createClientData("config.xml");
+            CommandUtils.setClientData(clientData);
+
             String encodedAttachment = FileUtils.encodeFile(attachmentFilePath);
             String contentType = FileUtils.getContentType(attachmentFilePath);
             Mail mail = new MailImpl(
@@ -57,8 +60,10 @@ public class MailFile {
                     subject,
                     encodedAttachment,
                     contentType);
+            CommandUtils.setMail(mail);
 
             MailProcessorImpl mailProcessor = new MailProcessorImpl(clientData);
+            mailProcessor.run();
         } catch (IOException e) {
             e.printStackTrace();
         }
