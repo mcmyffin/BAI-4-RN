@@ -2,6 +2,7 @@ package bai4_rn.praktikum_01.command;
 
 import bai4_rn.praktikum_01.client.ClientData;
 import bai4_rn.praktikum_01.mail.Mail;
+import bai4_rn.praktikum_01.util.FileUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public enum ClientResponseEnum implements ClientResponse {
         public ServerReply process() throws IOException {
 
             ClientData clientData = CommandUtils.getClientData();
-            clientData.writeToServer("HELO");
+            clientData.writeToServer("HELO "+clientData.getHostname());
 
             String serverReply = clientData.readFromServer();
             return CommandUtils.createServerReply(serverReply);
@@ -34,25 +35,44 @@ public enum ClientResponseEnum implements ClientResponse {
 
     AUTH {
         @Override
-        public ServerReply process() {
+        public ServerReply process() throws IOException {
 
             ClientData clientData = CommandUtils.getClientData();
-//            clientData.
-            throw new UnsupportedOperationException();
+
+
+            String loginData = "\0"+clientData.getUsername()+"\0"+clientData.getPassword();
+            String loginBase64Data = FileUtils.encodeString(loginData);
+
+            clientData.writeToServer("AUTH PLAIN "+loginBase64Data);
+            String serverReply = clientData.readFromServer();
+
+            return CommandUtils.createServerReply(serverReply);
         }
     },
 
     MAIL {
         @Override
-        public ServerReply process() {
-            throw new UnsupportedOperationException();
+        public ServerReply process() throws IOException {
+
+            ClientData clientData = CommandUtils.getClientData();
+            clientData.writeToServer("MAIL FROM: "+clientData.getMailAddress());
+
+            String serverReply = clientData.readFromServer();
+            return CommandUtils.createServerReply(serverReply);
         }
     },
 
     RCPT {
         @Override
-        public ServerReply process() {
-            throw new UnsupportedOperationException();
+        public ServerReply process() throws IOException {
+
+            ClientData clientData = CommandUtils.getClientData();
+            Mail mail = CommandUtils.getMail();
+
+            clientData.writeToServer("RCPT TO: "+mail.getMailToAdress());
+
+            String serverReply = clientData.readFromServer();
+            return CommandUtils.createServerReply(serverReply);
         }
     },
 
