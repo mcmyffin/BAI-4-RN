@@ -14,24 +14,27 @@ public class MailImpl implements Mail{
     private String subject;
     private List<String> message;
     private String fileAttachment;
+    private String contentType;
 
-    public MailImpl(String mailFrom, String mailTo, String subject, List<String> message, String fileAttachment) {
+    public MailImpl(String mailFrom, String mailTo, String subject, List<String> message, String fileAttachment, String contentType) {
 
         checkNotNull(mailFrom);
         checkNotNull(mailTo);
         checkNotNull(subject);
         checkNotNull(message);
         checkNotNull(fileAttachment);
+        checkNotNull(contentType);
 
         this.mailFrom = mailFrom;
         this.mailTo = mailTo;
         this.subject = subject;
         this.message = message;
         this.fileAttachment = fileAttachment;
+        this.contentType = contentType;
     }
 
-    public MailImpl(String mailFrom, String mailTo, String subject, String fileAttachment){
-        this(mailFrom,mailTo,subject, new ArrayList(),fileAttachment);
+    public MailImpl(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType){
+        this(mailFrom,mailTo,subject, new ArrayList(),fileAttachment, contentType);
     }
 
     @Override

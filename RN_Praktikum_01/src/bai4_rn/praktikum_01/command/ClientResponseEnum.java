@@ -1,7 +1,9 @@
 package bai4_rn.praktikum_01.command;
 
 import bai4_rn.praktikum_01.client.ClientData;
+import bai4_rn.praktikum_01.mail.Mail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -14,11 +16,10 @@ public enum ClientResponseEnum implements ClientResponse {
         @Override
         public void process() {
 
-        }
 
-        @Override
-        public List<ClientResponse> getPossibleSuccessors() {
-            return null;
+
+
+
         }
     },
 
@@ -27,22 +28,12 @@ public enum ClientResponseEnum implements ClientResponse {
         public void process() {
 
         }
-
-        @Override
-        public List<ClientResponse> getPossibleSuccessors() {
-            return null;
-        }
     },
 
     AUTH {
         @Override
         public void process() {
 
-        }
-
-        @Override
-        public List<ClientResponse> getPossibleSuccessors() {
-            return null;
         }
     },
 
@@ -51,11 +42,6 @@ public enum ClientResponseEnum implements ClientResponse {
         public void process() {
 
         }
-
-        @Override
-        public List<ClientResponse> getPossibleSuccessors() {
-            return null;
-        }
     },
 
     RCPT {
@@ -63,27 +49,27 @@ public enum ClientResponseEnum implements ClientResponse {
         public void process() {
 
         }
-
-        @Override
-        public List<ClientResponse> getPossibleSuccessors() {
-            return null;
-        }
     },
 
     DATA {
         @Override
         public void process() {
 
-            String from;
-            String to;
-            String subject;
-            String mimeVersion;
-            String ContentType;
-        }
+            ClientData clientData = CommandUtils.getClientData();
+            Mail mail = CommandUtils.getMail();
 
-        @Override
-        public List<ClientResponse> getPossibleSuccessors() {
-            return null;
+            String from = "From: "+mail.getMailFromAdress();
+            String to = "To: "+mail.getMailToAdress();
+            String subject = "Subject: "+mail.getSubject();
+            String mimeVersion = "MIME-Version: 1.0";
+            String ContentTransferEncoding = "Content-Transfer-Encoding: base64";
+            String ContentType = "Content-Type: "+mail.getAttachmentContentType();
+
+            String encodedDataLimiter = "base64 encoded data";
+
+            clientData.writeToServer();
+
+
         }
     },
 
@@ -91,11 +77,6 @@ public enum ClientResponseEnum implements ClientResponse {
         @Override
         public void process() {
 
-        }
-
-        @Override
-        public List<ClientResponse> getPossibleSuccessors() {
-            return null;
         }
     };
 

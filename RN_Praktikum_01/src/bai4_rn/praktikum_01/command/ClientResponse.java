@@ -8,5 +8,5 @@ import java.util.List;
 public interface ClientResponse {
     String getName();
     void process();
-    List<ClientResponse> getPossibleSuccessors();
+//    List<ClientResponse> getPossibleSuccessors();
 }
