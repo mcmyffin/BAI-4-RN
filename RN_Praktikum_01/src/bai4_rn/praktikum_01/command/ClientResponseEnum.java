@@ -3,6 +3,7 @@ package bai4_rn.praktikum_01.command;
 import bai4_rn.praktikum_01.client.ClientData;
 import bai4_rn.praktikum_01.mail.Mail;
 import bai4_rn.praktikum_01.util.EncodeUtils;
+import bai4_rn.praktikum_01.util.FileUtils;
 
 import java.io.IOException;
 
@@ -43,7 +44,8 @@ public enum ClientResponseEnum implements ClientResponse {
 
             ClientData clientData = CommandUtils.getClientData();
 
-            clientData.writeToServer("AUTH LOGIN");
+            String loginDATA = EncodeUtils.encodeString("\0"+clientData.getUsername()+"\0"+clientData.getPassword());
+            clientData.writeToServer("AUTH PLAIN "+loginDATA);
             String serverReply = clientData.readFromServer();
 
             return CommandUtils.createServerReply(serverReply);
