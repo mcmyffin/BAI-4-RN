@@ -16,5 +16,5 @@ public interface Mail {
 
     public String getAttachmentFile();
     public String getAttachmentContentType();
-
+    public String getFileName();
 }

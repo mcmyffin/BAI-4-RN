@@ -140,6 +140,13 @@ final class ClientDataImpl implements ClientData {
     }
 
     @Override
+    public void writeToServerNewLine() throws IOException {
+        /* Sende eine Zeile (mit CRLF) zum Server */
+        outToServer.writeBytes("\r\n");
+        System.out.println("TCP Client has sent the message: ");
+    }
+
+    @Override
     public String readFromServer() throws IOException {
         /* Lies die Antwort (reply) vom Server */
         String reply = inFromServer.readLine();

@@ -15,8 +15,9 @@ class MailImpl implements Mail{
     private List<String> message;
     private String fileAttachment;
     private String contentType;
+    private String filename;
 
-    public MailImpl(String mailFrom, String mailTo, String subject, List<String> message, String fileAttachment, String contentType) {
+    public MailImpl(String mailFrom, String mailTo, String subject, List<String> message, String fileAttachment, String contentType, String filename) {
 
         checkNotNull(mailFrom);
         checkNotNull(mailTo);
@@ -24,6 +25,7 @@ class MailImpl implements Mail{
         checkNotNull(message);
         checkNotNull(fileAttachment);
         checkNotNull(contentType);
+        checkNotNull(filename);
 
         this.mailFrom = mailFrom;
         this.mailTo = mailTo;
@@ -31,14 +33,15 @@ class MailImpl implements Mail{
         this.message = message;
         this.fileAttachment = fileAttachment;
         this.contentType = contentType;
+        this.filename = filename;
     }
 
-    private MailImpl(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType){
-        this(mailFrom,mailTo,subject, new ArrayList(), fileAttachment, contentType);
+    private MailImpl(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType, String filename){
+        this(mailFrom,mailTo,subject, new ArrayList(), fileAttachment, contentType, filename);
     }
 
-    public static Mail create(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType) {
-        return new MailImpl(mailFrom, mailTo, subject, fileAttachment, contentType);
+    public static Mail create(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType, String filename) {
+        return new MailImpl(mailFrom, mailTo, subject, fileAttachment, contentType, filename);
     }
 
     @Override
@@ -69,5 +72,10 @@ class MailImpl implements Mail{
     @Override
     public String getMailToAdress() {
         return this.mailTo;
+    }
+
+    @Override
+    public String getFileName(){
+        return this.filename;
     }
 }

@@ -88,6 +88,6 @@ class MailProcessorImpl implements MailProcessor {
             e.printStackTrace();
         }
 
-        throw new UnsupportedOperationException();
+        System.out.println("--- CONNECTION CLOSED ---");
     }
 }

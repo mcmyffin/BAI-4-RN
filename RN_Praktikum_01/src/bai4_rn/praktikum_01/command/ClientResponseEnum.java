@@ -126,33 +126,40 @@ public enum ClientResponseEnum implements ClientResponse {
             ClientData clientData = CommandUtils.getClientData();
             Mail mail = CommandUtils.getMail();
 
+            // header
             String from = "From: "+mail.getMailFromAdress();
             String to = "To: "+mail.getMailToAdress();
             String subject = "Subject: "+mail.getSubject();
             String mimeVersion = "MIME-Version: 1.0";
-            String ContentTransferEncoding = "Content-Transfer-Encoding: base64";
-            String ContentType = "Content-Type: "+mail.getAttachmentContentType();
+            String boundary = Long.toString(System.nanoTime());
+            String contentType_header = "Content-Type: "+"multipart/mixed; boundary="+boundary;
+
+            // attachment header
+            String contenType_attachment = "Content-Disposition: attachment; filename="+mail.getFileName()+";";
+            String contentTransferEncoding = "Content-Transfer-Encoding: base64";
             String encodedDataLimiter = "base64 encoded data";
 
-            // write Data Header
+            // ---------------------- write data ---------------------------
+            // Data Header
             clientData.writeToServer(from);
             clientData.writeToServer(to);
             clientData.writeToServer(subject);
             clientData.writeToServer(mimeVersion);
-            clientData.writeToServer(ContentTransferEncoding);
-            clientData.writeToServer(ContentType);
+            clientData.writeToServer(contentType_header);
+            clientData.writeToServerNewLine();
 
-            // write base64 limiter
-            clientData.writeToServer(encodedDataLimiter);
+            // new Data Header for attachment
+            clientData.writeToServer("--"+boundary);
+            clientData.writeToServer(contenType_attachment);
+            clientData.writeToServer(contentTransferEncoding);
+            clientData.writeToServerNewLine();
 
-            // write base64 coded File
+            // write base64 encoded File
             clientData.writeToServer(mail.getAttachmentFile());
+            clientData.writeToServer("--"+boundary+"--");
 
-            // write base64 limiter
-            clientData.writeToServer(encodedDataLimiter);
-
-            // write end Command
-            clientData.writeToServer("\r\n.");
+            // write end of Command
+            clientData.writeToServer(".");
 
             String serverReply = clientData.readFromServer();
             return CommandUtils.createServerReply(serverReply);

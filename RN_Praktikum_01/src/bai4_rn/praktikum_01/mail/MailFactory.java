@@ -7,7 +7,7 @@ public class MailFactory {
     private MailFactory() {
     }
 
-    public static Mail createMail(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType) {
-        return MailImpl.create(mailFrom, mailTo, subject, fileAttachment, contentType);
+    public static Mail createMail(String mailFrom, String mailTo, String subject, String fileAttachment, String contentType, String filename) {
+        return MailImpl.create(mailFrom, mailTo, subject, fileAttachment, contentType, filename);
     }
 }
