@@ -37,7 +37,7 @@ public final class OperationDataManager {
         storeOperationData(CLIENT, 100, "UnknownClient");
         storeOperationData(SERVER, 101, "UnknownServer");
         storeOperationData(CLIENT, 102, "Login");
-        storeOperationData(SERVER, 103, "LoginResponce");
+        storeOperationData(SERVER, 103, "LoginResponse");
     }
 
     public static OperationData getOperationData(int operationCode) {
