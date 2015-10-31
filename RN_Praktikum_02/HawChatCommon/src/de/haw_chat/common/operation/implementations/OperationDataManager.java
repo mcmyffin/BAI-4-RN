@@ -38,6 +38,28 @@ public final class OperationDataManager {
         storeOperationData(SERVER, 101, "UnknownServer");
         storeOperationData(CLIENT, 102, "Login");
         storeOperationData(SERVER, 103, "LoginResponse");
+        storeOperationData(CLIENT, 104, "UsernameChange");
+        storeOperationData(SERVER, 105, "UsernameChangeResponse");
+        storeOperationData(CLIENT, 106, "Logout");
+        storeOperationData(SERVER, 107, "LogoutResponse");
+        storeOperationData(CLIENT, 108, "ChatroomsRefresh");
+        storeOperationData(SERVER, 109, "ChatroomListBegin");
+        storeOperationData(SERVER, 110, "ChatroomListElement");
+        storeOperationData(SERVER, 111, "ChatroomListEnd");
+        storeOperationData(CLIENT, 112, "ChatroomJoin");
+        storeOperationData(SERVER, 113, "ChatroomJoinResponse");
+        storeOperationData(CLIENT, 114, "ChatroomLeave");
+        storeOperationData(SERVER, 115, "ChatroomLeaveResponse");
+        storeOperationData(CLIENT, 116, "ChatroomCreate");
+        storeOperationData(SERVER, 117, "ChatroomCreateResponse");
+        storeOperationData(CLIENT, 118, "ChatroomDelete");
+        storeOperationData(SERVER, 119, "ChatroomDeleteResponse");
+        storeOperationData(CLIENT, 120, "ChatroomChangeName");
+        storeOperationData(SERVER, 121, "ChatroomChangeNameResponse");
+        storeOperationData(CLIENT, 122, "ChatroomChangePassword");
+        storeOperationData(SERVER, 123, "ChatroomChangePasswordResponse");
+        storeOperationData(CLIENT, 124, "ChatroomChangeMaxUserCount");
+        storeOperationData(SERVER, 125, "ChatroomChangeMaxUserCountResponse");
     }
 
     public static OperationData getOperationData(int operationCode) {
