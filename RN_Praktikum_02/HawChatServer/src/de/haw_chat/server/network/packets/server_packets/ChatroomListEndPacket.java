@@ -1,4 +1,4 @@
-package de.haw_chat.server.network.packets;
+package de.haw_chat.server.network.packets.server_packets;
 
 import static de.haw_chat.common.operation.implementations.OperationDataManager.getOperationData;
 

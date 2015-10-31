@@ -1,14 +1,14 @@
-package de.haw_chat.server.network.packets;
+package de.haw_chat.server.network.packets.client_packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomDeletePacket extends AbstractClientPacket {
+public class ChatroomLeavePacket extends AbstractClientPacket {
     private String chatroomName;
 
-    public ChatroomDeletePacket(ChatClientThread chatClientThread, String messageString) {
+    public ChatroomLeavePacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
         this.chatroomName = messageString.split(" ")[0];
     }

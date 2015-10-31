@@ -1,16 +1,16 @@
-package de.haw_chat.server.network.packets;
+package de.haw_chat.server.network.packets.client_packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomsRefreshPacket extends AbstractClientPacket {
-    
+public class UsernameChangePacket extends AbstractClientPacket {
+    private String username;
 
-    public ChatroomsRefreshPacket(ChatClientThread chatClientThread, String messageString) {
+    public UsernameChangePacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        
+        this.username = messageString.split(" ")[0];
     }
 
     @Override

@@ -4,8 +4,8 @@ import de.haw_chat.common.operation.interfaces.OperationData;
 import de.haw_chat.server.network.interfaces.ChatClientData;
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 import de.haw_chat.server.network.interfaces.ChatServer;
-import de.haw_chat.server.network.packets.AbstractClientPacket;
-import de.haw_chat.server.network.packets.AbstractServerPacket;
+import de.haw_chat.server.network.packets.client_packets.AbstractClientPacket;
+import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

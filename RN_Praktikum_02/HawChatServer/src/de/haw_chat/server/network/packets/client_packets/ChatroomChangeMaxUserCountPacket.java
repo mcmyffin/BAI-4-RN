@@ -1,16 +1,18 @@
-package de.haw_chat.server.network.packets;
+package de.haw_chat.server.network.packets.client_packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class UsernameChangePacket extends AbstractClientPacket {
-    private String username;
+public class ChatroomChangeMaxUserCountPacket extends AbstractClientPacket {
+    private String chatroomName;
+    private int maxUserCount;
 
-    public UsernameChangePacket(ChatClientThread chatClientThread, String messageString) {
+    public ChatroomChangeMaxUserCountPacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.username = messageString.split(" ")[0];
+        this.chatroomName = messageString.split(" ")[0];
+        this.maxUserCount = Integer.parseInt(messageString.split(" ")[1]);
     }
 
     @Override

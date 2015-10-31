@@ -1,8 +1,9 @@
-package de.haw_chat.server.network.packets;
+package de.haw_chat.server.network.packets.client_packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientData;
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 import de.haw_chat.server.network.interfaces.ChatServerData;
+import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
 
 import java.io.IOException;
 

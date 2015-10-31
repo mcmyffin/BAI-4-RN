@@ -1,6 +1,7 @@
-package de.haw_chat.server.network.packets;
+package de.haw_chat.server.network.packets.client_packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientThread;
+import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
 
 /**
  * Created by Andreas on 31.10.2015.

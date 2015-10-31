@@ -1,6 +1,6 @@
 package de.haw_chat.server.network.interfaces;
 
-import de.haw_chat.server.network.packets.AbstractServerPacket;
+import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
 
 import java.io.IOException;
 import java.net.Socket;

@@ -1,18 +1,18 @@
-package de.haw_chat.server.network.packets;
+package de.haw_chat.server.network.packets.client_packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomChangeNamePacket extends AbstractClientPacket {
-    private String chatroomNameOld;
-    private String chatroomNameNew;
+public class ChatroomJoinPacket extends AbstractClientPacket {
+    private String chatroomName;
+    private String chatroomPassword;
 
-    public ChatroomChangeNamePacket(ChatClientThread chatClientThread, String messageString) {
+    public ChatroomJoinPacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.chatroomNameOld = messageString.split(" ")[0];
-        this.chatroomNameNew = messageString.split(" ")[1];
+        this.chatroomName = messageString.split(" ")[0];
+        this.chatroomPassword = messageString.split(" ")[1];
     }
 
     @Override
