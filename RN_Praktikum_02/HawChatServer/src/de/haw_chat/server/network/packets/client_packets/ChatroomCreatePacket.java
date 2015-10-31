@@ -12,9 +12,9 @@ public class ChatroomCreatePacket extends AbstractClientPacket {
 
     public ChatroomCreatePacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.chatroomName = messageString.split(" ")[0];
-        this.maxUserCount = Integer.parseInt(messageString.split(" ")[1]);
-        this.chatroomPassword = messageString.split(" ")[2];
+        this.chatroomName = messageString.split(" ")[1];
+        this.maxUserCount = Integer.parseInt(messageString.split(" ")[2]);
+        this.chatroomPassword = messageString.split(" ")[3];
     }
 
     @Override

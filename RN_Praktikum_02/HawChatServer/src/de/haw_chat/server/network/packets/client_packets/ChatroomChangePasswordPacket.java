@@ -11,8 +11,8 @@ public class ChatroomChangePasswordPacket extends AbstractClientPacket {
 
     public ChatroomChangePasswordPacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.chatroomName = messageString.split(" ")[0];
-        this.chatroomPassword = messageString.split(" ")[1];
+        this.chatroomName = messageString.split(" ")[1];
+        this.chatroomPassword = messageString.split(" ")[2];
     }
 
     @Override

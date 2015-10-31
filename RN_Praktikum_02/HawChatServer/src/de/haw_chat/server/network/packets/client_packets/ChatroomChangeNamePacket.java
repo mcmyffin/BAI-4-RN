@@ -11,8 +11,8 @@ public class ChatroomChangeNamePacket extends AbstractClientPacket {
 
     public ChatroomChangeNamePacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.chatroomNameOld = messageString.split(" ")[0];
-        this.chatroomNameNew = messageString.split(" ")[1];
+        this.chatroomNameOld = messageString.split(" ")[1];
+        this.chatroomNameNew = messageString.split(" ")[2];
     }
 
     @Override

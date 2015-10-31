@@ -12,8 +12,10 @@ public class LoginPacket extends AbstractClientPacket {
 
     public LoginPacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.username = messageString.split(" ")[0];
-        this.password = messageString.split(" ")[1];
+        this.username = messageString.split(" ")[1];
+        this.password = messageString.split(" ")[2];
+        System.out.println(username);
+        System.out.println(password);
     }
 
     @Override

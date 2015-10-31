@@ -10,7 +10,7 @@ public class UsernameChangePacket extends AbstractClientPacket {
 
     public UsernameChangePacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.username = messageString.split(" ")[0];
+        this.username = messageString.split(" ")[1];
     }
 
     @Override

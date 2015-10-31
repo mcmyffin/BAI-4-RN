@@ -11,8 +11,8 @@ public class ChatroomChangeMaxUserCountPacket extends AbstractClientPacket {
 
     public ChatroomChangeMaxUserCountPacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
-        this.chatroomName = messageString.split(" ")[0];
-        this.maxUserCount = Integer.parseInt(messageString.split(" ")[1]);
+        this.chatroomName = messageString.split(" ")[1];
+        this.maxUserCount = Integer.parseInt(messageString.split(" ")[2]);
     }
 
     @Override
