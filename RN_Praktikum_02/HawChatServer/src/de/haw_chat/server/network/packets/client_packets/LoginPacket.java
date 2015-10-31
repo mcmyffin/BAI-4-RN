@@ -14,17 +14,28 @@ public class LoginPacket extends AbstractClientPacket {
         super(chatClientThread);
         this.username = messageString.split(" ")[1];
         this.password = messageString.split(" ")[2];
-        System.out.println(username);
-        System.out.println(password);
     }
 
     @Override
     public void process() {
-        // TODO: Implement password check!
-        
-        if (getServerData().getTakenUsernames().contains(username)) {
-            // Username is taken
+        if (getClientData().getUsername() != null) {
+            // Already logged in
             LoginResponsePacket response = new LoginResponsePacket(101);
+            sendToClient(response);
+            return;
+        }
+
+        if (getServerData().getTakenUsernames().contains(username)) {
+            // Username already taken
+            LoginResponsePacket response = new LoginResponsePacket(102);
+            sendToClient(response);
+            return;
+        }
+
+        // TODO: Implement password check!
+        if (false) {
+            // Wrong password
+            LoginResponsePacket response = new LoginResponsePacket(103);
             sendToClient(response);
             return;
         }
