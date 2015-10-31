@@ -18,5 +18,6 @@ public class LoginPacket implements ClientPacket {
     @Override
     public void process() {
         chatClientThread.getData().setUsername(username);
+        chatClientThread.getChatServer().getData();
     }
 }

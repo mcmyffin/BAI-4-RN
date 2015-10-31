@@ -1,9 +1,6 @@
 package de.haw_chat.server.network.implementations;
 
-import de.haw_chat.server.network.interfaces.ChatClientData;
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.server.network.interfaces.ChatServer;
-import de.haw_chat.server.network.interfaces.ChatServerConfiguration;
+import de.haw_chat.server.network.interfaces.*;
 
 import java.net.Socket;
 import java.util.Properties;
@@ -26,6 +23,10 @@ public final class ChatDeviceFactory {
 
     static ChatClientThread createChatClientThread(int clientId, Socket clientSocket, ChatServer chatServer) {
         return ChatClientThreadImpl.create(clientId, clientSocket, chatServer);
+    }
+
+    static ChatServerData createChatServerData() {
+        return ChatServerDataImpl.create();
     }
 
     static ChatClientData createChatClientData() {

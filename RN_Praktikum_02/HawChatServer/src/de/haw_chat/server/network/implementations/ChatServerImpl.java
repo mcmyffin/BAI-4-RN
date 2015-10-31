@@ -3,6 +3,7 @@ package de.haw_chat.server.network.implementations;
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 import de.haw_chat.server.network.interfaces.ChatServer;
 import de.haw_chat.server.network.interfaces.ChatServerConfiguration;
+import de.haw_chat.server.network.interfaces.ChatServerData;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,11 +17,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 final class ChatServerImpl implements ChatServer {
     private final ChatServerConfiguration configuration;
+    private ChatServerData chatServerData;
     private Semaphore clientThreadsSemaphore;
 
     private ChatServerImpl(ChatServerConfiguration configuration) {
         checkNotNull(configuration);
         this.configuration = configuration;
+        this.chatServerData = null;
         this.clientThreadsSemaphore = null;
     }
 
@@ -31,6 +34,11 @@ final class ChatServerImpl implements ChatServer {
     @Override
     public ChatServerConfiguration getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public ChatServerData getData() {
+        return chatServerData;
     }
 
     @Override
@@ -45,19 +53,27 @@ final class ChatServerImpl implements ChatServer {
 
         ChatServerImpl that = (ChatServerImpl) o;
 
-        return getConfiguration().equals(that.getConfiguration());
+        if (getConfiguration() != null ? !getConfiguration().equals(that.getConfiguration()) : that.getConfiguration() != null)
+            return false;
+        if (chatServerData != null ? !chatServerData.equals(that.chatServerData) : that.chatServerData != null)
+            return false;
+        return !(getClientThreadsSemaphore() != null ? !getClientThreadsSemaphore().equals(that.getClientThreadsSemaphore()) : that.getClientThreadsSemaphore() != null);
 
     }
 
     @Override
     public int hashCode() {
-        return getConfiguration().hashCode();
+        int result = getConfiguration() != null ? getConfiguration().hashCode() : 0;
+        result = 31 * result + (chatServerData != null ? chatServerData.hashCode() : 0);
+        result = 31 * result + (getClientThreadsSemaphore() != null ? getClientThreadsSemaphore().hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "ChatServer{" +
                 "configuration=" + configuration +
+                ", chatServerData=" + chatServerData +
                 ", clientThreadsSemaphore=" + clientThreadsSemaphore +
                 '}';
     }
@@ -70,6 +86,7 @@ final class ChatServerImpl implements ChatServer {
 
         final int serverPort = configuration.getServerPort();
         clientThreadsSemaphore = new Semaphore(configuration.getMaxThreads());
+        chatServerData = ChatServerDataImpl.create();
 
         ServerSocket welcomeSocket;
         Socket connectionSocket;
