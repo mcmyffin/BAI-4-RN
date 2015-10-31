@@ -1,6 +1,6 @@
 package de.haw_chat.server.network.interfaces;
 
-import de.haw_chat.server.network.packets.interfaces.ServerPacket;
+import de.haw_chat.server.network.packets.AbstractServerPacket;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -16,5 +16,5 @@ public interface ChatClientThread extends Runnable {
     void setWorkerServiceRequested(boolean workerServiceRequested);
 
     ChatClientData getData();
-    void writeToClient(ServerPacket serverPacket) throws IOException;
+    void writeToClient(AbstractServerPacket serverPacket) throws IOException;
 }

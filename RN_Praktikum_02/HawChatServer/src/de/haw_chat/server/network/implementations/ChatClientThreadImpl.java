@@ -4,8 +4,8 @@ import de.haw_chat.common.operation.interfaces.OperationData;
 import de.haw_chat.server.network.interfaces.ChatClientData;
 import de.haw_chat.server.network.interfaces.ChatClientThread;
 import de.haw_chat.server.network.interfaces.ChatServer;
-import de.haw_chat.server.network.packets.interfaces.ClientPacket;
-import de.haw_chat.server.network.packets.interfaces.ServerPacket;
+import de.haw_chat.server.network.packets.AbstractClientPacket;
+import de.haw_chat.server.network.packets.AbstractServerPacket;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -104,11 +104,11 @@ final class ChatClientThreadImpl implements ChatClientThread {
                 '}';
     }
 
-    private ClientPacket readFromClient() throws IOException {
+    private AbstractClientPacket readFromClient() throws IOException {
         String request = inFromClient.readLine();
         System.out.println("TCP Worker Thread " + clientId + " detected job: " + request);
 
-        final String PACKET_CLASS_PREFIX = "de.haw_chat.server.network.packets.implementations.";
+        final String PACKET_CLASS_PREFIX = AbstractClientPacket.class.getPackage().getName() + ".";
         final String PACKET_CLASS_POSTFIX = "Packet";
 
         int operationCode = Integer.parseInt(request.split(" ")[0]);
@@ -124,7 +124,7 @@ final class ChatClientThreadImpl implements ChatClientThread {
         try {
             Class<?> clazz = Class.forName(className);
             Constructor<?> ctor = clazz.getConstructor(ChatClientThread.class, String.class);
-            ClientPacket object = (ClientPacket) ctor.newInstance(this, request);
+            AbstractClientPacket object = (AbstractClientPacket) ctor.newInstance(this, request);
             return object;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -143,7 +143,7 @@ final class ChatClientThreadImpl implements ChatClientThread {
     }
 
     @Override
-    public void writeToClient(ServerPacket serverPacket) throws IOException {
+    public void writeToClient(AbstractServerPacket serverPacket) throws IOException {
         checkNotNull(serverPacket, "serverPacket is null!");
         String reply = serverPacket.toMessageString();
         outToClient.writeBytes(reply + '\r' + '\n');
@@ -157,7 +157,7 @@ final class ChatClientThreadImpl implements ChatClientThread {
             outToClient = new DataOutputStream(clientSocket.getOutputStream());
 
             while (workerServiceRequested) {
-                ClientPacket clientPacket = readFromClient();
+                AbstractClientPacket clientPacket = readFromClient();
                 if (clientPacket != null)
                     clientPacket.process();
             }

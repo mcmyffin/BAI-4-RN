@@ -1,13 +1,11 @@
-package de.haw_chat.server.network.packets.implementations;
-
-import de.haw_chat.server.network.packets.interfaces.ServerPacket;
+package de.haw_chat.server.network.packets;
 
 import static de.haw_chat.common.operation.implementations.OperationDataManager.getOperationData;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class LoginResponsePacket implements ServerPacket {
+public class LoginResponsePacket extends AbstractServerPacket {
     private int statusCode;
 
     public LoginResponsePacket(int statusCode) {
@@ -16,7 +14,6 @@ public class LoginResponsePacket implements ServerPacket {
 
     @Override
     public String toMessageString() {
-        int operationCode = getOperationData("LoginResponse").getOperationCode();
-        return "" + operationCode + " " + statusCode;
+        return "" + getOperationCode() + " " + statusCode;
     }
 }

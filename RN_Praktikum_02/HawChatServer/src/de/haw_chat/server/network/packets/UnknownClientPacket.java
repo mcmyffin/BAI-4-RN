@@ -1,17 +1,15 @@
-package de.haw_chat.server.network.packets.implementations;
+package de.haw_chat.server.network.packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.server.network.packets.interfaces.ClientPacket;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class UnknownClientPacket implements ClientPacket {
-    private ChatClientThread chatClientThread;
+public class UnknownClientPacket extends AbstractClientPacket {
     private String messageString;
 
     public UnknownClientPacket(ChatClientThread chatClientThread, String messageString) {
-        this.chatClientThread = chatClientThread;
+        super(chatClientThread);
         this.messageString = messageString;
     }
 
