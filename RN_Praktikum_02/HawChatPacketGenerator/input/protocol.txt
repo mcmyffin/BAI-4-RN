@@ -1,0 +1,103 @@
+CLIENT LOGIN
+// Client möchte sich mit Benutzernamen und Passwort anmelden
+>> USERNAME:String // Benutzername des Clients
+>> PASSWORD:String // Passwort des Clients
+
+SERVER LOGIN_RESPONSE
+// Server beantwortet die Anmeldung eines Clients
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT USERNAME_CHANGE
+// Client möchte seinen Benutzernamen ändern
+>> USERNAME:String // Neuer Benutzername des Clients
+
+SERVER USERNAME_CHANGE_RESPONSE
+// Server beantwortet die Änderung des Benutzernamens
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT LOGOUT
+// Client möchte sich abmelden
+
+SERVER LOGOUT_RESPONSE
+// Server beantwortet die Abmeldung eines Clients
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT CHATROOMS_REFRESH
+// Client möchte die aktuelle Liste von Chaträumen haben
+
+SERVER CHATROOM_LIST_BEGIN
+// Server beginnt mit der Übertragung der aktuellen Liste von Chaträumen
+>> CHATROOM_COUNT:int // Gibt an, wieviele Chaträume es insgesamt gibt
+
+SERVER CHATROOM_LIST_ELEMENT
+// Server sendet Daten über einen konkreten Chatraum
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CURRENT_USER_COUNT:int // Aktuelle Anzahl an Teilnehmern
+>> MAX_USER_COUNT:int // Maximale Anzahl an Teilnehmern
+
+SERVER CHATROOM_LIST_END
+// Server endet mit der Übertragung der aktuellen Liste von Chaträumen
+
+CLIENT CHATROOM_JOIN
+// Client möchte einem Chatraum beitreten
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CHATROOM_PASSWORD:String // Passwort des Chatraumes (leerer Text, wenn nicht vorhanden)
+
+SERVER CHATROOM_JOIN_RESPONSE
+// Server beantwortet Anfrage zum Beitreten eines Chatraumes
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT CHATROOM_LEAVE
+// Client möchte einem Chatraum verlassen
+>> CHATROOM_NAME:String Name des Chatraumes
+
+SERVER CHATROOM_LEAVE_RESPONSE
+// Server beantwortet Anfrage zum Verlassen eines Chatraumes
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT CHATROOM_CREATE
+// Client möchte einem Chatraum erstellen
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MAX_USER_COUNT:int // Anzahl an Teilnehmern des Chatraumes
+>> CHATROOM_PASSWORD:String // Passwort des Chatraumes
+
+SERVER CHATROOM_CREATE_RESPONSE
+// Server beantwortet Anfrage zum Erstellen eines Chatraumes
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT CHATROOM_DELETE
+// Client möchte einem Chatraum löschen
+>> CHATROOM_NAME:String // Name des Chatraumes
+
+SERVER CHATROOM_DELETE_RESPONSE
+// Server beantwortet Anfrage zum Löschen eines Chatraumes
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT CHATROOM_CHANGE_NAME              
+// Client möchte den Namen des Chatraumes ändern
+>> CHATROOM_NAME_OLD:String // Alter Name des Chatraumes
+>> CHATROOM_NAME_NEW:String // Neuer Name des Chatraumes
+
+SERVER CHATROOM_CHANGE_NAME_RESPONSE
+// Server beantwortet Anfrage zum Ändern des Passworts des Chatraumes
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT CHATROOM_CHANGE_PASSWORD                
+// Client möchte das Passwort des Chatraumes ändern
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CHATROOM_PASSWORD:String // Neues Passwort des Chatraumes
+
+SERVER CHATROOM_CHANGE_PASSWORD_RESPONSE
+// Server beantwortet Anfrage zum Ändern des Passworts des Chatraumes
+>> STATUS_CODE:int // Status-Code der Antwort
+
+CLIENT CHATROOM_CHANGE_MAX_USER_COUNT                
+// Client möchte maximale Anzahl an Teilnehmern des Chatraumes ändern
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MAX_USER_COUNT:int // Neue Anzahl an Teilnehmern des Chatraumes
+
+SERVER CHATROOM_CHANGE_MAX_USER_COUNT_RESPONSE
+// Server beantwortet Anfrage zum Ändern der maximalen Anzahl an Teilnehmern des Chatraumes
+>> STATUS_CODE:int // Status-Code der Antwort
+
+
