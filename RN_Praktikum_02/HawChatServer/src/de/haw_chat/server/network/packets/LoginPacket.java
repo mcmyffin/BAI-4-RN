@@ -7,14 +7,18 @@ import de.haw_chat.server.network.interfaces.ChatClientThread;
  */
 public class LoginPacket extends AbstractClientPacket {
     private String username;
+    private String password;
 
     public LoginPacket(ChatClientThread chatClientThread, String messageString) {
         super(chatClientThread);
         this.username = messageString.split(" ")[0];
+        this.password = messageString.split(" ")[1];
     }
 
     @Override
     public void process() {
+        // TODO: Implement password check!
+        
         if (getServerData().getTakenUsernames().contains(username)) {
             // Username is taken
             LoginResponsePacket response = new LoginResponsePacket(101);
@@ -22,13 +26,11 @@ public class LoginPacket extends AbstractClientPacket {
             return;
         }
 
-        // Old way to access client data (@Dimitri: remove line if recognized)
-        chatClientThread.getData().setUsername(username);
-
-        // The new (and better) way to access client data
+        // Set username and add it to taken usernames
         getServerData().getTakenUsernames().add(username);
         getClientData().setUsername(username);
 
+        // Username successfully set
         LoginResponsePacket response = new LoginResponsePacket(100);
         sendToClient(response);
     }
