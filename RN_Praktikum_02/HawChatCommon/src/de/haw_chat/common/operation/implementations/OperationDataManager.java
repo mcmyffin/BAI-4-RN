@@ -37,14 +37,18 @@ public final class OperationDataManager {
         storeOperationData(CLIENT, 100, "UnknownClient");
         storeOperationData(SERVER, 101, "UnknownServer");
         storeOperationData(CLIENT, 102, "Login");
-        storeOperationData(SERVER, 103, "UnknownServer");
+        storeOperationData(SERVER, 103, "LoginResponce");
     }
 
     public static OperationData getOperationData(int operationCode) {
+        if (!operationCodeMap.containsKey(operationCode))
+            return getOperationData("UnknownClient"); // TODO: Change in Client version!
         return operationCodeMap.get(operationCode);
     }
 
     public static OperationData getOperationData(String operationName) {
+        if (!operationNameMap.containsKey(operationName))
+            return getOperationData("UnknownClient"); // TODO: Change in Client version!
         return operationNameMap.get(operationName);
     }
 }
