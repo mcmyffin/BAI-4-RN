@@ -10,12 +10,12 @@ import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
 public class Main {
     public static void main(String[] args) {
         ChatServerConfiguration configuration =
-                ChatDeviceFactory.createChatServerConfiguration(12345, 10, false);
-        ChatClient chatServer = ChatDeviceFactory.createChatServer(configuration);
+                ChatDeviceFactory.createChatServerConfiguration("localhost", 12345, false);
+        ChatClient chatClient = ChatDeviceFactory.createChatClient(configuration);
 
-        Thread thread = new Thread(chatServer);
+        Thread thread = new Thread(chatClient);
         thread.start();
 
-        System.out.println("SERVER STARTED!");
+        System.out.println("CLIENT STARTED!");
     }
 }

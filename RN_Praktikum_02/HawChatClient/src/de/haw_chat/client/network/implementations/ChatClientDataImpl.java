@@ -9,10 +9,9 @@ import java.util.HashSet;
  * Created by Andreas on 31.10.2015.
  */
 final class ChatClientDataImpl implements ChatClientData {
-    private Collection<String> takenUsernames;
+    private String username;
 
     private ChatClientDataImpl() {
-        this.takenUsernames = new HashSet<>();
     }
 
     public static ChatClientData create() {
@@ -20,7 +19,12 @@ final class ChatClientDataImpl implements ChatClientData {
     }
 
     @Override
-    public Collection<String> getTakenUsernames() {
-        return takenUsernames;
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

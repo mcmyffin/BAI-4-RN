@@ -8,6 +8,4 @@ import java.util.concurrent.Semaphore;
 public interface ChatClient extends Runnable {
     ChatServerConfiguration getConfiguration();
     ChatClientData getData();
-
-    Semaphore getClientThreadsSemaphore();
 }

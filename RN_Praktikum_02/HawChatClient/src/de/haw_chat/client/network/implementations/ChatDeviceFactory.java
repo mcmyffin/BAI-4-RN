@@ -9,27 +9,27 @@ import java.util.Properties;
  * Created by Andreas on 31.10.2015.
  */
 public final class ChatDeviceFactory {
-    public static ChatServerConfiguration createChatServerConfiguration(int serverPort, int maxThreads, boolean sslEnabled) {
-        return ChatServerConfigurationImpl.create(serverPort, maxThreads, sslEnabled);
+    public static ChatServerConfiguration createChatServerConfiguration(String serverHost, int serverPort, boolean sslEnabled) {
+        return ChatServerConfigurationImpl.create(serverHost, serverPort, sslEnabled);
     }
 
     public static ChatServerConfiguration createChatServerConfiguration(Properties properties) {
         return ChatServerConfigurationImpl.create(properties);
     }
 
-    public static ChatClient createChatServer(ChatServerConfiguration configuration) {
+    public static ChatClient createChatClient(ChatServerConfiguration configuration) {
         return ChatClientImpl.create(configuration);
     }
 
-    static ChatServerThread createChatClientThread(int clientId, Socket clientSocket, ChatClient chatClient) {
-        return ChatServerThreadImpl.create(clientId, clientSocket, chatClient);
+    static ChatServerThread createChatServerThread(int serverId, Socket clientSocket, ChatClient chatClient) {
+        return ChatServerThreadImpl.create(serverId, clientSocket, chatClient);
     }
 
-    static ChatClientData createChatServerData() {
+    static ChatClientData createChatClientData() {
         return ChatClientDataImpl.create();
     }
 
-    static ChatServerData createChatClientData() {
+    static ChatServerData createChatServerData() {
         return ChatServerDataImpl.create();
     }
 }

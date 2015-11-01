@@ -17,30 +17,30 @@ import java.net.Socket;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static de.haw_chat.common.operation.implementations.OperationDataManager.getOperationData;
-import static de.haw_chat.client.network.implementations.ChatDeviceFactory.createChatClientData;
+import static de.haw_chat.client.network.implementations.ChatDeviceFactory.createChatServerData;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
 final class ChatServerThreadImpl implements ChatServerThread {
-    private final int clientId;
-    private final Socket clientSocket;
+    private final int serverId;
+    private final Socket serverSocket;
     private final ChatClient chatClient;
-    private BufferedReader inFromClient;
-    private DataOutputStream outToClient;
+    private BufferedReader inFromServer;
+    private DataOutputStream outToServer;
     private boolean workerServiceRequested = true;
     private ChatServerData chatServerData;
 
-    private ChatServerThreadImpl(int clientId, Socket clientSocket, ChatClient chatClient) {
-        checkNotNull(clientSocket);
+    private ChatServerThreadImpl(int serverId, Socket serverSocket, ChatClient chatClient) {
+        checkNotNull(serverSocket);
         checkNotNull(chatClient);
-        this.clientId = clientId;
-        this.clientSocket = clientSocket;
+        this.serverId = serverId;
+        this.serverSocket = serverSocket;
         this.chatClient = chatClient;
-        this.inFromClient = null;
-        this.outToClient = null;
+        this.inFromServer = null;
+        this.outToServer = null;
         this.workerServiceRequested = true;
-        this.chatServerData = createChatClientData();
+        this.chatServerData = createChatServerData();
     }
 
     public static ChatServerThread create(int clientId, Socket clientSocket, ChatClient chatClient) {
@@ -48,13 +48,13 @@ final class ChatServerThreadImpl implements ChatServerThread {
     }
 
     @Override
-    public int getClientId() {
-        return clientId;
+    public int getServerId() {
+        return serverId;
     }
 
     @Override
-    public Socket getClientSocket() {
-        return clientSocket;
+    public Socket getServerSocket() {
+        return serverSocket;
     }
 
     @Override
@@ -84,37 +84,37 @@ final class ChatServerThreadImpl implements ChatServerThread {
 
         ChatServerThreadImpl that = (ChatServerThreadImpl) o;
 
-        return getClientId() == that.getClientId();
+        return getServerId() == that.getServerId();
 
     }
 
     @Override
     public int hashCode() {
-        return getClientId();
+        return getServerId();
     }
 
     @Override
     public String toString() {
         return "ChatServerThread{" +
-                "clientId=" + clientId +
-                ", clientSocket=" + clientSocket +
+                "serverId=" + serverId +
+                ", serverSocket=" + serverSocket +
                 ", chatClient=" + chatClient +
                 ", workerServiceRequested=" + workerServiceRequested +
                 ", chatServerData=" + chatServerData +
                 '}';
     }
 
-    private AbstractServerPacket readFromClient() throws IOException {
-        String request = inFromClient.readLine();
-        System.out.println("TCP Worker Thread " + clientId + " detected job: " + request);
+    private AbstractServerPacket readFromServer() throws IOException {
+        String response = inFromServer.readLine();
+        System.out.println("TCP Server Thread " + serverId + " detected job: " + response);
 
         final String PACKET_CLASS_PREFIX = AbstractServerPacket.class.getPackage().getName() + ".";
         final String PACKET_CLASS_POSTFIX = "Packet";
 
-        int operationCode = Integer.parseInt(request.split(" ")[0]);
+        int operationCode = Integer.parseInt(response.split(" ")[0]);
         OperationData operationData = getOperationData(operationCode);
-        if (!operationData.isClientOperation()) {
-            System.err.println("[WARNING] client tried to send server packet! request '" + request + "' ignored!");
+        if (operationData.isClientOperation()) {
+            System.err.println("[WARNING] server tried to send client packet! response '" + response + "' ignored!");
             return null;
         }
 
@@ -124,7 +124,7 @@ final class ChatServerThreadImpl implements ChatServerThread {
         try {
             Class<?> clazz = Class.forName(className);
             Constructor<?> ctor = clazz.getConstructor(ChatServerThread.class, String.class);
-            AbstractServerPacket object = (AbstractServerPacket) ctor.newInstance(this, request);
+            AbstractServerPacket object = (AbstractServerPacket) ctor.newInstance(this, response);
             return object;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -138,35 +138,33 @@ final class ChatServerThreadImpl implements ChatServerThread {
             e.printStackTrace();
         }
 
-        System.err.println("[WARNING] error while creating client packet! request '" + request + "' ignored!");
+        System.err.println("[WARNING] error while creating server packet! response '" + response + "' ignored!");
         return null;
     }
 
     @Override
-    public void writeToClient(AbstractClientPacket serverPacket) throws IOException {
-        checkNotNull(serverPacket, "serverPacket is null!");
-        String reply = serverPacket.toMessageString();
-        outToClient.writeBytes(reply + '\r' + '\n');
-        System.out.println("TCP Worker Thread " + clientId + " has written the message: " + reply);
+    public void writeToServer(AbstractClientPacket clientPacket) throws IOException {
+        checkNotNull(clientPacket, "clientPacket is null!");
+        String request = clientPacket.toMessageString();
+        outToServer.writeBytes(request + '\r' + '\n');
+        System.out.println("TCP Server Thread " + serverId + " has written the message: " + request);
     }
 
     @Override
     public void run() {
         try {
-            inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            outToClient = new DataOutputStream(clientSocket.getOutputStream());
+            inFromServer = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+            outToServer = new DataOutputStream(serverSocket.getOutputStream());
 
             while (workerServiceRequested) {
-                AbstractServerPacket clientPacket = readFromClient();
+                AbstractServerPacket clientPacket = readFromServer();
                 if (clientPacket != null)
                     clientPacket.process();
             }
 
-            clientSocket.close();
+            serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            chatClient.getClientThreadsSemaphore().release();
         }
     }
 }

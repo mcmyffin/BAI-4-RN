@@ -31,9 +31,9 @@ public abstract class AbstractServerPacket {
         return chatServerThread.getChatClient().getData();
     }
 
-    protected final void sendToClient(AbstractClientPacket serverPacket) {
+    protected final void sendToServer(AbstractClientPacket clientPacket) {
         try {
-            chatServerThread.writeToClient(serverPacket);
+            chatServerThread.writeToServer(clientPacket);
         } catch (IOException e) {
             e.printStackTrace();
         }

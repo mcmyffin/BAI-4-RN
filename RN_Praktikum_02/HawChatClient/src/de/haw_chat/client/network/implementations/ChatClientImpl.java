@@ -4,6 +4,7 @@ import de.haw_chat.client.network.interfaces.ChatClientData;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.client.network.interfaces.ChatClient;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
+import de.haw_chat.client.network.packets.client_packets.LoginPacket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,13 +19,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 final class ChatClientImpl implements ChatClient {
     private final ChatServerConfiguration configuration;
     private ChatClientData chatClientData;
-    private Semaphore clientThreadsSemaphore;
 
     private ChatClientImpl(ChatServerConfiguration configuration) {
         checkNotNull(configuration);
         this.configuration = configuration;
         this.chatClientData = null;
-        this.clientThreadsSemaphore = null;
     }
 
     public static ChatClient create(ChatServerConfiguration configuration) {
@@ -42,11 +41,6 @@ final class ChatClientImpl implements ChatClient {
     }
 
     @Override
-    public Semaphore getClientThreadsSemaphore() {
-        return clientThreadsSemaphore;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ChatClientImpl)) return false;
@@ -55,9 +49,7 @@ final class ChatClientImpl implements ChatClient {
 
         if (getConfiguration() != null ? !getConfiguration().equals(that.getConfiguration()) : that.getConfiguration() != null)
             return false;
-        if (chatClientData != null ? !chatClientData.equals(that.chatClientData) : that.chatClientData != null)
-            return false;
-        return !(getClientThreadsSemaphore() != null ? !getClientThreadsSemaphore().equals(that.getClientThreadsSemaphore()) : that.getClientThreadsSemaphore() != null);
+        return !(chatClientData != null ? !chatClientData.equals(that.chatClientData) : that.chatClientData != null);
 
     }
 
@@ -65,7 +57,6 @@ final class ChatClientImpl implements ChatClient {
     public int hashCode() {
         int result = getConfiguration() != null ? getConfiguration().hashCode() : 0;
         result = 31 * result + (chatClientData != null ? chatClientData.hashCode() : 0);
-        result = 31 * result + (getClientThreadsSemaphore() != null ? getClientThreadsSemaphore().hashCode() : 0);
         return result;
     }
 
@@ -74,7 +65,6 @@ final class ChatClientImpl implements ChatClient {
         return "ChatClient{" +
                 "configuration=" + configuration +
                 ", chatClientData=" + chatClientData +
-                ", clientThreadsSemaphore=" + clientThreadsSemaphore +
                 '}';
     }
 
@@ -84,34 +74,22 @@ final class ChatClientImpl implements ChatClient {
             throw new UnsupportedOperationException("SSL support currently not implemented!");
         }
 
+        final String serverHost = configuration.getServerHost();
         final int serverPort = configuration.getServerPort();
-        clientThreadsSemaphore = new Semaphore(configuration.getMaxThreads());
         chatClientData = ChatClientDataImpl.create();
 
-        ServerSocket welcomeSocket;
         Socket connectionSocket;
 
-        boolean serviceRequested = true;
-        int nextThreadNumber = 0;
-
         try {
-            welcomeSocket = new ServerSocket(serverPort);
-            while (serviceRequested) {
-                clientThreadsSemaphore.acquire();
+            connectionSocket = new Socket(serverHost, serverPort);
+            System.out.println("TCP Client is connected - TCP host " + serverHost + ", TCP port " + serverPort);
 
-                System.out.println("TCP Server is waiting for connection - listening TCP port " + serverPort);
-                connectionSocket = welcomeSocket.accept();
+            ChatServerThread chatServerThread =
+                    ChatDeviceFactory.createChatServerThread(0, connectionSocket, this);
 
-                ChatServerThread chatServerThread =
-                        ChatDeviceFactory.createChatClientThread(nextThreadNumber, connectionSocket, this);
-                nextThreadNumber++;
-
-                Thread thread = new Thread(chatServerThread);
-                thread.start();
-            }
+            Thread thread = new Thread(chatServerThread);
+            thread.start();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

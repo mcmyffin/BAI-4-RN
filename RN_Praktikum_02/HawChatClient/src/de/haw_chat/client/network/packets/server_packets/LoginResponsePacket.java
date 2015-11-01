@@ -15,12 +15,14 @@ public class LoginResponsePacket extends AbstractServerPacket {
 
     @Override
     public void process() {
-        // TODO: Implement processing logic
-        
-        // NOTES:
-        // - you can access client data with: getClientData()
-        // - you can access global server data with: getServerData()
-        // - you can send response to client with: sendToClient(ServerPacket)
-        throw new UnsupportedOperationException();
+        if (statusCode == 100) {
+            System.out.println("Successfully logged in!");
+        } else if (statusCode == 101) {
+            System.out.println("You are already logged in!");
+        } else if (statusCode == 102) {
+            System.out.println("Username already logged in!");
+        } else if (statusCode == 103) {
+            System.out.println("Wrong username or password!");
+        }
     }
 }

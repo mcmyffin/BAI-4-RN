@@ -6,5 +6,6 @@ import java.util.Collection;
  * Created by Andreas on 31.10.2015.
  */
 public interface ChatClientData {
-    Collection<String> getTakenUsernames();
+    String getUsername();
+    void setUsername(String username);
 }
