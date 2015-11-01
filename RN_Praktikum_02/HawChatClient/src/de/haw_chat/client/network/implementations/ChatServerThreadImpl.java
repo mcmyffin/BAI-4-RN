@@ -30,6 +30,7 @@ final class ChatServerThreadImpl implements ChatServerThread {
     private DataOutputStream outToServer;
     private boolean workerServiceRequested = true;
     private ChatServerData chatServerData;
+    private boolean initialized;
 
     private ChatServerThreadImpl(int serverId, Socket serverSocket, ChatClient chatClient) {
         checkNotNull(serverSocket);
@@ -41,6 +42,7 @@ final class ChatServerThreadImpl implements ChatServerThread {
         this.outToServer = null;
         this.workerServiceRequested = true;
         this.chatServerData = createChatServerData();
+        this.initialized = false;
     }
 
     public static ChatServerThread create(int clientId, Socket clientSocket, ChatClient chatClient) {
@@ -78,6 +80,11 @@ final class ChatServerThreadImpl implements ChatServerThread {
     }
 
     @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ChatServerThreadImpl)) return false;
@@ -99,8 +106,9 @@ final class ChatServerThreadImpl implements ChatServerThread {
                 "serverId=" + serverId +
                 ", serverSocket=" + serverSocket +
                 ", chatClient=" + chatClient +
-                ", workerServiceRequested=" + workerServiceRequested +
+                ", inFromServer=" + inFromServer +
                 ", chatServerData=" + chatServerData +
+                ", initialized=" + initialized +
                 '}';
     }
 
@@ -156,6 +164,8 @@ final class ChatServerThreadImpl implements ChatServerThread {
             inFromServer = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             outToServer = new DataOutputStream(serverSocket.getOutputStream());
 
+            initialized = true;
+
             while (workerServiceRequested) {
                 AbstractServerPacket clientPacket = readFromServer();
                 if (clientPacket != null)
@@ -164,7 +174,7 @@ final class ChatServerThreadImpl implements ChatServerThread {
 
             serverSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("TCP Server " + serverId + " closed the connection");
         }
     }
 }

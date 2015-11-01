@@ -20,12 +20,12 @@ public abstract class AbstractServerPacket {
         this.chatServerThread = chatServerThread;
     }
 
-    protected final ChatServerData getClientData() {
+    protected final ChatServerData getServerData() {
         checkNotNull(chatServerThread.getData());
         return chatServerThread.getData();
     }
 
-    protected final ChatClientData getServerData() {
+    protected final ChatClientData getClientData() {
         checkNotNull(chatServerThread.getChatClient());
         checkNotNull(chatServerThread.getChatClient().getData());
         return chatServerThread.getChatClient().getData();

@@ -164,7 +164,7 @@ final class ChatClientThreadImpl implements ChatClientThread {
 
             clientSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("TCP Client " + clientId + " closed the connection");
         } finally {
             chatServer.getClientThreadsSemaphore().release();
         }

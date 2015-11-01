@@ -14,7 +14,9 @@ public interface ChatServerThread extends Runnable {
     ChatClient getChatClient();
     boolean isWorkerServiceRequested();
     void setWorkerServiceRequested(boolean workerServiceRequested);
+    boolean isInitialized();
 
     ChatServerData getData();
+
     void writeToServer(AbstractClientPacket clientPacket) throws IOException;
 }

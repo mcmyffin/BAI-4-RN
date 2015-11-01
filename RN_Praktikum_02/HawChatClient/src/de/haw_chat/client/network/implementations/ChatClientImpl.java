@@ -77,6 +77,7 @@ final class ChatClientImpl implements ChatClient {
         final String serverHost = configuration.getServerHost();
         final int serverPort = configuration.getServerPort();
         chatClientData = ChatClientDataImpl.create();
+        int serverId = 0;
 
         Socket connectionSocket;
 
@@ -85,10 +86,21 @@ final class ChatClientImpl implements ChatClient {
             System.out.println("TCP Client is connected - TCP host " + serverHost + ", TCP port " + serverPort);
 
             ChatServerThread chatServerThread =
-                    ChatDeviceFactory.createChatServerThread(0, connectionSocket, this);
+                    ChatDeviceFactory.createChatServerThread(serverId, connectionSocket, this);
 
             Thread thread = new Thread(chatServerThread);
             thread.start();
+
+            while (!chatServerThread.isInitialized()) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // TODO: Remove (it's just a test)
+            chatServerThread.writeToServer(new LoginPacket("Hans", "Wurst"));
         } catch (IOException e) {
             e.printStackTrace();
         }

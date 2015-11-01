@@ -16,6 +16,7 @@ public class LoginResponsePacket extends AbstractServerPacket {
     @Override
     public void process() {
         if (statusCode == 100) {
+            getClientData().setUsername("Test");
             System.out.println("Successfully logged in!");
         } else if (statusCode == 101) {
             System.out.println("You are already logged in!");
