@@ -44,7 +44,7 @@ final class ChatServerConfigurationImpl implements ChatServerConfiguration {
     }
 
     @Override
-    public int getMaxThreads() {
+    public int getMaxClients() {
         return maxThreads;
     }
 
@@ -61,7 +61,7 @@ final class ChatServerConfigurationImpl implements ChatServerConfiguration {
         ChatServerConfigurationImpl that = (ChatServerConfigurationImpl) o;
 
         if (getServerPort() != that.getServerPort()) return false;
-        if (getMaxThreads() != that.getMaxThreads()) return false;
+        if (getMaxClients() != that.getMaxClients()) return false;
         return isSslEnabled() == that.isSslEnabled();
 
     }
@@ -69,7 +69,7 @@ final class ChatServerConfigurationImpl implements ChatServerConfiguration {
     @Override
     public int hashCode() {
         int result = getServerPort();
-        result = 31 * result + getMaxThreads();
+        result = 31 * result + getMaxClients();
         result = 31 * result + (isSslEnabled() ? 1 : 0);
         return result;
     }

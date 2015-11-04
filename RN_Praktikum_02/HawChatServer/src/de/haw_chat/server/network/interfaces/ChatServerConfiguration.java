@@ -5,6 +5,6 @@ package de.haw_chat.server.network.interfaces;
  */
 public interface ChatServerConfiguration {
     int getServerPort();
-    int getMaxThreads();
+    int getMaxClients();
     boolean isSslEnabled();
 }

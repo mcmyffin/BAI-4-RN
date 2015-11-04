@@ -4,6 +4,7 @@ import de.haw_chat.server.network.interfaces.ChatClientThread;
 import de.haw_chat.server.network.interfaces.ChatServer;
 import de.haw_chat.server.network.interfaces.ChatServerConfiguration;
 import de.haw_chat.server.network.interfaces.ChatServerData;
+import de.haw_chat.server.network.utils.IpChecker;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -85,7 +86,7 @@ final class ChatServerImpl implements ChatServer {
         }
 
         final int serverPort = configuration.getServerPort();
-        clientThreadsSemaphore = new Semaphore(configuration.getMaxThreads());
+        clientThreadsSemaphore = new Semaphore(configuration.getMaxClients());
         chatServerData = ChatServerDataImpl.create();
 
         ServerSocket welcomeSocket;
@@ -97,9 +98,13 @@ final class ChatServerImpl implements ChatServer {
         try {
             welcomeSocket = new ServerSocket(serverPort);
             while (serviceRequested) {
+
                 clientThreadsSemaphore.acquire();
 
-                System.out.println("TCP Server is waiting for connection - listening TCP port " + serverPort);
+                System.out.println("TCP Server is waiting for connection - \n" +
+                        "IP: "+ IpChecker.getIp()+"\n"+
+                        "Port: " + serverPort);
+
                 connectionSocket = welcomeSocket.accept();
 
                 ChatClientThread chatClientThread =
