@@ -32,14 +32,6 @@ SERVER LOGIN_RESPONSE
 // Server beantwortet die Anmeldung eines Clients
 >> STATUS_CODE:int // Status-Code der Antwort
 
-CLIENT USERNAME_CHANGE
-// Client möchte seinen Benutzernamen ändern
->> USERNAME:String // Neuer Benutzername des Clients
-
-SERVER USERNAME_CHANGE_RESPONSE
-// Server beantwortet die Änderung des Benutzernamens
->> STATUS_CODE:int // Status-Code der Antwort
-
 CLIENT LOGOUT
 // Client möchte sich abmelden
 

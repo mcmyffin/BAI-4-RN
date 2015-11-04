@@ -42,8 +42,6 @@ public final class OperationDataManager {
         storeOperationData(SERVER, 107, "RegisterAccountResponse");
         storeOperationData(CLIENT, 108, "Login");
         storeOperationData(SERVER, 109, "LoginResponse");
-        storeOperationData(CLIENT, 110, "UsernameChange");
-        storeOperationData(SERVER, 111, "UsernameChangeResponse");
         storeOperationData(CLIENT, 112, "Logout");
         storeOperationData(SERVER, 113, "LogoutResponse");
         storeOperationData(CLIENT, 114, "ChatroomsRefresh");
