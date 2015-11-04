@@ -5,12 +5,14 @@ import de.haw_chat.client.network.interfaces.ChatServerThread;
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomListBeginPacket extends AbstractServerPacket {
-    private int chatroomCount;
+public class ChatroomNameChangedPacket extends AbstractServerPacket {
+    private String chatroomNameOld;
+    private String chatroomNameNew;
 
-    public ChatroomListBeginPacket(ChatServerThread chatServerThread, String messageString) {
+    public ChatroomNameChangedPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.chatroomCount = Integer.parseInt(messageString.split(" ")[1]);
+        this.chatroomNameOld = messageString.split(" ")[1];
+        this.chatroomNameNew = messageString.split(" ")[2];
     }
 
     @Override

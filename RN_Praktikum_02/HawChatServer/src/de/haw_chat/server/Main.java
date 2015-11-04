@@ -10,7 +10,7 @@ import de.haw_chat.server.network.interfaces.ChatServerConfiguration;
 public class Main {
     public static void main(String[] args) {
         ChatServerConfiguration configuration =
-                ChatDeviceFactory.createChatServerConfiguration(12345, 10, false);
+                ChatDeviceFactory.createChatServerConfiguration(42345, 10, false);
         ChatServer chatServer = ChatDeviceFactory.createChatServer(configuration);
 
         Thread thread = new Thread(chatServer);

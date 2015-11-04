@@ -125,4 +125,42 @@ SERVER CHATROOM_CHANGE_MAX_USER_COUNT_RESPONSE
 // Server beantwortet Anfrage zum Ändern der maximalen Anzahl an Teilnehmern des Chatraumes
 >> STATUS_CODE:int // Status-Code der Antwort
 
+SERVER CHATROOM_NAME_CHANGED
+// Server gibt Clients bekannt, dass sich der Name eines Chatrooms geändert hat
+>> CHATROOM_NAME_OLD:String // Alter Name des Chatraumes
+>> CHATROOM_NAME_NEW:String // Neuer Name des Chatraumes
+
+SERVER CHATROOM_MAX_USER_COUNT_CHANGED            
+// Server gibt Clients bekannt, dass sich die maximale Anzahl an Teilnehmern eines Chatraumes geändert hat
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MAX_USER_COUNT:int // Neue Anzahl an Teilnehmern des Chatraumes
+
+SERVER CHATROOM_MEMBER_LIST_BEGIN
+// Server beginnt mit der Übertragung der aktuellen Liste von Teilnehmern eines Chatraumes
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CHATROOM_MEMBER_COUNT:int // Gibt an, wieviele Teilnehmer der Chatraum besitzt
+
+SERVER CHATROOM_MEMBER_LIST_ELEMENT
+// Server sendet Daten über einen konkreten Teilnehmern eines Chatraums
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> USERNAME:String // Benutzername des Teilnehmerns
+
+SERVER CHATROOM_MEMBER_LIST_END
+// Server endet mit der Übertragung der aktuellen Liste von Teilnehmern eines Chatraumes
+>> CHATROOM_NAME:String // Name des Chatraumes
+
+CLIENT MESSAGE_SEND
+// Client möchte eine Nachricht in einen Chatraum senden
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MESSAGE:String // Inhalt der Nachricht
+
+SERVER MESSAGE_SEND_RESPONSE
+// Server bestätigt Ankunft der Nachricht
+>> STATUS_CODE:int // Status-Code der Antwort
+
+SERVER MESSAGE_SENDED
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> USERNAME:String // Benutzername des Absenders
+>> MESSAGE:String // Inhalt der Nachricht
+>> TIMESTAMP:int // Zeitpunkt des Versandes (serverseitig)
 

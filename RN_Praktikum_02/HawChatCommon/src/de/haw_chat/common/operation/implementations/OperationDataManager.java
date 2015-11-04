@@ -34,32 +34,44 @@ public final class OperationDataManager {
     }
 
     private static void storeOperationDatas() {
-        storeOperationData(CLIENT, 100, "UnknownClient");
-        storeOperationData(SERVER, 101, "UnknownServer");
-        storeOperationData(CLIENT, 102, "Login");
-        storeOperationData(SERVER, 103, "LoginResponse");
-        storeOperationData(CLIENT, 104, "UsernameChange");
-        storeOperationData(SERVER, 105, "UsernameChangeResponse");
-        storeOperationData(CLIENT, 106, "Logout");
-        storeOperationData(SERVER, 107, "LogoutResponse");
-        storeOperationData(CLIENT, 108, "ChatroomsRefresh");
-        storeOperationData(SERVER, 109, "ChatroomListBegin");
-        storeOperationData(SERVER, 110, "ChatroomListElement");
-        storeOperationData(SERVER, 111, "ChatroomListEnd");
-        storeOperationData(CLIENT, 112, "ChatroomJoin");
-        storeOperationData(SERVER, 113, "ChatroomJoinResponse");
-        storeOperationData(CLIENT, 114, "ChatroomLeave");
-        storeOperationData(SERVER, 115, "ChatroomLeaveResponse");
-        storeOperationData(CLIENT, 116, "ChatroomCreate");
-        storeOperationData(SERVER, 117, "ChatroomCreateResponse");
-        storeOperationData(CLIENT, 118, "ChatroomDelete");
-        storeOperationData(SERVER, 119, "ChatroomDeleteResponse");
-        storeOperationData(CLIENT, 120, "ChatroomChangeName");
-        storeOperationData(SERVER, 121, "ChatroomChangeNameResponse");
-        storeOperationData(CLIENT, 122, "ChatroomChangePassword");
-        storeOperationData(SERVER, 123, "ChatroomChangePasswordResponse");
-        storeOperationData(CLIENT, 124, "ChatroomChangeMaxUserCount");
-        storeOperationData(SERVER, 125, "ChatroomChangeMaxUserCountResponse");
+        storeOperationData(CLIENT, 102, "PingToServer");
+        storeOperationData(SERVER, 103, "PongFromServer");
+        storeOperationData(SERVER, 104, "PingToClient");
+        storeOperationData(CLIENT, 105, "PongFromClient");
+        storeOperationData(CLIENT, 106, "RegisterAccount");
+        storeOperationData(SERVER, 107, "RegisterAccountResponse");
+        storeOperationData(CLIENT, 108, "Login");
+        storeOperationData(SERVER, 109, "LoginResponse");
+        storeOperationData(CLIENT, 110, "UsernameChange");
+        storeOperationData(SERVER, 111, "UsernameChangeResponse");
+        storeOperationData(CLIENT, 112, "Logout");
+        storeOperationData(SERVER, 113, "LogoutResponse");
+        storeOperationData(CLIENT, 114, "ChatroomsRefresh");
+        storeOperationData(SERVER, 115, "ChatroomListBegin");
+        storeOperationData(SERVER, 116, "ChatroomListElement");
+        storeOperationData(SERVER, 117, "ChatroomListEnd");
+        storeOperationData(CLIENT, 118, "ChatroomJoin");
+        storeOperationData(SERVER, 119, "ChatroomJoinResponse");
+        storeOperationData(CLIENT, 120, "ChatroomLeave");
+        storeOperationData(SERVER, 121, "ChatroomLeaveResponse");
+        storeOperationData(CLIENT, 122, "ChatroomCreate");
+        storeOperationData(SERVER, 123, "ChatroomCreateResponse");
+        storeOperationData(CLIENT, 124, "ChatroomDelete");
+        storeOperationData(SERVER, 125, "ChatroomDeleteResponse");
+        storeOperationData(CLIENT, 126, "ChatroomChangeName");
+        storeOperationData(SERVER, 127, "ChatroomChangeNameResponse");
+        storeOperationData(CLIENT, 128, "ChatroomChangePassword");
+        storeOperationData(SERVER, 129, "ChatroomChangePasswordResponse");
+        storeOperationData(CLIENT, 130, "ChatroomChangeMaxUserCount");
+        storeOperationData(SERVER, 131, "ChatroomChangeMaxUserCountResponse");
+        storeOperationData(SERVER, 132, "ChatroomNameChanged");
+        storeOperationData(SERVER, 133, "ChatroomMaxUserCountChanged");
+        storeOperationData(SERVER, 134, "ChatroomMemberListBegin");
+        storeOperationData(SERVER, 135, "ChatroomMemberListElement");
+        storeOperationData(SERVER, 136, "ChatroomMemberListEnd");
+        storeOperationData(CLIENT, 137, "MessageSend");
+        storeOperationData(SERVER, 138, "MessageSendResponse");
+        storeOperationData(SERVER, 139, "MessageSended");
     }
 
     public static OperationData getOperationData(int operationCode) {

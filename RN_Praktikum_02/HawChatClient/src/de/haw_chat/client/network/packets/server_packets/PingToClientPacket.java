@@ -5,12 +5,12 @@ import de.haw_chat.client.network.interfaces.ChatServerThread;
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomListBeginPacket extends AbstractServerPacket {
-    private int chatroomCount;
+public class PingToClientPacket extends AbstractServerPacket {
+    private int timestamp;
 
-    public ChatroomListBeginPacket(ChatServerThread chatServerThread, String messageString) {
+    public PingToClientPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.chatroomCount = Integer.parseInt(messageString.split(" ")[1]);
+        this.timestamp = Integer.parseInt(messageString.split(" ")[1]);
     }
 
     @Override
