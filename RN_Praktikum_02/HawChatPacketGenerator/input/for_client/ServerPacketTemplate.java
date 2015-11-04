@@ -2,6 +2,8 @@ package de.haw_chat.client.network.packets.server_packets;
 
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 
+import static de.haw_chat.common.operation.implementations.StatusEnum.*;
+
 /**
  * Created by Andreas on 31.10.2015.
  */
