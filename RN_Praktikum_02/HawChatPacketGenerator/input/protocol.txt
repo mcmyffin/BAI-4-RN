@@ -1,3 +1,19 @@
+CLIENT PING_TO_SERVER
+// Client sendet eine Ping-Anfrage an den Server
+>> TIMESTAMP:int // Zeitpunkt des Ping-Versandes
+
+SERVER PONG_FROM_SERVER
+// Server sendet die Pong-Antwort an den Client
+>> TIMESTAMP:int // Zeitpunkt des Ping-Versandes
+
+SERVER PING_TO_CLIENT
+// Server sendet eine Ping-Anfrage an den Client
+>> TIMESTAMP:int // Zeitpunkt des Versandes
+
+CLIENT PONG_FROM_CLIENT
+// Client sendet die Pong-Antwort an den Server
+>> TIMESTAMP:int // Zeitpunkt des Ping-Versandes
+
 CLIENT REGISTER_ACCOUNT
 // Client möchte einen Benutzer-Account registrieren
 >> USERNAME:String // Benutzername des Accounts
