@@ -1,9 +1,10 @@
 package de.haw_chat.server.network.packets.client_packets;
 
 import de.haw_chat.server.network.interfaces.ChatClientThread;
+import de.haw_chat.common.operation.implementations.Status;
 import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
 
-import static de.haw_chat.common.operation.implementations.StatusEnum.*;
+import static de.haw_chat.common.operation.implementations.Status.*;
 
 /**
  * Created by Andreas on 31.10.2015.
@@ -22,14 +23,14 @@ public class LoginPacket extends AbstractClientPacket {
     public void process() {
         if (getClientData().getUsername() != null) {
             // Client already logged in with some username
-            LoginResponsePacket response = new LoginResponsePacket(CLIENT_ALREADY_LOGGED_IN.getStatusCode());
+            LoginResponsePacket response = new LoginResponsePacket(CLIENT_ALREADY_LOGGED_IN);
             sendToClient(response);
             return;
         }
 
         if (getServerData().getTakenUsernames().contains(username)) {
             // Username already logged in by other user
-            LoginResponsePacket response = new LoginResponsePacket(USERNAME_ALREADY_LOGGED_IN.getStatusCode());
+            LoginResponsePacket response = new LoginResponsePacket(USERNAME_ALREADY_LOGGED_IN);
             sendToClient(response);
             return;
         }
@@ -37,7 +38,7 @@ public class LoginPacket extends AbstractClientPacket {
         // TODO: Implement password check!
         if (false) {
             // Wrong username or password
-            LoginResponsePacket response = new LoginResponsePacket(PASSWORD_WRONG.getStatusCode());
+            LoginResponsePacket response = new LoginResponsePacket(PASSWORD_WRONG);
             sendToClient(response);
             return;
         }
@@ -47,7 +48,7 @@ public class LoginPacket extends AbstractClientPacket {
         getClientData().setUsername(username);
 
         // Username successfully set
-        LoginResponsePacket response = new LoginResponsePacket(OK.getStatusCode());
+        LoginResponsePacket response = new LoginResponsePacket(OK);
         sendToClient(response);
     }
 }
