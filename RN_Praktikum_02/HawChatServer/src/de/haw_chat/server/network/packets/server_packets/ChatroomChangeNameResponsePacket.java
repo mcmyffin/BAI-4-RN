@@ -17,6 +17,6 @@ public class ChatroomChangeNameResponsePacket extends AbstractServerPacket {
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + statusCode;
+        return "" + getOperationCode() + " " + statusCode.getStatusCode();
     }
 }

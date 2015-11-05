@@ -34,14 +34,18 @@ public final class OperationDataManager {
     }
 
     private static void storeOperationDatas() {
-        storeOperationData(CLIENT, 102, "PingToServer");
-        storeOperationData(SERVER, 103, "PongFromServer");
-        storeOperationData(SERVER, 104, "PingToClient");
-        storeOperationData(CLIENT, 105, "PongFromClient");
-        storeOperationData(CLIENT, 106, "RegisterAccount");
-        storeOperationData(SERVER, 107, "RegisterAccountResponse");
-        storeOperationData(CLIENT, 108, "Login");
-        storeOperationData(SERVER, 109, "LoginResponse");
+        storeOperationData(CLIENT, 100, "UnknownClient");
+        storeOperationData(SERVER, 101, "UnknownServer");
+        storeOperationData(CLIENT, 102, "UnsupportedClient");
+        storeOperationData(SERVER, 103, "UnsupportedServer");
+        storeOperationData(CLIENT, 104, "PingToServer");
+        storeOperationData(SERVER, 105, "PongFromServer");
+        storeOperationData(SERVER, 106, "PingToClient");
+        storeOperationData(CLIENT, 107, "PongFromClient");
+        storeOperationData(CLIENT, 108, "RegisterAccount");
+        storeOperationData(SERVER, 109, "RegisterAccountResponse");
+        storeOperationData(CLIENT, 110, "Login");
+        storeOperationData(SERVER, 111, "LoginResponse");
         storeOperationData(CLIENT, 112, "Logout");
         storeOperationData(SERVER, 113, "LogoutResponse");
         storeOperationData(CLIENT, 114, "ChatroomsRefresh");

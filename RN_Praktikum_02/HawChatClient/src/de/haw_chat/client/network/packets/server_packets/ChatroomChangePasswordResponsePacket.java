@@ -1,16 +1,19 @@
 package de.haw_chat.client.network.packets.server_packets;
 
 import de.haw_chat.client.network.interfaces.ChatServerThread;
+import de.haw_chat.common.operation.implementations.Status;
+
+import static de.haw_chat.common.operation.implementations.Status.*;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
 public class ChatroomChangePasswordResponsePacket extends AbstractServerPacket {
-    private int statusCode;
+    private Status statusCode;
 
     public ChatroomChangePasswordResponsePacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.statusCode = Integer.parseInt(messageString.split(" ")[1]);
+        this.statusCode = Status.getStatus(Integer.parseInt(messageString.split(" ")[1]));
     }
 
     @Override

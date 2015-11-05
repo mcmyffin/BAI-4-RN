@@ -1,3 +1,15 @@
+CLIENT UNKNOWN_CLIENT
+// Unbekanntes Client-Packet (wird ignoriert)
+
+SERVER UNKNOWN_SERVER
+// Unbekanntes Server-Packet (wird ignoriert)
+
+CLIENT UNSUPPORTED_CLIENT
+// Nicht-implementiertes Client-Packet (wird ignoriert)
+
+SERVER UNSUPPORTED_SERVER
+// Nicht-implementiertes Server-Packet (wird ignoriert)
+
 CLIENT PING_TO_SERVER
 // Client sendet eine Ping-Anfrage an den Server
 >> TIMESTAMP:int // Zeitpunkt des Ping-Versandes
@@ -21,7 +33,7 @@ CLIENT REGISTER_ACCOUNT
 
 SERVER REGISTER_ACCOUNT_RESPONSE
 // Server beantwortet die Registrierung eines Benutzer-Accounts
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT LOGIN
 // Client möchte sich mit Benutzernamen und Passwort anmelden
@@ -30,14 +42,14 @@ CLIENT LOGIN
 
 SERVER LOGIN_RESPONSE
 // Server beantwortet die Anmeldung eines Clients
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT LOGOUT
 // Client möchte sich abmelden
 
 SERVER LOGOUT_RESPONSE
 // Server beantwortet die Abmeldung eines Clients
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT CHATROOMS_REFRESH
 // Client möchte die aktuelle Liste von Chaträumen haben
@@ -62,7 +74,7 @@ CLIENT CHATROOM_JOIN
 
 SERVER CHATROOM_JOIN_RESPONSE
 // Server beantwortet Anfrage zum Beitreten eines Chatraumes
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT CHATROOM_LEAVE
 // Client möchte einem Chatraum verlassen
@@ -70,7 +82,7 @@ CLIENT CHATROOM_LEAVE
 
 SERVER CHATROOM_LEAVE_RESPONSE
 // Server beantwortet Anfrage zum Verlassen eines Chatraumes
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT CHATROOM_CREATE
 // Client möchte einem Chatraum erstellen
@@ -80,7 +92,7 @@ CLIENT CHATROOM_CREATE
 
 SERVER CHATROOM_CREATE_RESPONSE
 // Server beantwortet Anfrage zum Erstellen eines Chatraumes
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT CHATROOM_DELETE
 // Client möchte einem Chatraum löschen
@@ -88,7 +100,7 @@ CLIENT CHATROOM_DELETE
 
 SERVER CHATROOM_DELETE_RESPONSE
 // Server beantwortet Anfrage zum Löschen eines Chatraumes
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT CHATROOM_CHANGE_NAME              
 // Client möchte den Namen des Chatraumes ändern
@@ -97,7 +109,7 @@ CLIENT CHATROOM_CHANGE_NAME
 
 SERVER CHATROOM_CHANGE_NAME_RESPONSE
 // Server beantwortet Anfrage zum Ändern des Passworts des Chatraumes
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT CHATROOM_CHANGE_PASSWORD                
 // Client möchte das Passwort des Chatraumes ändern
@@ -106,7 +118,7 @@ CLIENT CHATROOM_CHANGE_PASSWORD
 
 SERVER CHATROOM_CHANGE_PASSWORD_RESPONSE
 // Server beantwortet Anfrage zum Ändern des Passworts des Chatraumes
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 CLIENT CHATROOM_CHANGE_MAX_USER_COUNT                
 // Client möchte maximale Anzahl an Teilnehmern des Chatraumes ändern
@@ -115,7 +127,7 @@ CLIENT CHATROOM_CHANGE_MAX_USER_COUNT
 
 SERVER CHATROOM_CHANGE_MAX_USER_COUNT_RESPONSE
 // Server beantwortet Anfrage zum Ändern der maximalen Anzahl an Teilnehmern des Chatraumes
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 SERVER CHATROOM_NAME_CHANGED
 // Server gibt Clients bekannt, dass sich der Name eines Chatrooms geändert hat
@@ -148,7 +160,7 @@ CLIENT MESSAGE_SEND
 
 SERVER MESSAGE_SEND_RESPONSE
 // Server bestätigt Ankunft der Nachricht
->> STATUS_CODE:int // Status-Code der Antwort
+>> STATUS_CODE:Status // Status-Code der Antwort
 
 SERVER MESSAGE_SENDED
 >> CHATROOM_NAME:String // Name des Chatraumes

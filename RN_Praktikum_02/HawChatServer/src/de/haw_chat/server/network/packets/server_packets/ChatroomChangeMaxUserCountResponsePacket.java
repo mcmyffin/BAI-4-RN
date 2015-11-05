@@ -17,6 +17,6 @@ public class ChatroomChangeMaxUserCountResponsePacket extends AbstractServerPack
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + statusCode;
+        return "" + getOperationCode() + " " + statusCode.getStatusCode();
     }
 }

@@ -8,12 +8,12 @@ import static de.haw_chat.common.operation.implementations.Status.*;
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomCreateResponsePacket extends AbstractServerPacket {
-    private Status statusCode;
+public class UnsupportedServerPacket extends AbstractServerPacket {
+    
 
-    public ChatroomCreateResponsePacket(ChatServerThread chatServerThread, String messageString) {
+    public UnsupportedServerPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.statusCode = Status.getStatus(Integer.parseInt(messageString.split(" ")[1]));
+        
     }
 
     @Override

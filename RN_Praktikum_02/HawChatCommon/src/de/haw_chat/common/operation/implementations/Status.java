@@ -3,7 +3,7 @@ package de.haw_chat.common.operation.implementations;
 /**
  * Created by Andreas on 04.11.2015.
  */
-public enum StatusEnum {
+public enum Status {
     OK,                                 // ALL PACKETS
 
     USERNAME_INVALID,                   // REGISTER_ACCOUNT_RESPONSE
@@ -32,13 +32,13 @@ public enum StatusEnum {
 
     private static final int START_VALUE = 400;
 
-    public static StatusEnum getStatus(int statusCode) {
+    public static Status getStatus(int statusCode) {
         statusCode = statusCode - START_VALUE;
-        return StatusEnum.values()[statusCode];
+        return Status.values()[statusCode];
     }
 
-    public static StatusEnum getStatus(String statusName) {
-        return StatusEnum.valueOf(statusName);
+    public static Status getStatus(String statusName) {
+        return Status.valueOf(statusName);
     }
 
     public int getStatusCode() {

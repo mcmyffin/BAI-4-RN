@@ -1,4 +1,4 @@
-package de.haw_chat.server.network.packets.server_packets;
+package de.haw_chat.client.network.packets.client_packets;
 
 import de.haw_chat.common.operation.implementations.Status;
 
@@ -8,15 +8,15 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomDeleteResponsePacket extends AbstractServerPacket {
-    private Status statusCode;
+public class UnknownClientPacket extends AbstractClientPacket {
+    
 
-    public ChatroomDeleteResponsePacket(Status statusCode) {
-        this.statusCode = statusCode;
+    public UnknownClientPacket() {
+        
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + statusCode.getStatusCode();
+        return "" + getOperationCode();
     }
 }
