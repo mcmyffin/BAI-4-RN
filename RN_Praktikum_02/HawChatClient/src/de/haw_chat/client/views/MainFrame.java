@@ -27,6 +27,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -228,14 +230,22 @@ public class MainFrame {
 		buttonConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String hostname = textFieldHostname.getText();
+				try {
+					InetAddress.getByName(hostname);
+				} catch (UnknownHostException e1) {
+					JOptionPane.showMessageDialog(null,
+							"Der Server '" + textFieldHostname.getText() + "' ist unbekannt!",
+							"Unbekannter Server!", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				
 				int port;
 				try {
 					port = Integer.valueOf(textFieldPort.getText());
 				} catch(Exception ex) {
 					JOptionPane.showMessageDialog(null,
-							"Ungültiger Port: " + textFieldPort.getText(),
-							"Fehlerhafte Eingabe!", JOptionPane.ERROR_MESSAGE);
+							"Der Port '" + textFieldPort.getText() + "' ist ungültig!",
+							"Ungültiger Port!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				
