@@ -179,7 +179,7 @@ public class MainFrame {
 		JButton buttonLogin = new JButton("Anmelden");
 		buttonLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String username = textFieldHostname.getText();
+				String username = textFieldUsername.getText();
 				String password = textFieldPassword.getText();
 				controller.login(username, password);
 			}
