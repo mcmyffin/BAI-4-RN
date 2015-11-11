@@ -4,7 +4,6 @@ import de.haw_chat.client.network.interfaces.ChatClient;
 import de.haw_chat.client.network.interfaces.ChatClientData;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
-import de.haw_chat.client.network.packets.client_packets.AbstractClientPacket;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -40,8 +39,8 @@ final class ChatClientImpl implements ChatClient {
     }
 
     @Override
-    public void writeToServer(AbstractClientPacket clientPacket) throws IOException {
-        chatServerThread.writeToServer(clientPacket);
+    public ChatServerThread getChatServerThread() {
+        return chatServerThread;
     }
 
     @Override
@@ -91,6 +90,8 @@ final class ChatClientImpl implements ChatClient {
 
             ChatServerThread chatServerThread =
                     ChatDeviceFactory.createChatServerThread(serverId, connectionSocket, this);
+
+            this.chatServerThread = chatServerThread;
 
             Thread thread = new Thread(chatServerThread);
             thread.start();

@@ -10,5 +10,5 @@ import java.io.IOException;
 public interface ChatClient extends Runnable {
     ChatServerConfiguration getConfiguration();
     ChatClientData getData();
-    void writeToServer(AbstractClientPacket clientPacket) throws IOException;
+    ChatServerThread getChatServerThread();
 }
