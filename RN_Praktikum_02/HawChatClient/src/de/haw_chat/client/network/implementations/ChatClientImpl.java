@@ -1,15 +1,13 @@
 package de.haw_chat.client.network.implementations;
 
-import de.haw_chat.client.network.interfaces.ChatClientData;
-import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.client.network.interfaces.ChatClient;
+import de.haw_chat.client.network.interfaces.ChatClientData;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
-import de.haw_chat.client.network.packets.client_packets.LoginPacket;
+import de.haw_chat.client.network.interfaces.ChatServerThread;
+import de.haw_chat.client.network.packets.client_packets.AbstractClientPacket;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.Semaphore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -19,6 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 final class ChatClientImpl implements ChatClient {
     private final ChatServerConfiguration configuration;
     private ChatClientData chatClientData;
+    private ChatServerThread chatServerThread;
 
     private ChatClientImpl(ChatServerConfiguration configuration) {
         checkNotNull(configuration);
@@ -38,6 +37,11 @@ final class ChatClientImpl implements ChatClient {
     @Override
     public ChatClientData getData() {
         return chatClientData;
+    }
+
+    @Override
+    public void writeToServer(AbstractClientPacket clientPacket) throws IOException {
+        chatServerThread.writeToServer(clientPacket);
     }
 
     @Override
@@ -98,9 +102,6 @@ final class ChatClientImpl implements ChatClient {
                     e.printStackTrace();
                 }
             }
-
-            // TODO: Remove (it's just a test)
-            chatServerThread.writeToServer(new LoginPacket("Hans", "Wurst"));
         } catch (IOException e) {
             e.printStackTrace();
         }
