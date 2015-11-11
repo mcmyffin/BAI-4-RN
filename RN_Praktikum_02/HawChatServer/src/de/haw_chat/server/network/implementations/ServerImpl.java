@@ -1,9 +1,8 @@
 package de.haw_chat.server.network.implementations;
 
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.server.network.interfaces.ChatServer;
-import de.haw_chat.server.network.interfaces.ChatServerConfiguration;
-import de.haw_chat.server.network.interfaces.ChatServerData;
+import de.haw_chat.server.network.interfaces.ClientThread;
+import de.haw_chat.server.network.interfaces.Server;
+import de.haw_chat.server.network.interfaces.ServerConfiguration;
 import de.haw_chat.server.network.utils.IpChecker;
 
 import java.io.IOException;
@@ -16,30 +15,30 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by Andreas on 31.10.2015.
  */
-final class ChatServerImpl implements ChatServer {
-    private final ChatServerConfiguration configuration;
-    private ChatServerData chatServerData;
+final class ServerImpl implements Server {
+    private final ServerConfiguration configuration;
+    private ServerData serverData;
     private Semaphore clientThreadsSemaphore;
 
-    private ChatServerImpl(ChatServerConfiguration configuration) {
+    private ServerImpl(ServerConfiguration configuration) {
         checkNotNull(configuration);
         this.configuration = configuration;
-        this.chatServerData = null;
+        this.serverData = null;
         this.clientThreadsSemaphore = null;
     }
 
-    public static ChatServer create(ChatServerConfiguration configuration) {
-        return new ChatServerImpl(configuration);
+    public static Server create(ServerConfiguration configuration) {
+        return new ServerImpl(configuration);
     }
 
     @Override
-    public ChatServerConfiguration getConfiguration() {
+    public ServerConfiguration getConfiguration() {
         return configuration;
     }
 
     @Override
-    public ChatServerData getData() {
-        return chatServerData;
+    public ServerData getData() {
+        return serverData;
     }
 
     @Override
@@ -50,13 +49,13 @@ final class ChatServerImpl implements ChatServer {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChatServerImpl)) return false;
+        if (!(o instanceof ServerImpl)) return false;
 
-        ChatServerImpl that = (ChatServerImpl) o;
+        ServerImpl that = (ServerImpl) o;
 
         if (getConfiguration() != null ? !getConfiguration().equals(that.getConfiguration()) : that.getConfiguration() != null)
             return false;
-        if (chatServerData != null ? !chatServerData.equals(that.chatServerData) : that.chatServerData != null)
+        if (serverData != null ? !serverData.equals(that.serverData) : that.serverData != null)
             return false;
         return !(getClientThreadsSemaphore() != null ? !getClientThreadsSemaphore().equals(that.getClientThreadsSemaphore()) : that.getClientThreadsSemaphore() != null);
 
@@ -65,16 +64,16 @@ final class ChatServerImpl implements ChatServer {
     @Override
     public int hashCode() {
         int result = getConfiguration() != null ? getConfiguration().hashCode() : 0;
-        result = 31 * result + (chatServerData != null ? chatServerData.hashCode() : 0);
+        result = 31 * result + (serverData != null ? serverData.hashCode() : 0);
         result = 31 * result + (getClientThreadsSemaphore() != null ? getClientThreadsSemaphore().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "ChatServer{" +
+        return "Server{" +
                 "configuration=" + configuration +
-                ", chatServerData=" + chatServerData +
+                ", serverData=" + serverData +
                 ", clientThreadsSemaphore=" + clientThreadsSemaphore +
                 '}';
     }
@@ -87,7 +86,7 @@ final class ChatServerImpl implements ChatServer {
 
         final int serverPort = configuration.getServerPort();
         clientThreadsSemaphore = new Semaphore(configuration.getMaxClients());
-        chatServerData = ChatServerDataImpl.create();
+        serverData = ServerData.create();
 
         ServerSocket welcomeSocket;
         Socket connectionSocket;
@@ -107,11 +106,11 @@ final class ChatServerImpl implements ChatServer {
 
                 connectionSocket = welcomeSocket.accept();
 
-                ChatClientThread chatClientThread =
-                        ChatDeviceFactory.createChatClientThread(nextThreadNumber, connectionSocket, this);
+                ClientThread clientThread =
+                        DeviceFactory.createChatClientThread(nextThreadNumber, connectionSocket, this);
                 nextThreadNumber++;
 
-                Thread thread = new Thread(chatClientThread);
+                Thread thread = new Thread(clientThread);
                 thread.start();
             }
         } catch (IOException e) {

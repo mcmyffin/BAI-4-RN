@@ -1,9 +1,6 @@
 package de.haw_chat.server.network.packets.client_packets;
 
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.common.operation.implementations.Status;
-
-import static de.haw_chat.common.operation.implementations.Status.*;
+import de.haw_chat.server.network.interfaces.ClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
@@ -12,8 +9,8 @@ public class RegisterAccountPacket extends AbstractClientPacket {
     private String username;
     private String password;
 
-    public RegisterAccountPacket(ChatClientThread chatClientThread, String messageString) {
-        super(chatClientThread);
+    public RegisterAccountPacket(ClientThread clientThread, String messageString) {
+        super(clientThread);
         this.username = messageString.split(" ")[1];
         this.password = messageString.split(" ")[2];
     }

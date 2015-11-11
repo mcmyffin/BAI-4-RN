@@ -8,13 +8,13 @@ import java.net.Socket;
 /**
  * Created by Andreas on 31.10.2015.
  */
-public interface ChatClientThread extends Runnable {
+public interface ClientThread extends Runnable {
     int getClientId();
     Socket getClientSocket();
-    ChatServer getChatServer();
+    Server getServer();
     boolean isWorkerServiceRequested();
     void setWorkerServiceRequested(boolean workerServiceRequested);
 
-    ChatClientData getData();
+    ClientData getData();
     void writeToClient(AbstractServerPacket serverPacket) throws IOException;
 }

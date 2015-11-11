@@ -1,9 +1,9 @@
 package de.haw_chat.server.network.implementations;
 
 import de.haw_chat.common.operation.interfaces.OperationData;
-import de.haw_chat.server.network.interfaces.ChatClientData;
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.server.network.interfaces.ChatServer;
+import de.haw_chat.server.network.interfaces.ClientData;
+import de.haw_chat.server.network.interfaces.ClientThread;
+import de.haw_chat.server.network.interfaces.Server;
 import de.haw_chat.server.network.packets.client_packets.AbstractClientPacket;
 import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
 
@@ -17,34 +17,34 @@ import java.net.Socket;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static de.haw_chat.common.operation.implementations.OperationDataManager.getOperationData;
-import static de.haw_chat.server.network.implementations.ChatDeviceFactory.createChatClientData;
+import static de.haw_chat.server.network.implementations.DeviceFactory.createChatClientData;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-final class ChatClientThreadImpl implements ChatClientThread {
+final class ClientThreadImpl implements ClientThread {
     private final int clientId;
     private final Socket clientSocket;
-    private final ChatServer chatServer;
+    private final Server server;
     private BufferedReader inFromClient;
     private DataOutputStream outToClient;
     private boolean workerServiceRequested = true;
-    private ChatClientData chatClientData;
+    private ClientData clientData;
 
-    private ChatClientThreadImpl(int clientId, Socket clientSocket, ChatServer chatServer) {
+    private ClientThreadImpl(int clientId, Socket clientSocket, Server server) {
         checkNotNull(clientSocket);
-        checkNotNull(chatServer);
+        checkNotNull(server);
         this.clientId = clientId;
         this.clientSocket = clientSocket;
-        this.chatServer = chatServer;
+        this.server = server;
         this.inFromClient = null;
         this.outToClient = null;
         this.workerServiceRequested = true;
-        this.chatClientData = createChatClientData();
+        this.clientData = createChatClientData();
     }
 
-    public static ChatClientThread create(int clientId, Socket clientSocket, ChatServer chatServer) {
-        return new ChatClientThreadImpl(clientId, clientSocket, chatServer);
+    public static ClientThread create(int clientId, Socket clientSocket, Server server) {
+        return new ClientThreadImpl(clientId, clientSocket, server);
     }
 
     @Override
@@ -58,8 +58,8 @@ final class ChatClientThreadImpl implements ChatClientThread {
     }
 
     @Override
-    public ChatServer getChatServer() {
-        return chatServer;
+    public Server getServer() {
+        return server;
     }
 
     @Override
@@ -73,16 +73,16 @@ final class ChatClientThreadImpl implements ChatClientThread {
     }
 
     @Override
-    public ChatClientData getData() {
-        return chatClientData;
+    public ClientData getData() {
+        return clientData;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChatClientThreadImpl)) return false;
+        if (!(o instanceof ClientThreadImpl)) return false;
 
-        ChatClientThreadImpl that = (ChatClientThreadImpl) o;
+        ClientThreadImpl that = (ClientThreadImpl) o;
 
         return getClientId() == that.getClientId();
 
@@ -95,12 +95,12 @@ final class ChatClientThreadImpl implements ChatClientThread {
 
     @Override
     public String toString() {
-        return "ChatClientThread{" +
+        return "ClientThread{" +
                 "clientId=" + clientId +
                 ", clientSocket=" + clientSocket +
-                ", chatServer=" + chatServer +
+                ", server=" + server +
                 ", workerServiceRequested=" + workerServiceRequested +
-                ", chatClientData=" + chatClientData +
+                ", clientData=" + clientData +
                 '}';
     }
 
@@ -123,7 +123,7 @@ final class ChatClientThreadImpl implements ChatClientThread {
 
         try {
             Class<?> clazz = Class.forName(className);
-            Constructor<?> ctor = clazz.getConstructor(ChatClientThread.class, String.class);
+            Constructor<?> ctor = clazz.getConstructor(ClientThread.class, String.class);
             AbstractClientPacket object = (AbstractClientPacket) ctor.newInstance(this, request);
             return object;
         } catch (ClassNotFoundException e) {
@@ -166,7 +166,7 @@ final class ChatClientThreadImpl implements ChatClientThread {
         } catch (IOException e) {
             System.out.println("TCP Client " + clientId + " closed the connection");
         } finally {
-            chatServer.getClientThreadsSemaphore().release();
+            server.getClientThreadsSemaphore().release();
         }
     }
 }

@@ -1,9 +1,6 @@
 package de.haw_chat.server.network.packets.client_packets;
 
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.common.operation.implementations.Status;
-
-import static de.haw_chat.common.operation.implementations.Status.*;
+import de.haw_chat.server.network.interfaces.ClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
@@ -11,8 +8,8 @@ import static de.haw_chat.common.operation.implementations.Status.*;
 public class PongFromClientPacket extends AbstractClientPacket {
     private int timestamp;
 
-    public PongFromClientPacket(ChatClientThread chatClientThread, String messageString) {
-        super(chatClientThread);
+    public PongFromClientPacket(ClientThread clientThread, String messageString) {
+        super(clientThread);
         this.timestamp = Integer.parseInt(messageString.split(" ")[1]);
     }
 

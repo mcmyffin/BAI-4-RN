@@ -1,6 +1,6 @@
 package de.haw_chat.server.network.implementations;
 
-import de.haw_chat.server.network.interfaces.ChatServerConfiguration;
+import de.haw_chat.server.network.interfaces.ServerConfiguration;
 
 import java.util.Properties;
 
@@ -10,22 +10,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by Andreas on 31.10.2015.
  */
-final class ChatServerConfigurationImpl implements ChatServerConfiguration {
+final class ServerConfigurationImpl implements ServerConfiguration {
     private final int serverPort;
     private final int maxThreads;
     private final boolean sslEnabled;
 
-    private ChatServerConfigurationImpl(int serverPort, int maxThreads, boolean sslEnabled) {
+    private ServerConfigurationImpl(int serverPort, int maxThreads, boolean sslEnabled) {
         this.serverPort = serverPort;
         this.maxThreads = maxThreads;
         this.sslEnabled = sslEnabled;
     }
 
-    public static ChatServerConfiguration create(int serverPort, int maxThreads, boolean sslEnabled) {
-        return new ChatServerConfigurationImpl(serverPort, maxThreads, sslEnabled);
+    public static ServerConfiguration create(int serverPort, int maxThreads, boolean sslEnabled) {
+        return new ServerConfigurationImpl(serverPort, maxThreads, sslEnabled);
     }
 
-    public static ChatServerConfiguration create(Properties properties) {
+    public static ServerConfiguration create(Properties properties) {
         checkNotNull(properties, "properties is null!");
         checkArgument(properties.containsKey("SERVER_PORT"), "properties does not contain key 'SERVER_PORT'!");
         checkArgument(properties.containsKey("MAX_THREADS"), "properties does not contain key 'MAX_THREADS'!");
@@ -56,9 +56,9 @@ final class ChatServerConfigurationImpl implements ChatServerConfiguration {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChatServerConfigurationImpl)) return false;
+        if (!(o instanceof ServerConfigurationImpl)) return false;
 
-        ChatServerConfigurationImpl that = (ChatServerConfigurationImpl) o;
+        ServerConfigurationImpl that = (ServerConfigurationImpl) o;
 
         if (getServerPort() != that.getServerPort()) return false;
         if (getMaxClients() != that.getMaxClients()) return false;
@@ -76,7 +76,7 @@ final class ChatServerConfigurationImpl implements ChatServerConfiguration {
 
     @Override
     public String toString() {
-        return "ChatServerConfiguration{" +
+        return "ServerConfiguration{" +
                 "serverPort=" + serverPort +
                 ", maxThreads=" + maxThreads +
                 ", sslEnabled=" + sslEnabled +

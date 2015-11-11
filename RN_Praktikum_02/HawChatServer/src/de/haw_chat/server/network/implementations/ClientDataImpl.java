@@ -1,18 +1,18 @@
 package de.haw_chat.server.network.implementations;
 
-import de.haw_chat.server.network.interfaces.ChatClientData;
+import de.haw_chat.server.network.interfaces.ClientData;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-final class ChatClientDataImpl implements ChatClientData {
+final class ClientDataImpl implements ClientData {
     private String username;
 
-    private ChatClientDataImpl() {
+    private ClientDataImpl() {
     }
 
-    public static ChatClientData create() {
-        return new ChatClientDataImpl();
+    public static ClientData create() {
+        return new ClientDataImpl();
     }
 
     @Override

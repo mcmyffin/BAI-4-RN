@@ -1,7 +1,5 @@
 package de.haw_chat.server.network.packets.server_packets;
 
-import de.haw_chat.server.network.interfaces.ChatServer;
-
 import static de.haw_chat.common.operation.implementations.OperationDataManager.getOperationData;
 
 /**

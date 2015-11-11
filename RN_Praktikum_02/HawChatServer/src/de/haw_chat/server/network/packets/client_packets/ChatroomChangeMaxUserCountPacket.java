@@ -1,9 +1,6 @@
 package de.haw_chat.server.network.packets.client_packets;
 
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.common.operation.implementations.Status;
-
-import static de.haw_chat.common.operation.implementations.Status.*;
+import de.haw_chat.server.network.interfaces.ClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
@@ -12,8 +9,8 @@ public class ChatroomChangeMaxUserCountPacket extends AbstractClientPacket {
     private String chatroomName;
     private int maxUserCount;
 
-    public ChatroomChangeMaxUserCountPacket(ChatClientThread chatClientThread, String messageString) {
-        super(chatClientThread);
+    public ChatroomChangeMaxUserCountPacket(ClientThread clientThread, String messageString) {
+        super(clientThread);
         this.chatroomName = messageString.split(" ")[1];
         this.maxUserCount = Integer.parseInt(messageString.split(" ")[2]);
     }

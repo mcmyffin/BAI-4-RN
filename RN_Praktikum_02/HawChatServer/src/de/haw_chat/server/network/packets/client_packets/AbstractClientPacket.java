@@ -1,8 +1,8 @@
 package de.haw_chat.server.network.packets.client_packets;
 
-import de.haw_chat.server.network.interfaces.ChatClientData;
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.server.network.interfaces.ChatServerData;
+import de.haw_chat.server.network.implementations.ServerData;
+import de.haw_chat.server.network.interfaces.ClientData;
+import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
 
 import java.io.IOException;
@@ -13,31 +13,34 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Andreas on 31.10.2015.
  */
 public abstract class AbstractClientPacket {
-    private final ChatClientThread chatClientThread;
+    private final ClientThread clientThread;
 
-    protected AbstractClientPacket(ChatClientThread chatClientThread) {
-        checkNotNull(chatClientThread);
-        this.chatClientThread = chatClientThread;
+    protected AbstractClientPacket(ClientThread clientThread) {
+        checkNotNull(clientThread);
+        this.clientThread = clientThread;
     }
 
-    protected final ChatClientData getClientData() {
-        checkNotNull(chatClientThread.getData());
-        return chatClientThread.getData();
+    protected final ClientData getClientData() {
+        checkNotNull(clientThread.getData());
+        return clientThread.getData();
     }
 
-    protected final ChatServerData getServerData() {
-        checkNotNull(chatClientThread.getChatServer());
-        checkNotNull(chatClientThread.getChatServer().getData());
-        return chatClientThread.getChatServer().getData();
+    protected final ServerData getServerData() {
+        checkNotNull(clientThread.getServer());
+        checkNotNull(clientThread.getServer().getData());
+        return clientThread.getServer().getData();
     }
 
     protected final void sendToClient(AbstractServerPacket serverPacket) {
         try {
-            chatClientThread.writeToClient(serverPacket);
+            clientThread.writeToClient(serverPacket);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    protected  final ClientThread getClientThread(){
+        return this.clientThread;
+    }
     public abstract void process();
 }

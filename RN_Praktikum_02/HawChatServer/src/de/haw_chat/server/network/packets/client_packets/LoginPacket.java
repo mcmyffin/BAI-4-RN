@@ -1,7 +1,6 @@
 package de.haw_chat.server.network.packets.client_packets;
 
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.common.operation.implementations.Status;
+import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
 
 import static de.haw_chat.common.operation.implementations.Status.*;
@@ -13,8 +12,8 @@ public class LoginPacket extends AbstractClientPacket {
     private String username;
     private String password;
 
-    public LoginPacket(ChatClientThread chatClientThread, String messageString) {
-        super(chatClientThread);
+    public LoginPacket(ClientThread clientThread, String messageString) {
+        super(clientThread);
         this.username = messageString.split(" ")[1];
         this.password = messageString.split(" ")[2];
     }
@@ -28,7 +27,7 @@ public class LoginPacket extends AbstractClientPacket {
             return;
         }
 
-        if (getServerData().getTakenUsernames().contains(username)) {
+        if (getServerData().containsUser(username)) {
             // Username already logged in by other user
             LoginResponsePacket response = new LoginResponsePacket(USERNAME_ALREADY_LOGGED_IN);
             sendToClient(response);
@@ -44,8 +43,8 @@ public class LoginPacket extends AbstractClientPacket {
         }
 
         // Set username and add it to taken usernames
-        getServerData().getTakenUsernames().add(username);
         getClientData().setUsername(username);
+        getServerData().addUserClient(username, getClientThread());
 
         // Username successfully set
         LoginResponsePacket response = new LoginResponsePacket(OK);

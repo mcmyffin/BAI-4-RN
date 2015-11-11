@@ -1,9 +1,6 @@
 package de.haw_chat.server.network.packets.client_packets;
 
-import de.haw_chat.server.network.interfaces.ChatClientThread;
-import de.haw_chat.common.operation.implementations.Status;
-
-import static de.haw_chat.common.operation.implementations.Status.*;
+import de.haw_chat.server.network.interfaces.ClientThread;
 
 /**
  * Created by Andreas on 31.10.2015.
@@ -12,8 +9,8 @@ public class ChatroomChangeNamePacket extends AbstractClientPacket {
     private String chatroomNameOld;
     private String chatroomNameNew;
 
-    public ChatroomChangeNamePacket(ChatClientThread chatClientThread, String messageString) {
-        super(chatClientThread);
+    public ChatroomChangeNamePacket(ClientThread clientThread, String messageString) {
+        super(clientThread);
         this.chatroomNameOld = messageString.split(" ")[1];
         this.chatroomNameNew = messageString.split(" ")[2];
     }
