@@ -177,6 +177,13 @@ public class MainFrame {
 		panelLogin.add(textFieldPassword);
 		
 		JButton buttonLogin = new JButton("Anmelden");
+		buttonLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String username = textFieldHostname.getText();
+				String password = textFieldPassword.getText();
+				controller.login(username, password);
+			}
+		});
 		buttonLogin.setBounds(537, 138, 89, 23);
 		panelLogin.add(buttonLogin);
 		

@@ -10,4 +10,8 @@ public class MainController {
 	public void setServerConfiguration(String hostname, int port, boolean enableSsl) {
 		throw new UnsupportedOperationException();
 	}
+	
+	public void login(String username, String password) {
+		throw new UnsupportedOperationException();
+	}
 }
