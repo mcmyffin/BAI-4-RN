@@ -169,12 +169,14 @@ public class MainFrame {
 		textFieldUsername.setColumns(10);
 		textFieldUsername.setBounds(451, 60, 175, 20);
 		panelLogin.add(textFieldUsername);
+		textFieldUsername.setText("unnamed");
 		
 		textFieldPassword = new JPasswordField();
 		components.add(textFieldPassword);
 		textFieldPassword.setColumns(10);
 		textFieldPassword.setBounds(451, 99, 175, 20);
 		panelLogin.add(textFieldPassword);
+		textFieldPassword.setText("test");
 		
 		JButton buttonLogin = new JButton("Anmelden");
 		buttonLogin.addActionListener(new ActionListener() {
@@ -213,6 +215,7 @@ public class MainFrame {
 		textFieldHostname.setColumns(10);
 		textFieldHostname.setBounds(451, 62, 175, 20);
 		panelServerSettings.add(textFieldHostname);
+		textFieldHostname.setText("localhost");
 		
 		JLabel labelPort = new JLabel("Port:");
 		labelPort.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -226,7 +229,8 @@ public class MainFrame {
 		textFieldPort.setColumns(10);
 		textFieldPort.setBounds(451, 101, 175, 20);
 		panelServerSettings.add(textFieldPort);
-		
+		textFieldPort.setText("12345");
+
 		JCheckBox checkBoxEnableSsl = new JCheckBox("");
 		checkBoxEnableSsl.setHorizontalAlignment(SwingConstants.RIGHT);
 		components.add(checkBoxEnableSsl);

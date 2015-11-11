@@ -17,19 +17,12 @@ public class MainController {
 	}
 	
 	public void setServerConfiguration(String hostname, int port, boolean enableSsl) {
-		try {
-			ChatServerConfiguration configuration =
-					ChatDeviceFactory.createChatServerConfiguration(hostname, port, enableSsl);
-			chatClient = ChatDeviceFactory.createChatClient(configuration);
+		ChatServerConfiguration configuration =
+				ChatDeviceFactory.createChatServerConfiguration(hostname, port, enableSsl);
+		chatClient = ChatDeviceFactory.createChatClient(configuration);
 
-			Thread thread = new Thread(chatClient);
-			thread.start();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null,
-					"Der Server '" + hostname + "' ist momentan nicht erreichbar!",
-					"Server ist offline!", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+		Thread thread = new Thread(chatClient);
+		thread.start();
 	}
 	
 	public void login(String username, String password) {

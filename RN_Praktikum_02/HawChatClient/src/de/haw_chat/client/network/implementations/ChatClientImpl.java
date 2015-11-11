@@ -5,6 +5,7 @@ import de.haw_chat.client.network.interfaces.ChatClientData;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -104,7 +105,10 @@ final class ChatClientImpl implements ChatClient {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Der Server '" + serverHost + "' ist momentan nicht erreichbar!",
+                    "Server ist offline!", JOptionPane.ERROR_MESSAGE);
+            return;
         }
     }
 }
