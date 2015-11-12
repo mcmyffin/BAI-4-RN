@@ -30,14 +30,22 @@ public final class ServerData {
     public synchronized boolean addUserClient(String username, ClientThread clientThread){
         checkNotNull(username);
         checkNotNull(clientThread);
-
         if(takenUsernames.containsKey(username)) return false;
+
         takenUsernames.put(username,clientThread);
         return true;
     }
 
     public synchronized boolean containsUser(String user){
         return takenUsernames.containsKey(user);
+    }
+
+    public synchronized boolean removeUserClient(ClientThread client){
+        checkNotNull(client);
+        if(!containsUser(client.getData().getUsername())) return false;
+
+        takenUsernames.remove(client.getData().getUsername());
+        return true;
     }
 
     public synchronized ClientThread getChatClientByUsername(String username) throws UsernameNotFoundException {
@@ -47,8 +55,12 @@ public final class ServerData {
     }
 
     /** Chatroom operation **/
-    public synchronized Set<String> getChatRooms(){
+    public synchronized Set<String> getChatRoomNames(){
         return Collections.unmodifiableSet(chatrooms.keySet());
+    }
+
+    public synchronized Collection<Chatroom> getChatrooms(){
+        return Collections.unmodifiableCollection(chatrooms.values());
     }
 
     public synchronized Chatroom getChatroomByName(String chatroom) throws ChatroomNotFoundExeption {
@@ -76,7 +88,7 @@ public final class ServerData {
         return true;
     }
 
-    public boolean renameChatRoom(Chatroom chatroom, String newName){
+    public boolean renameChatroom(Chatroom chatroom, String newName){
         checkNotNull(chatroom);
         checkNotNull(newName);
         if(isChatroomExisting(newName)) return false;

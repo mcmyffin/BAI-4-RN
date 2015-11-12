@@ -6,7 +6,6 @@ import de.haw_chat.server.network.implementations.ServerData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.*;
 
-import java.security.Timestamp;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.*;
@@ -32,7 +31,10 @@ public class Chatroom {
         this.chatName   = chatName;
         this.password   = password;
         this.maxUser    = maxUser;
-        connectedClients.put(owner,clientThread);
+        connectedClients.put(owner, clientThread);
+
+        ChatroomCreateResponsePacket packet = new ChatroomCreateResponsePacket(Status.OK);
+        sendSinglePacketAt(clientThread,packet);
     }
 
     public synchronized static Chatroom create(ClientThread clientThread, String chatName, String password, int maxUser)
@@ -50,9 +52,34 @@ public class Chatroom {
         return new Chatroom(clientThread,chatName,password,maxUser);
     }
 
+    public synchronized void remove(ClientThread client){
+        checkNotNull(client);
+        Status response = Status.OK;
+        if(!isOwner(client)) response = Status.CHATROOM_PERMISSION_DENIED;
+        if(!isMember(client)) response = Status.CHATROOM_NOT_MEMBER;
+        else{
+
+            // disconnect all member
+            for(ClientThread c : connectedClients.values()){
+                leave(c);
+            }
+
+
+            boolean result = client.getServer().getData().removeChatroom(this);
+            if(!result) response = Status.CHATROOM_NOT_FOUND;
+
+            ChatroomDeleteResponsePacket packet = new ChatroomDeleteResponsePacket(response);
+            sendSinglePacketAt(client,packet);
+        }
+    }
+
     // getter
     public synchronized String getName(){
         return this.chatName;
+    }
+
+    public synchronized int getMaxUser(){
+        return new Integer(this.maxUser);
     }
 
     public synchronized int getNumberOfConnectedUser(){
@@ -75,6 +102,8 @@ public class Chatroom {
         else {
             // add client to Chatroom
             connectedClients.put(client.getData().getUsername(), client);
+            client.getData().addConnectedChats(getName());
+
             // SEND NEW MEMBERLIST TO MEMBERS
             sendDistributedMemberList();
         }
@@ -98,13 +127,15 @@ public class Chatroom {
     }
 
 
-    public synchronized void leave(ClientThread client) throws UserNotMemberExeption {
+    public synchronized void leave(ClientThread client){
         checkNotNull(client);
         Status responseStatus = Status.OK;
         if(!connectedClients.containsKey(client.getData().getUsername())) responseStatus = Status.CHATROOM_NOT_MEMBER;
         else{
             // remove client from Chatroom
             connectedClients.remove(client.getData().getUsername());
+            client.getData().disconnectFromChat(getName());
+
             // send new Memberlist to chatroom member
             sendDistributedMemberList();
         }
@@ -128,9 +159,8 @@ public class Chatroom {
 
     }
 
-    public void changeChatName(String newChatName, String password, ClientThread client){
+    public void changeChatName(String newChatName, ClientThread client){
         checkNotNull(newChatName);
-        checkNotNull(password);
 
         Status responseStatus = Status.OK;
         ServerData serverData = client.getServer().getData();
@@ -138,10 +168,16 @@ public class Chatroom {
 
         if(owner != client.getData().getUsername()) responseStatus = Status.CHATROOM_PERMISSION_DENIED;
         else if(!connectedClients.containsKey(client.getData().getUsername())) responseStatus = Status.CHATROOM_NOT_MEMBER;
-        else if(!checkPassword(password)) responseStatus = Status.PASSWORD_INVALID;
-        else if(!serverData.renameChatRoom(this,newChatName)) responseStatus = Status.CHATROOM_NAME_ALREADY_TAKEN;
+        else if(!serverData.renameChatroom(this, newChatName)) responseStatus = Status.CHATROOM_NAME_ALREADY_TAKEN;
         else{
             this.chatName = newChatName;
+
+            // change chatName in Clientdata by connected members
+            for(ClientThread c : connectedClients.values()){
+                c.getData().disconnectFromChat(oldChatName);
+                c.getData().addConnectedChats(newChatName);
+            }
+
             ChatroomNameChangedPacket packet = new ChatroomNameChangedPacket(oldChatName,newChatName);
             sendDistributedPackestAtAll(packet);
         }
@@ -235,7 +271,7 @@ public class Chatroom {
 
     private void sendDistributedMessage(ClientThread messageFrom, String message){
         long timeStamp = System.currentTimeMillis();
-        MessageSendedPacket packet = new MessageSendedPacket(messageFrom.getData().getUsername(),message,timeStamp); // TODO: MISSING CHATROOMNAME
+        MessageSendedPacket packet = new MessageSendedPacket(getName(),messageFrom.getData().getUsername(),message,timeStamp); // TODO: MISSING CHATROOMNAME
         sendDistributedPacketsAtAll(packet,messageFrom);
     }
 
