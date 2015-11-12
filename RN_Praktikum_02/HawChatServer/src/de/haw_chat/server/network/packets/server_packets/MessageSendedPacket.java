@@ -9,11 +9,13 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  * Created by Andreas on 31.10.2015.
  */
 public class MessageSendedPacket extends AbstractServerPacket {
+    private String chatname;
     private String username;
     private String message;
-    private int timestamp;
+    private long timestamp;
 
-    public MessageSendedPacket(String username, String message, int timestamp) {
+    public MessageSendedPacket(String chatname, String username, String message, long timestamp) {
+        this.chatname = chatname;
         this.username = username;
         this.message = message;
         this.timestamp = timestamp;
@@ -21,6 +23,6 @@ public class MessageSendedPacket extends AbstractServerPacket {
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + username + " " + message + " " + timestamp;
+        return "" + getOperationCode() + " " +chatname + " " + username + " " + message + " " + timestamp;
     }
 }

@@ -9,9 +9,9 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  * Created by Andreas on 31.10.2015.
  */
 public class PongFromServerPacket extends AbstractServerPacket {
-    private int timestamp;
+    private long timestamp;
 
-    public PongFromServerPacket(int timestamp) {
+    public PongFromServerPacket(long timestamp) {
         this.timestamp = timestamp;
     }
 

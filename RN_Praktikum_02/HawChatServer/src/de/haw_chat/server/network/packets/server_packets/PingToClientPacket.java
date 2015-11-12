@@ -9,9 +9,9 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  * Created by Andreas on 31.10.2015.
  */
 public class PingToClientPacket extends AbstractServerPacket {
-    private int timestamp;
+    private long timestamp;
 
-    public PingToClientPacket(int timestamp) {
+    public PingToClientPacket(long timestamp) {
         this.timestamp = timestamp;
     }
 

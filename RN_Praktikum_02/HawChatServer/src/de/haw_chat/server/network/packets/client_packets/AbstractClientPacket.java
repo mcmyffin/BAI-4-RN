@@ -32,11 +32,7 @@ public abstract class AbstractClientPacket {
     }
 
     protected final void sendToClient(AbstractServerPacket serverPacket) {
-        try {
-            clientThread.writeToClient(serverPacket);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        clientThread.writeToClient(serverPacket);
     }
 
     protected  final ClientThread getClientThread(){
