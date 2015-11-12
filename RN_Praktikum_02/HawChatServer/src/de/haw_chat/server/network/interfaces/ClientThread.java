@@ -16,5 +16,5 @@ public interface ClientThread extends Runnable {
     void setWorkerServiceRequested(boolean workerServiceRequested);
 
     ClientData getData();
-    void writeToClient(AbstractServerPacket serverPacket) throws IOException;
+    void writeToClient(AbstractServerPacket serverPacket);
 }

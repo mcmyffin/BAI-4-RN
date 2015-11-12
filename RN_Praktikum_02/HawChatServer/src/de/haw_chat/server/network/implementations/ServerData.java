@@ -1,10 +1,11 @@
 package de.haw_chat.server.network.implementations;
 
+import de.haw_chat.server.model.Chatroom;
+import de.haw_chat.server.network.Exceptions.ChatroomNotFoundExeption;
 import de.haw_chat.server.network.Exceptions.UsernameNotFoundException;
 import de.haw_chat.server.network.interfaces.ClientThread;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -15,8 +16,11 @@ import static com.google.common.base.Preconditions.*;
 public final class ServerData {
 
     private Map<String,ClientThread> takenUsernames;
+    private Map<String,Chatroom>            chatrooms;
+
     private ServerData() {
         this.takenUsernames = new HashMap();
+        this.chatrooms = new HashMap();
     }
 
     public static ServerData create() {
@@ -40,5 +44,46 @@ public final class ServerData {
         checkNotNull(username);
         if(!containsUser(username)) throw new UsernameNotFoundException(username);
         return takenUsernames.get(username);
+    }
+
+    /** Chatroom operation **/
+    public synchronized Set<String> getChatRooms(){
+        return Collections.unmodifiableSet(chatrooms.keySet());
+    }
+
+    public synchronized Chatroom getChatroomByName(String chatroom) throws ChatroomNotFoundExeption {
+        checkNotNull(chatroom);
+        if(!chatrooms.containsKey(chatroom)) throw new ChatroomNotFoundExeption(chatroom);
+        return chatrooms.get(chatroom);
+    }
+
+    public synchronized boolean isChatroomExisting(String chatroomName){
+        checkNotNull(chatroomName);
+        return chatrooms.containsKey(chatroomName);
+    }
+
+    public synchronized boolean addChatroom(Chatroom chatroom){
+        checkNotNull(chatroom);
+        if(isChatroomExisting(chatroom.getName())) return false;
+        chatrooms.put(chatroom.getName(), chatroom);
+        return true;
+    }
+
+    public synchronized boolean removeChatroom(Chatroom chatroom){
+        checkNotNull(chatroom);
+        if(!isChatroomExisting(chatroom.getName())) return false;
+        chatrooms.remove(chatroom.getName());
+        return true;
+    }
+
+    public boolean renameChatRoom(Chatroom chatroom, String newName){
+        checkNotNull(chatroom);
+        checkNotNull(newName);
+        if(isChatroomExisting(newName)) return false;
+
+        String oldName = chatroom.getName();
+        chatrooms.remove(oldName);
+        chatrooms.put(newName,chatroom);
+        return true;
     }
 }

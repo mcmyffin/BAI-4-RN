@@ -1,10 +1,12 @@
 package de.haw_chat.server.network.implementations;
 
+import de.haw_chat.common.operation.implementations.OperationDataManager;
 import de.haw_chat.common.operation.interfaces.OperationData;
 import de.haw_chat.server.network.interfaces.ClientData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.interfaces.Server;
 import de.haw_chat.server.network.packets.client_packets.AbstractClientPacket;
+import de.haw_chat.server.network.packets.client_packets.LogoutPacket;
 import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
 
 import java.io.BufferedReader;
@@ -143,11 +145,18 @@ final class ClientThreadImpl implements ClientThread {
     }
 
     @Override
-    public void writeToClient(AbstractServerPacket serverPacket) throws IOException {
+    public void writeToClient(AbstractServerPacket serverPacket){
         checkNotNull(serverPacket, "serverPacket is null!");
         String reply = serverPacket.toMessageString();
-        outToClient.writeBytes(reply + '\r' + '\n');
-        System.out.println("TCP Worker Thread " + clientId + " has written the message: " + reply);
+        try {
+            outToClient.writeBytes(reply + '\r' + '\n');
+            System.out.println("TCP Worker Thread " + clientId + " has written the message: " + reply);
+        } catch (IOException e) {
+            // will be already cleanup in logout
+            System.out.println("TCP connection lost, packet can not be written");
+            // anzahlLeerzeichen(s_rest,summe)
+        }
+
     }
 
     @Override
@@ -163,7 +172,10 @@ final class ClientThreadImpl implements ClientThread {
             }
 
             clientSocket.close();
-        } catch (IOException e) {
+        } catch (IOException|NullPointerException  e) {
+            // simulate logout by client connection lost
+            LogoutPacket packet = new LogoutPacket(this, Integer.toString(OperationDataManager.getOperationData("Logout").getOperationCode()));
+            packet.process();
             System.out.println("TCP Client " + clientId + " closed the connection");
         } finally {
             server.getClientThreadsSemaphore().release();
