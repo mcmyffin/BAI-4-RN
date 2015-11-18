@@ -1,6 +1,8 @@
 package de.haw_chat.client.network.implementations;
 
+import de.haw_chat.client.controllers.MainController;
 import de.haw_chat.client.network.interfaces.ChatClientData;
+import de.haw_chat.client.views.MainFrame;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import java.util.HashSet;
  */
 final class ChatClientDataImpl implements ChatClientData {
     private String username;
+    private MainController mainController;
 
     private ChatClientDataImpl() {
     }
@@ -26,5 +29,15 @@ final class ChatClientDataImpl implements ChatClientData {
     @Override
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public MainController getMainController() {
+        return mainController;
+    }
+
+    @Override
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 }

@@ -29,6 +29,16 @@ public class MainController {
 		Thread thread = new Thread(chatClient);
 		thread.start();
 
+		while (!chatClient.isStarted()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		chatClient.getData().setMainController(this);
+
 		frame.buttonLogin.setEnabled(true);
 	}
 

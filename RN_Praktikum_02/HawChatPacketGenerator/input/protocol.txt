@@ -43,6 +43,7 @@ CLIENT LOGIN
 SERVER LOGIN_RESPONSE
 // Server beantwortet die Anmeldung eines Clients
 >> STATUS_CODE:Status // Status-Code der Antwort
+>> USERNAME:String // Neuer Benutzername des Clients
 
 CLIENT LOGOUT
 // Client möchte sich abmelden
@@ -165,6 +166,5 @@ SERVER MESSAGE_SEND_RESPONSE
 SERVER MESSAGE_SENDED
 >> CHATROOM_NAME:String // Name des Chatraumes
 >> USERNAME:String // Benutzername des Absenders
->> MESSAGE:String // Inhalt der Nachricht
 >> TIMESTAMP:int // Zeitpunkt des Versandes (serverseitig)
-
+>> MESSAGE:String // Inhalt der Nachricht

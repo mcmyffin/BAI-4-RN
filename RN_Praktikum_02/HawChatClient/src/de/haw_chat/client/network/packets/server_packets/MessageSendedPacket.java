@@ -9,15 +9,18 @@ import static de.haw_chat.common.operation.implementations.Status.*;
  * Created by Andreas on 31.10.2015.
  */
 public class MessageSendedPacket extends AbstractServerPacket {
+    private String chatroom;
     private String username;
     private String message;
     private int timestamp;
 
     public MessageSendedPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.username = messageString.split(" ")[1];
-        this.message = messageString.split(" ")[2];
-        this.timestamp = Integer.parseInt(messageString.split(" ")[3]);
+        this.chatroom = messageString.split(" ")[1];
+        this.timestamp = Integer.parseInt(messageString.split(" ")[2]);
+        this.username = messageString.split(" ")[3];
+
+        this.message = messageString.split(" ")[4];
     }
 
     @Override

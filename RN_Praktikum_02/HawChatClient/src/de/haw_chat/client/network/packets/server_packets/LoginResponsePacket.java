@@ -3,6 +3,8 @@ package de.haw_chat.client.network.packets.server_packets;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.common.operation.implementations.Status;
 
+import javax.swing.*;
+
 import static de.haw_chat.common.operation.implementations.Status.*;
 
 /**
@@ -10,23 +12,33 @@ import static de.haw_chat.common.operation.implementations.Status.*;
  */
 public class LoginResponsePacket extends AbstractServerPacket {
     private Status statusCode;
+    private String username;
 
     public LoginResponsePacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
         this.statusCode = Status.getStatus(Integer.parseInt(messageString.split(" ")[1]));
+        this.username = messageString.split(" ")[2];
     }
 
     @Override
     public void process() {
         if (statusCode == OK) {
-            getClientData().setUsername("Test");
-            System.out.println("Successfully logged in!");
+            getClientData().setUsername(username);
         } else if (statusCode == CLIENT_ALREADY_LOGGED_IN) {
-            System.out.println("You are already logged in!");
+            JOptionPane.showMessageDialog(null,
+                    "Du bist bereits als " + getClientData().getUsername() + " eingeloggt!",
+                    "Fehler!", JOptionPane.ERROR_MESSAGE);
+            return;
         } else if (statusCode == USERNAME_ALREADY_LOGGED_IN) {
-            System.out.println("Username already logged in!");
+            JOptionPane.showMessageDialog(null,
+                    "Der Benutzername" + username + " ist bereits eingeloggt!",
+                    "Fehler!", JOptionPane.ERROR_MESSAGE);
+            return;
         } else if (statusCode == PASSWORD_WRONG) {
-            System.out.println("Wrong username or password!");
+            JOptionPane.showMessageDialog(null,
+                    "Falsches Password!",
+                    "Fehler!", JOptionPane.ERROR_MESSAGE);
+            return;
         }
     }
 }
