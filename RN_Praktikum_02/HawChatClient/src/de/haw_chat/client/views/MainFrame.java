@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
@@ -30,8 +31,14 @@ import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.awt.event.ActionEvent;
+import javax.swing.JSeparator;
+import javax.swing.JList;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class MainFrame {
 	// General frame settings
@@ -58,6 +65,12 @@ public class MainFrame {
 	private JTextField textFieldPort;
 	private JPanel panelForegroundColor;
 	private JPanel panelBackgroundColor;
+	private JPanel settingsPanel;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	public DefaultListModel<String> listModel;
 
 	/**
 	 * Launch the application.
@@ -89,21 +102,161 @@ public class MainFrame {
 		initialize();
 	}
 	
-	private void addChatroomPanel(String chatroomName) {
+	private Map<String, DefaultListModel<String>> chatroomUsers = new HashMap<>();
+	
+	public DefaultListModel<String> getChatroomUsers(String chatroom) {
+		return chatroomUsers.get(chatroom);
+	}
+
+	private Map<String, DefaultListModel<String>> chatroomMessages = new HashMap<>();
+	
+	public DefaultListModel<String> getChatroomMessages(String chatroom) {
+		return chatroomMessages.get(chatroom);
+	}
+	
+	public void addChatroomPanel(String chatroomName) {
+		
 		JPanel chatroomPanel = new JPanel();
-		chatroomPanel.setForeground(COLOR_FOREGROUND);
-		chatroomPanel.setBackground(COLOR_BACKGROUND);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(10, 504, 660, 28);
+		chatroomPanel.add(textField_3);
+		textField_3.setColumns(10);
+		
+		components.add(chatroomPanel);
+		tabbedPane.addTab(chatroomName, null, chatroomPanel, null);
+		chatroomPanel.setLayout(null);
+		
+		JList list_1 = new JList();
+		DefaultListModel<String> messageModel = new DefaultListModel<>();
+		chatroomMessages.put(chatroomName, messageModel);
+		list_1.setModel(messageModel);
+		list_1.setBounds(10, 11, 660, 471);
+		chatroomPanel.add(list_1);
+		
+		JList list_2 = new JList();
+		DefaultListModel<String> userModel = new DefaultListModel<>();
+		chatroomUsers.put(chatroomName, userModel);
+		list_2.setModel(userModel);
+		list_2.setBounds(692, 11, 287, 471);
+		chatroomPanel.add(list_2);
+		
+		JButton btnSenden = new JButton("Senden");
+		btnSenden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String chatroom = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+				controller.requestSendMessage(chatroom , textField_3.getText());
+				textField_3.setText("");
+			}
+		});
+		btnSenden.setBounds(692, 504, 116, 28);
+		chatroomPanel.add(btnSenden);
+		
+		JButton btnChatraumVerlassen = new JButton("Chatraum verlassen");
+		btnChatraumVerlassen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String chatroom = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+				controller.requestLeaveChatroom(chatroom);
+			}
+		});
+		btnChatraumVerlassen.setBounds(829, 504, 150, 28);
+		chatroomPanel.add(btnChatraumVerlassen);
+		
+		refreshColors();
+		
 		tabbedPane.addTab(chatroomName, null, chatroomPanel, null);
 	}
 	
-	private void removeCurrentChatroomPanel() {
+	public void removeCurrentChatroomPanel() {
 		int selectedIndex = tabbedPane.getSelectedIndex();
 		tabbedPane.remove(selectedIndex);
 		tabbedPane.setSelectedIndex(0);
 	}
 	
+	public void gotoChatroomPanel() {
+		int index = tabbedPane.getTabCount() - 1;
+		tabbedPane.setSelectedIndex(index);
+	}
+	
+	private void refreshColors(JPanel panel) {
+		for (Component component : panel.getComponents()) {
+			if (component instanceof JPanel) {
+				refreshColors((JPanel) component);
+			} else if (component instanceof JButton) {
+				continue;
+			} else if (component instanceof JTextField) {
+				continue;
+			} else if (component instanceof JSeparator) {
+				float[] hsb = Color.RGBtoHSB(COLOR_BACKGROUND.getRed(), COLOR_BACKGROUND.getGreen(), COLOR_BACKGROUND.getBlue(), null);
+				float factor = 0.9f;
+
+				if (hsb[2] > (255/2.0f)) {
+					hsb[2] = hsb[2] * factor;
+				} else {
+					hsb[2] = hsb[2] / factor;
+				}
+				
+				Color color = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+				component.setBackground(color);
+				component.setForeground(color);
+				continue;
+			} else if (component instanceof JList) {
+				float[] hsb = Color.RGBtoHSB(COLOR_BACKGROUND.getRed(), COLOR_BACKGROUND.getGreen(), COLOR_BACKGROUND.getBlue(), null);
+				float factor = 0.9f;
+
+				if (hsb[2] > (255/2.0f)) {
+					hsb[2] = hsb[2] * factor;
+				} else {
+					hsb[2] = hsb[2] / factor;
+				}
+				
+				Color color = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+				component.setBackground(color);
+				component.setForeground(COLOR_FOREGROUND);
+				continue;
+			}
+			component.setForeground(COLOR_FOREGROUND);
+			component.setBackground(COLOR_BACKGROUND);
+		}
+	}
+	
 	private void refreshColors() {
-		for (Component component : components) {
+		for (Component component : tabbedPane.getComponents()) {
+			if (component instanceof JPanel) {
+				refreshColors((JPanel) component);
+			} else if (component instanceof JButton) {
+				continue;
+			} else if (component instanceof JTextField) {
+				continue;
+			} else if (component instanceof JSeparator) {
+				float[] hsb = Color.RGBtoHSB(COLOR_BACKGROUND.getRed(), COLOR_BACKGROUND.getGreen(), COLOR_BACKGROUND.getBlue(), null);
+				float factor = 0.9f;
+
+				if (hsb[2] > (255/2.0f)) {
+					hsb[2] = hsb[2] * factor;
+				} else {
+					hsb[2] = hsb[2] / factor;
+				}
+				
+				Color color = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+				component.setBackground(color);
+				component.setForeground(color);
+				continue;
+			} else if (component instanceof JList) {
+				float[] hsb = Color.RGBtoHSB(COLOR_BACKGROUND.getRed(), COLOR_BACKGROUND.getGreen(), COLOR_BACKGROUND.getBlue(), null);
+				float factor = 0.9f;
+
+				if (hsb[2] > (255/2.0f)) {
+					hsb[2] = hsb[2] * factor;
+				} else {
+					hsb[2] = hsb[2] / factor;
+				}
+				
+				Color color = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+				component.setBackground(color);
+				component.setForeground(COLOR_FOREGROUND);
+				continue;
+			}
 			component.setForeground(COLOR_FOREGROUND);
 			component.setBackground(COLOR_BACKGROUND);
 		}
@@ -131,23 +284,31 @@ public class MainFrame {
 		tabbedPane.setBounds(0, 0, 994, 571);
 		mainPanel.add(tabbedPane);
 		
-		JPanel settingsPanel = new JPanel();
+		settingsPanel = new JPanel();
 		components.add(settingsPanel);
 		tabbedPane.addTab("Einstellungen", null, settingsPanel, null);
 		settingsPanel.setLayout(null);
 		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(10, 205, 969, 2);
+		settingsPanel.add(separator_2);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(10, 403, 969, 2);
+		settingsPanel.add(separator_1);
+		
 		JPanel panelLogin = new JPanel();
-		panelLogin.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelLogin.setBorder(null);
 		components.add(panelLogin);
 		panelLogin.setLayout(null);
-		panelLogin.setBounds(0, 200, 989, 200);
+		panelLogin.setBounds(0, 205, 989, 187);
 		settingsPanel.add(panelLogin);
 		
 		JLabel labelLogin = new JLabel("Benutzerdaten");
 		components.add(labelLogin);
 		labelLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		labelLogin.setFont(new Font("Tahoma", Font.BOLD, 14));
-		labelLogin.setBounds(10, 11, 969, 14);
+		labelLogin.setBounds(10, 11, 969, 23);
 		panelLogin.add(labelLogin);
 		
 		JLabel labelUsername = new JLabel("Benutzername:");
@@ -190,7 +351,7 @@ public class MainFrame {
 		panelLogin.add(buttonLogin);
 		
 		JPanel panelServerSettings = new JPanel();
-		panelServerSettings.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelServerSettings.setBorder(null);
 		components.add(panelServerSettings);
 		panelServerSettings.setLayout(null);
 		panelServerSettings.setBounds(0, 0, 989, 200);
@@ -200,7 +361,7 @@ public class MainFrame {
 		components.add(labelServerSettings);
 		labelServerSettings.setHorizontalAlignment(SwingConstants.CENTER);
 		labelServerSettings.setFont(new Font("Tahoma", Font.BOLD, 14));
-		labelServerSettings.setBounds(10, 11, 969, 14);
+		labelServerSettings.setBounds(10, 11, 969, 23);
 		panelServerSettings.add(labelServerSettings);
 		
 		JLabel labelHostname = new JLabel("Hostname:");
@@ -275,17 +436,17 @@ public class MainFrame {
 		panelServerSettings.add(labelEnableSsl);
 		
 		JPanel panelChatSettings = new JPanel();
-		panelChatSettings.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelChatSettings.setBorder(null);
 		components.add(panelChatSettings);
 		panelChatSettings.setLayout(null);
-		panelChatSettings.setBounds(0, 400, 989, 143);
+		panelChatSettings.setBounds(0, 403, 989, 121);
 		settingsPanel.add(panelChatSettings);
 		
 		JLabel labelChatSettings = new JLabel("Chateinstellungen");
 		components.add(labelChatSettings);
 		labelChatSettings.setHorizontalAlignment(SwingConstants.CENTER);
 		labelChatSettings.setFont(new Font("Tahoma", Font.BOLD, 14));
-		labelChatSettings.setBounds(10, 11, 969, 14);
+		labelChatSettings.setBounds(10, 11, 969, 23);
 		panelChatSettings.add(labelChatSettings);
 		
 		JLabel labelForegroundColor = new JLabel("Textfarbe:");
@@ -365,13 +526,95 @@ public class MainFrame {
 		tabbedPane.addTab("Chaträume", null, chatroomOverviewPanel, null);
 		chatroomOverviewPanel.setLayout(null);
 		
-		String chatroomName = "Chatroom_001";
-		// TODO: REPLACE WITH addChatroomPanel(chatroomName);
-		JPanel chatroomPanel = new JPanel();
-		components.add(chatroomPanel);
-		tabbedPane.addTab(chatroomName, null, chatroomPanel, null);
-		chatroomPanel.setLayout(null);
-		// TODO: COPY ABOVE SOURCE TO addChatroomPanel(chatroomName);
+		JList list = new JList();
+
+		JButton btnChatraumBeitreten = new JButton("Chatraum beitreten");
+		btnChatraumBeitreten.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String value = (String) list.getSelectedValue();
+				if (value != null)
+					controller.requestJoinChatroom(value);
+			}
+		});
+		btnChatraumBeitreten.setEnabled(false);
+		btnChatraumBeitreten.setBounds(141, 479, 153, 23);
+		chatroomOverviewPanel.add(btnChatraumBeitreten);
+		
+		
+		listModel = new DefaultListModel();
+		list.setModel(listModel);
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				String value = (String) list.getSelectedValue();
+				btnChatraumBeitreten.setEnabled(value != null);
+			}
+		});
+		list.setBounds(28, 69, 388, 368);
+		chatroomOverviewPanel.add(list);
+		
+		
+		
+		JSeparator separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setBounds(475, 21, 2, 511);
+		chatroomOverviewPanel.add(separator);
+		
+		JLabel lblVerfgbareChatrume = new JLabel("Verf\u00FCgbare Chatr\u00E4ume");
+		lblVerfgbareChatrume.setHorizontalAlignment(SwingConstants.CENTER);
+		lblVerfgbareChatrume.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblVerfgbareChatrume.setBounds(28, 21, 388, 14);
+		chatroomOverviewPanel.add(lblVerfgbareChatrume);
+		
+		JLabel lblNeuenChatraumErstellen = new JLabel("Neuen Chatraum erstellen");
+		lblNeuenChatraumErstellen.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNeuenChatraumErstellen.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNeuenChatraumErstellen.setBounds(553, 21, 388, 14);
+		chatroomOverviewPanel.add(lblNeuenChatraumErstellen);
+		
+		JLabel lblName = new JLabel("Name:");
+		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblName.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblName.setBounds(589, 76, 100, 14);
+		chatroomOverviewPanel.add(lblName);
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(720, 73, 175, 20);
+		chatroomOverviewPanel.add(textField);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(720, 112, 175, 20);
+		chatroomOverviewPanel.add(textField_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(720, 151, 175, 20);
+		chatroomOverviewPanel.add(textField_2);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblPassword.setBounds(589, 115, 100, 14);
+		chatroomOverviewPanel.add(lblPassword);
+		
+		JButton btnErstellen = new JButton("Erstellen");
+		btnErstellen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = textField.getText();
+				String password = textField_1.getText();
+				int maxUserCount = Integer.valueOf(textField_2.getText());
+				controller.requestCreateChatroom(name, password, maxUserCount);
+			}
+		});
+		btnErstellen.setBounds(806, 210, 89, 23);
+		chatroomOverviewPanel.add(btnErstellen);
+		
+		JLabel lblMaxTeilnehmerzahl = new JLabel("Max. Teilnehmerzahl");
+		lblMaxTeilnehmerzahl.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblMaxTeilnehmerzahl.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblMaxTeilnehmerzahl.setBounds(553, 154, 136, 14);
+		chatroomOverviewPanel.add(lblMaxTeilnehmerzahl);
 		
 		refreshColors();
 	}
