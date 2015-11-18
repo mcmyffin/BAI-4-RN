@@ -64,18 +64,17 @@ public class Chatroom {
         if(!isOwner(client)) response = Status.CHATROOM_PERMISSION_DENIED;
         else if(!isMember(client)) response = Status.CHATROOM_NOT_MEMBER;
         else{
-
             // disconnect all member
-            for(ClientThread c : connectedClients.values()){
+            List<ClientThread> memberToLeave = new ArrayList(connectedClients.values());
+            for(ClientThread c : memberToLeave){
                 leave(c);
             }
 
             boolean result = client.getServer().getData().removeChatroom(this);
             if(!result) response = Status.CHATROOM_NOT_FOUND;
-
-            ChatroomDeleteResponsePacket packet = new ChatroomDeleteResponsePacket(response);
-            sendSinglePacketAt(client,packet);
         }
+        ChatroomDeleteResponsePacket packet = new ChatroomDeleteResponsePacket(response);
+        sendSinglePacketAt(client,packet);
     }
 
     // getter
