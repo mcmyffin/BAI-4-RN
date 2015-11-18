@@ -10,13 +10,15 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  */
 public class LoginResponsePacket extends AbstractServerPacket {
     private Status statusCode;
+    private String username;
 
-    public LoginResponsePacket(Status statusCode) {
+    public LoginResponsePacket(Status statusCode, String username) {
         this.statusCode = statusCode;
+        this.username = username;
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + statusCode.getStatusCode();
+        return "" + getOperationCode() + " " + statusCode.getStatusCode() + " " + username;
     }
 }

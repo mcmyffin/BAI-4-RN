@@ -20,16 +20,16 @@ public class LoginPacket extends AbstractClientPacket {
 
     @Override
     public void process() {
-        if (getClientData().getUsername() != null) {
+        if (getClientData().isLoggedIn()) {
             // Client already logged in with some username
-            LoginResponsePacket response = new LoginResponsePacket(CLIENT_ALREADY_LOGGED_IN);
+            LoginResponsePacket response = new LoginResponsePacket(CLIENT_ALREADY_LOGGED_IN,username);
             sendToClient(response);
             return;
         }
 
         if (getServerData().containsUser(username)) {
             // Username already logged in by other user
-            LoginResponsePacket response = new LoginResponsePacket(USERNAME_ALREADY_LOGGED_IN);
+            LoginResponsePacket response = new LoginResponsePacket(USERNAME_ALREADY_LOGGED_IN,username);
             sendToClient(response);
             return;
         }
@@ -37,7 +37,7 @@ public class LoginPacket extends AbstractClientPacket {
         // TODO: Implement password check!
         if (false) {
             // Wrong username or password
-            LoginResponsePacket response = new LoginResponsePacket(PASSWORD_WRONG);
+            LoginResponsePacket response = new LoginResponsePacket(PASSWORD_WRONG,username);
             sendToClient(response);
             return;
         }
@@ -47,7 +47,7 @@ public class LoginPacket extends AbstractClientPacket {
         getServerData().addUserClient(username, getClientThread());
 
         // Username successfully set
-        LoginResponsePacket response = new LoginResponsePacket(OK);
+        LoginResponsePacket response = new LoginResponsePacket(OK,username);
         sendToClient(response);
     }
 }

@@ -1,7 +1,6 @@
 package de.haw_chat.server.model;
 
 import de.haw_chat.common.operation.implementations.Status;
-import de.haw_chat.server.network.Exceptions.*;
 import de.haw_chat.server.network.implementations.ServerData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.*;
@@ -16,6 +15,7 @@ import static com.google.common.base.Preconditions.*;
 public class Chatroom {
 
     private static final int defaultMaxUser = 2;
+    private static final int minChatroomNameCharCount = 3;
     private long id;
     private String owner;
     private String chatName;
@@ -31,39 +31,44 @@ public class Chatroom {
         this.chatName   = chatName;
         this.password   = password;
         this.maxUser    = maxUser;
-        connectedClients.put(owner, clientThread);
+        this.connectedClients = new HashMap();
+        this.connectedClients.put(owner, clientThread);
 
-        ChatroomCreateResponsePacket packet = new ChatroomCreateResponsePacket(Status.OK);
-        sendSinglePacketAt(clientThread,packet);
     }
 
-    public synchronized static Chatroom create(ClientThread clientThread, String chatName, String password, int maxUser)
-            throws InvalidMaxUserSizeException, ChatroomAlreadyExistingExeption {
+    public synchronized static void create(ClientThread client, String chatName, String password, int maxUser){
+
         // preconditions
-        checkNotNull(clientThread);
+        checkNotNull(client);
         checkNotNull(chatName);
         checkNotNull(password);
-        if(maxUser <= defaultMaxUser) throw new InvalidMaxUserSizeException();
 
-        // check for chatroomName already taken
-        ServerData serverData = clientThread.getServer().getData();
-        if(serverData.isChatroomExisting(chatName)) throw new ChatroomAlreadyExistingExeption(chatName);
+        Status response = Status.OK;
+        ServerData serverData = client.getServer().getData();
+        Chatroom chatroom = new Chatroom(client,chatName,password,maxUser);
 
-        return new Chatroom(clientThread,chatName,password,maxUser);
+        if(maxUser < defaultMaxUser) response = Status.CHATROOM_MEMBER_COUNT_INVALID;
+        else if(chatName.length() < minChatroomNameCharCount) response = Status.CHATROOM_NAME_INVALIED;
+        else if(serverData.isChatroomExisting(chatName)) response = Status.CHATROOM_NAME_ALREADY_TAKEN;
+        else if(!serverData.addChatroom(chatroom)) response = Status.CHATROOM_NAME_ALREADY_TAKEN;
+        else{
+            chatroom.sendDistributedMemberList();
+        }
+        ChatroomCreateResponsePacket packet = new ChatroomCreateResponsePacket(response);
+        sendSinglePacketAt(client, packet);
     }
 
     public synchronized void remove(ClientThread client){
         checkNotNull(client);
         Status response = Status.OK;
         if(!isOwner(client)) response = Status.CHATROOM_PERMISSION_DENIED;
-        if(!isMember(client)) response = Status.CHATROOM_NOT_MEMBER;
+        else if(!isMember(client)) response = Status.CHATROOM_NOT_MEMBER;
         else{
 
             // disconnect all member
             for(ClientThread c : connectedClients.values()){
                 leave(c);
             }
-
 
             boolean result = client.getServer().getData().removeChatroom(this);
             if(!result) response = Status.CHATROOM_NOT_FOUND;
@@ -95,10 +100,10 @@ public class Chatroom {
         checkNotNull(password);
         Status ResponseStatus = Status.OK;
 
-        if(connectedClients.containsKey(client.getData().getUsername())); // User already logged in
+        if(isMember(client)); // User already logged in
 
-        if(!checkPassword(password))              ResponseStatus = Status.CHATROOM_LOGIN_WRONG_PASSWORD;
-        if(getNumberOfConnectedUser() >= maxUser) ResponseStatus = Status.CHATROOM_IS_FULL;
+//        if(!checkPassword(password))              ResponseStatus = Status.CHATROOM_LOGIN_WRONG_PASSWORD;
+        else if(getNumberOfConnectedUser() >= maxUser) ResponseStatus = Status.CHATROOM_IS_FULL;
         else {
             // add client to Chatroom
             connectedClients.put(client.getData().getUsername(), client);
@@ -179,7 +184,7 @@ public class Chatroom {
             }
 
             ChatroomNameChangedPacket packet = new ChatroomNameChangedPacket(oldChatName,newChatName);
-            sendDistributedPackestAtAll(packet);
+            sendDistributedPacketsAtAll(packet);
         }
         ChatroomChangeNameResponsePacket packet = new ChatroomChangeNameResponsePacket(responseStatus);
         sendSinglePacketAt(client,packet);
@@ -218,7 +223,7 @@ public class Chatroom {
      * Send AbstractServerPacket at all members
      * @param packet
      */
-    private void sendDistributedPackestAtAll(AbstractServerPacket packet){
+    private void sendDistributedPacketsAtAll(AbstractServerPacket packet){
         for(ClientThread client : connectedClients.values()){
             client.writeToClient(packet);
         }
@@ -226,29 +231,29 @@ public class Chatroom {
 
     private void sendDistributedPacketsAtAll(List<AbstractServerPacket> packetList){
         for(AbstractServerPacket p : packetList){
-            sendDistributedPackestAtAll(p);
+            sendDistributedPacketsAtAll(p);
         }
     }
 
-    /**
-     * Send AbstractServerPacket at all members without
-     * without = ClientThread
-     * @param packet
-     * @param without
-     */
-    private void sendDistributedPacketsAtAll(AbstractServerPacket packet, ClientThread without){
-        for(ClientThread client : connectedClients.values()){
-            if(without.getData().getUsername().equals(client.getData().getUsername())) continue;
-            client.writeToClient(packet);
-        }
-    }
+//    /**
+//     * Send AbstractServerPacket at all members without
+//     * without = ClientThread
+//     * @param packet
+//     * @param without
+//     */
+//    private void sendDistributedPacketsAtAll(AbstractServerPacket packet, ClientThread without){
+//        for(ClientThread client : connectedClients.values()){
+//            if(without.getData().getUsername().equals(client.getData().getUsername())) continue;
+//            client.writeToClient(packet);
+//        }
+//    }
 
     /**
      * Send AbstractServerPacket at single member
      * @param client
      * @param packet
      */
-    private void sendSinglePacketAt(ClientThread client, AbstractServerPacket packet){
+    private static void sendSinglePacketAt(ClientThread client, AbstractServerPacket packet){
         client.writeToClient(packet);
     }
 
@@ -264,15 +269,15 @@ public class Chatroom {
             memberPackets.add(packet);
         }
 
-        sendDistributedPackestAtAll(packet_begin);
+        sendDistributedPacketsAtAll(packet_begin);
         sendDistributedPacketsAtAll(memberPackets);
-        sendDistributedPackestAtAll(packet_end);
+        sendDistributedPacketsAtAll(packet_end);
     }
 
     private void sendDistributedMessage(ClientThread messageFrom, String message){
         long timeStamp = System.currentTimeMillis();
         MessageSendedPacket packet = new MessageSendedPacket(getName(),messageFrom.getData().getUsername(),message,timeStamp); // TODO: MISSING CHATROOMNAME
-        sendDistributedPacketsAtAll(packet,messageFrom);
+        sendDistributedPacketsAtAll(packet);
     }
 
     @Override

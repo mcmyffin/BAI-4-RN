@@ -45,6 +45,7 @@ public final class ServerData {
         if(!containsUser(client.getData().getUsername())) return false;
 
         takenUsernames.remove(client.getData().getUsername());
+        client.getData().setUsername(null);
         return true;
     }
 

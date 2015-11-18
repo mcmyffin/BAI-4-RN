@@ -9,8 +9,10 @@ public interface ClientData {
 
     String getUsername();
     void setUsername(String username);
+    boolean isLoggedIn();
 
     Set<String> getConnectedChats();
+
     void addConnectedChats(String chatname);
     void disconnectFromChat(String chatname);
 }

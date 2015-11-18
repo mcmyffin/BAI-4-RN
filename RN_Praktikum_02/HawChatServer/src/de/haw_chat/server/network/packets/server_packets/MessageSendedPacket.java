@@ -23,6 +23,6 @@ public class MessageSendedPacket extends AbstractServerPacket {
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " +chatname + " " + username + " " + message + " " + timestamp;
+        return "" + getOperationCode() + " " +chatname + " " + timestamp + " " + username + " " + message;
     }
 }

@@ -8,6 +8,7 @@ import de.haw_chat.server.network.interfaces.Server;
 import de.haw_chat.server.network.packets.client_packets.AbstractClientPacket;
 import de.haw_chat.server.network.packets.client_packets.LogoutPacket;
 import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
+import de.haw_chat.server.network.packets.server_packets.UnsupportedServerPacket;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -113,7 +114,10 @@ final class ClientThreadImpl implements ClientThread {
         final String PACKET_CLASS_PREFIX = AbstractClientPacket.class.getPackage().getName() + ".";
         final String PACKET_CLASS_POSTFIX = "Packet";
 
-        int operationCode = Integer.parseInt(request.split(" ")[0]);
+        int operationCode = -1;
+        try {
+            operationCode = Integer.parseInt(request.split(" ")[0]);
+        }catch (NumberFormatException ex){}
         OperationData operationData = getOperationData(operationCode);
         if (!operationData.isClientOperation()) {
             System.err.println("[WARNING] client tried to send server packet! request '" + request + "' ignored!");

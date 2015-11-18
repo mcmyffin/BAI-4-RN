@@ -28,6 +28,7 @@ public class LogoutPacket extends AbstractClientPacket {
             try {
                 Chatroom c = getServerData().getChatroomByName(chatname);
                 c.leave(getClientThread());
+                System.out.println("LOGOUT!!!!");
 
             } catch (ChatroomNotFoundExeption chatroomNotFoundExeption) {
                 // chatroom not found

@@ -30,6 +30,11 @@ final class ClientDataImpl implements ClientData {
     }
 
     @Override
+    public boolean isLoggedIn() {
+        return getUsername() != null;
+    }
+
+    @Override
     public void setUsername(String username) {
         this.username = username;
     }

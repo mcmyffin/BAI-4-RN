@@ -15,6 +15,6 @@ public class PongFromClientPacket extends AbstractClientPacket {
 
     @Override
     public void process() {
-        // TODO 
+        // TODO
     }
 }

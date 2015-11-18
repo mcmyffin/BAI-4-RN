@@ -6,6 +6,7 @@ import de.haw_chat.server.network.Exceptions.ChatroomNotFoundExeption;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.ChatroomChangeMaxUserCountResponsePacket;
 import de.haw_chat.server.network.packets.server_packets.ChatroomChangeNameResponsePacket;
+import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
 
 /**
  * Created by Andreas on 31.10.2015.
@@ -22,6 +23,12 @@ public class ChatroomChangeNamePacket extends AbstractClientPacket {
 
     @Override
     public void process() {
+
+        if(!getClientData().isLoggedIn()){
+            ChatroomChangeNameResponsePacket packet = new ChatroomChangeNameResponsePacket(Status.CLIENT_NOT_LOGGED_IN);
+            getClientThread().writeToClient(packet);
+            return;
+        }
 
         try {
             Chatroom chat = getServerData().getChatroomByName(chatroomNameOld);

@@ -16,7 +16,8 @@ public class LogoutResponsePacket extends AbstractServerPacket {
     }
 
     @Override
-    public String toMessageString() {
+    public String toMessageString()
+    {
         return "" + getOperationCode() + " " + statusCode.getStatusCode();
     }
 }

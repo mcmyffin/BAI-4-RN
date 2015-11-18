@@ -1,10 +1,12 @@
 package de.haw_chat.server.network.packets.client_packets;
 
+import de.haw_chat.common.operation.implementations.Status;
 import de.haw_chat.server.model.Chatroom;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.ChatroomListBeginPacket;
 import de.haw_chat.server.network.packets.server_packets.ChatroomListElementPacket;
 import de.haw_chat.server.network.packets.server_packets.ChatroomListEndPacket;
+import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
 
 import java.util.Collection;
 import java.util.Iterator;
