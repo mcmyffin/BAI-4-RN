@@ -76,6 +76,7 @@ CLIENT CHATROOM_JOIN
 SERVER CHATROOM_JOIN_RESPONSE
 // Server beantwortet Anfrage zum Beitreten eines Chatraumes
 >> STATUS_CODE:Status // Status-Code der Antwort
+>> CHATROOM_NAME:String // Name des Chatraumes
 
 CLIENT CHATROOM_LEAVE
 // Client möchte einem Chatraum verlassen
