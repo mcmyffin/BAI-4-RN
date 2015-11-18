@@ -19,7 +19,6 @@ public class MessageSendedPacket extends AbstractServerPacket {
         this.chatroom = messageString.split(" ")[1];
         this.timestamp = Long.parseLong(messageString.split(" ")[2]);
         this.username = messageString.split(" ")[3];
-
         this.message = messageString.split(" ")[4];
     }
 

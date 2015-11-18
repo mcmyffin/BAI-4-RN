@@ -91,7 +91,8 @@ public class MainFrame {
 				public void run() {
 					while (isLoggedIn()) {
 						try {
-							controller.getChatClient().getChatServerThread().writeToServer(new ChatroomsRefreshPacket());
+							if (tabbedPane.getSelectedIndex() == 1)
+								controller.getChatClient().getChatServerThread().writeToServer(new ChatroomsRefreshPacket());
 							Thread.sleep(2000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
