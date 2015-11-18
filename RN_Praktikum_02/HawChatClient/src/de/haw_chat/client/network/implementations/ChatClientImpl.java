@@ -18,11 +18,13 @@ final class ChatClientImpl implements ChatClient {
     private final ChatServerConfiguration configuration;
     private ChatClientData chatClientData;
     private ChatServerThread chatServerThread;
+    private boolean started;
 
     private ChatClientImpl(ChatServerConfiguration configuration) {
         checkNotNull(configuration);
         this.configuration = configuration;
         this.chatClientData = null;
+        this.started = false;
     }
 
     public static ChatClient create(ChatServerConfiguration configuration) {
@@ -42,6 +44,11 @@ final class ChatClientImpl implements ChatClient {
     @Override
     public ChatServerThread getChatServerThread() {
         return chatServerThread;
+    }
+
+    @Override
+    public boolean isStarted() {
+        return started;
     }
 
     @Override
@@ -74,6 +81,8 @@ final class ChatClientImpl implements ChatClient {
 
     @Override
     public void run() {
+        started = false;
+
         if (configuration.isSslEnabled()) {
             throw new UnsupportedOperationException("SSL support currently not implemented!");
         }
@@ -104,6 +113,8 @@ final class ChatClientImpl implements ChatClient {
                     e.printStackTrace();
                 }
             }
+
+            started = true;
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null,
                     "Der Server '" + serverHost + "' ist momentan nicht erreichbar!",

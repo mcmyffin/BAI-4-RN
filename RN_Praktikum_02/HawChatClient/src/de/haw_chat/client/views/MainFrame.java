@@ -71,6 +71,7 @@ public class MainFrame {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	public DefaultListModel<String> listModel;
+	public JButton buttonLogin;
 
 	/**
 	 * Launch the application.
@@ -339,7 +340,7 @@ public class MainFrame {
 		panelLogin.add(textFieldPassword);
 		textFieldPassword.setText("test");
 		
-		JButton buttonLogin = new JButton("Anmelden");
+		buttonLogin = new JButton("Anmelden");
 		buttonLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String username = textFieldUsername.getText();
@@ -348,6 +349,7 @@ public class MainFrame {
 			}
 		});
 		buttonLogin.setBounds(537, 138, 89, 23);
+		buttonLogin.setEnabled(false);
 		panelLogin.add(buttonLogin);
 		
 		JPanel panelServerSettings = new JPanel();

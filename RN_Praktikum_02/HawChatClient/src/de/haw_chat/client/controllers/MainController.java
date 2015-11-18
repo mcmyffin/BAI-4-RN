@@ -1,31 +1,47 @@
 package de.haw_chat.client.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.haw_chat.client.network.implementations.ChatDeviceFactory;
+import de.haw_chat.client.network.interfaces.ChatClient;
+import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
+import de.haw_chat.client.network.packets.client_packets.LoginPacket;
 import de.haw_chat.client.views.MainFrame;
 
 public class MainController {
 	private MainFrame frame;
-	
+	private ChatClient chatClient;
+
 	public MainController(MainFrame frame) {
 		this.frame = frame;
 	}
-	
+
 	public void setServerConfiguration(String hostname, int port, boolean enableSsl) {
-		System.out.println("TODO set config");
+		ChatServerConfiguration configuration =
+				ChatDeviceFactory.createChatServerConfiguration(hostname, port, enableSsl);
+		chatClient = ChatDeviceFactory.createChatClient(configuration);
+
+		Thread thread = new Thread(chatClient);
+		thread.start();
+
+		frame.buttonLogin.setEnabled(true);
 	}
-	
+
 	public void login(String username, String password) {
-		System.out.println("TODO login");
+		try {
+			chatClient.getChatServerThread().writeToServer(new LoginPacket(username, password));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	
-	
-	
+
+
+
 	private Map<String, List<String>> usersToRemove = new HashMap<>();
 	
 	public void processChatroomListStart(String chatroom) {

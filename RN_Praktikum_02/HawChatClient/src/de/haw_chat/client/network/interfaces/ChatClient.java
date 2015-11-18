@@ -11,4 +11,5 @@ public interface ChatClient extends Runnable {
     ChatServerConfiguration getConfiguration();
     ChatClientData getData();
     ChatServerThread getChatServerThread();
+    boolean isStarted();
 }
