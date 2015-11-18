@@ -112,7 +112,7 @@ public class Chatroom {
             sendDistributedMemberList();
         }
         // SEND JOIN_RESPONSE TO CLIENT
-        ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(ResponseStatus);
+        ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(ResponseStatus,chatName);
         sendSinglePacketAt(client,packet);
     }
 

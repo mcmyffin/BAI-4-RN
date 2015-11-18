@@ -10,13 +10,15 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  */
 public class ChatroomJoinResponsePacket extends AbstractServerPacket {
     private Status statusCode;
+    private String chatName;
 
-    public ChatroomJoinResponsePacket(Status statusCode) {
+    public ChatroomJoinResponsePacket(Status statusCode, String chatName) {
         this.statusCode = statusCode;
+        this.chatName = chatName;
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + statusCode.getStatusCode();
+        return "" + getOperationCode() + " " + statusCode.getStatusCode() + " " +chatName ;
     }
 }

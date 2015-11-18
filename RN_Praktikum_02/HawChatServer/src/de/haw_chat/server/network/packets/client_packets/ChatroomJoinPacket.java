@@ -24,7 +24,7 @@ public class ChatroomJoinPacket extends AbstractClientPacket {
     public void process() {
 
         if(!getClientData().isLoggedIn()){
-            ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(Status.CLIENT_NOT_LOGGED_IN);
+            ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(Status.CLIENT_NOT_LOGGED_IN,chatroomName);
             getClientThread().writeToClient(packet);
             return;
         }
@@ -36,7 +36,7 @@ public class ChatroomJoinPacket extends AbstractClientPacket {
         } catch (ChatroomNotFoundExeption chatroomNotFoundExeption) {
 
             Status response = Status.CHATROOM_NOT_FOUND;
-            ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(response);
+            ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(response,chatroomName);
             getClientThread().writeToClient(packet);
         }
     }
