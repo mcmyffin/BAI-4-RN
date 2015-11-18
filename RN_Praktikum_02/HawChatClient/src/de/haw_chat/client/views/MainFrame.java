@@ -92,7 +92,7 @@ public class MainFrame {
 					while (isLoggedIn()) {
 						try {
 							controller.getChatClient().getChatServerThread().writeToServer(new ChatroomsRefreshPacket());
-							Thread.sleep(5000);
+							Thread.sleep(1000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						} catch (IOException e) {
@@ -571,7 +571,7 @@ public class MainFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String value = (String) list.getSelectedValue();
 				if (value != null)
-					controller.requestJoinChatroom(value);
+					controller.requestJoinChatroom(value, "test");
 			}
 		});
 		btnChatraumBeitreten.setEnabled(false);

@@ -10,20 +10,16 @@ import static de.haw_chat.common.operation.implementations.Status.*;
  */
 public class ChatroomJoinResponsePacket extends AbstractServerPacket {
     private Status statusCode;
+    private String chatname;
 
     public ChatroomJoinResponsePacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
         this.statusCode = Status.getStatus(Integer.parseInt(messageString.split(" ")[1]));
+        this.chatname = messageString.split(" ")[2];
     }
 
     @Override
     public void process() {
-        // TODO: Implement processing logic
-        
-        // NOTES:
-        // - you can access client data with: getClientData()
-        // - you can access global server data with: getServerData()
-        // - you can send response to client with: sendToServer(ServerPacket)
-        throw new UnsupportedOperationException();
+        getClientData().getMainController().joinChatroom(chatname);
     }
 }

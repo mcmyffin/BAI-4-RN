@@ -11,9 +11,12 @@ import de.haw_chat.client.network.implementations.ChatDeviceFactory;
 import de.haw_chat.client.network.interfaces.ChatClient;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
 import de.haw_chat.client.network.packets.client_packets.ChatroomCreatePacket;
+import de.haw_chat.client.network.packets.client_packets.ChatroomJoinPacket;
 import de.haw_chat.client.network.packets.client_packets.LoginPacket;
 import de.haw_chat.client.network.packets.client_packets.LogoutPacket;
 import de.haw_chat.client.views.MainFrame;
+
+import javax.swing.*;
 
 public class MainController {
 	private MainFrame frame;
@@ -109,6 +112,10 @@ public class MainController {
 	
 	public void processChatroomListStart(String chatroom) {
 		usersToRemove.put(chatroom, new ArrayList<>());
+
+		if (!frame.chatroomUsers.containsKey(chatroom)) {
+			frame.chatroomUsers.put(chatroom, new DefaultListModel<>());
+		}
 		
 		List<String> listElements = Collections.list(frame.chatroomUsers.get(chatroom).elements());
 		usersToRemove.get(chatroom).addAll(listElements);
@@ -167,13 +174,18 @@ public class MainController {
 		System.out.println("TODO send: " + chatroom + "   " + message);
 	}
 	
-	public void requestJoinChatroom(String name) {
-		System.out.println("TODO join: " + name);
+	public void requestJoinChatroom(String name, String password) {
+		try {
+			chatClient.getChatServerThread().writeToServer(new ChatroomJoinPacket(name, password));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void requestCreateChatroom(String name, String password, int maxUserCount) {
 		try {
 			chatClient.getChatServerThread().writeToServer(new ChatroomCreatePacket(name, maxUserCount, password));
+			requestJoinChatroom(name, password);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
