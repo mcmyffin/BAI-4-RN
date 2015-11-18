@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
 import de.haw_chat.client.controllers.MainController;
+import de.haw_chat.client.network.packets.client_packets.ChatroomsRefreshPacket;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,6 +29,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -73,6 +75,36 @@ public class MainFrame {
 	public DefaultListModel<String> listModel;
 	public JButton buttonLogin;
 
+	private boolean loggedIn = false;
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		tabbedPane.setEnabledAt(1, loggedIn);
+		this.loggedIn = loggedIn;
+
+		if (loggedIn) {
+			Thread thread = new Thread() {
+				@Override
+				public void run() {
+					while (isLoggedIn()) {
+						try {
+							controller.getChatClient().getChatServerThread().writeToServer(new ChatroomsRefreshPacket());
+							Thread.sleep(5000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			};
+			thread.start();
+		}
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -103,7 +135,7 @@ public class MainFrame {
 		initialize();
 	}
 	
-	private Map<String, DefaultListModel<String>> chatroomUsers = new HashMap<>();
+	public Map<String, DefaultListModel<String>> chatroomUsers = new HashMap<>();
 	
 	public DefaultListModel<String> getChatroomUsers(String chatroom) {
 		return chatroomUsers.get(chatroom);
@@ -177,6 +209,10 @@ public class MainFrame {
 	public void gotoChatroomPanel() {
 		int index = tabbedPane.getTabCount() - 1;
 		tabbedPane.setSelectedIndex(index);
+	}
+
+	public void gotoChatroomOverview() {
+		tabbedPane.setSelectedIndex(1);
 	}
 	
 	private void refreshColors(JPanel panel) {
@@ -604,8 +640,30 @@ public class MainFrame {
 		btnErstellen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name = textField.getText();
+				if (name.contains(" ")) {
+					JOptionPane.showMessageDialog(null,
+							"Ungültiger Chatname!",
+							"Fehler!", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				String password = textField_1.getText();
-				int maxUserCount = Integer.valueOf(textField_2.getText());
+				if (password.contains(" ")) {
+					JOptionPane.showMessageDialog(null,
+							"Ungültiges Passwort!",
+							"Fehler!", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				int maxUserCount;
+				try {
+					maxUserCount = Integer.valueOf(textField_2.getText());
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null,
+							"Ungültige maximale Teilnehmerzahl!",
+							"Fehler!", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
 				controller.requestCreateChatroom(name, password, maxUserCount);
 			}
 		});
@@ -617,7 +675,9 @@ public class MainFrame {
 		lblMaxTeilnehmerzahl.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMaxTeilnehmerzahl.setBounds(553, 154, 136, 14);
 		chatroomOverviewPanel.add(lblMaxTeilnehmerzahl);
-		
+
+		setLoggedIn(false);
+
 		refreshColors();
 	}
 }

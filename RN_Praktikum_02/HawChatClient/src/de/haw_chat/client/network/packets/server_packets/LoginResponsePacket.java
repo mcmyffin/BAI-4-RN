@@ -24,6 +24,9 @@ public class LoginResponsePacket extends AbstractServerPacket {
     public void process() {
         if (statusCode == OK) {
             getClientData().setUsername(username);
+            getClientData().getMainController().getFrame().setLoggedIn(true);
+            getClientData().getMainController().getFrame().buttonLogin.setText("Abmelden");
+            getClientData().getMainController().getFrame().gotoChatroomOverview();
         } else if (statusCode == CLIENT_ALREADY_LOGGED_IN) {
             JOptionPane.showMessageDialog(null,
                     "Du bist bereits als " + getClientData().getUsername() + " eingeloggt!",

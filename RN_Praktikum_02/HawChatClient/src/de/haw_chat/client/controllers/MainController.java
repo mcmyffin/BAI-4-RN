@@ -10,7 +10,9 @@ import java.util.Map;
 import de.haw_chat.client.network.implementations.ChatDeviceFactory;
 import de.haw_chat.client.network.interfaces.ChatClient;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
+import de.haw_chat.client.network.packets.client_packets.ChatroomCreatePacket;
 import de.haw_chat.client.network.packets.client_packets.LoginPacket;
+import de.haw_chat.client.network.packets.client_packets.LogoutPacket;
 import de.haw_chat.client.views.MainFrame;
 
 public class MainController {
@@ -19,6 +21,14 @@ public class MainController {
 
 	public MainController(MainFrame frame) {
 		this.frame = frame;
+	}
+
+	public MainFrame getFrame() {
+		return frame;
+	}
+
+	public ChatClient getChatClient() {
+		return chatClient;
 	}
 
 	public void setServerConfiguration(String hostname, int port, boolean enableSsl) {
@@ -43,11 +53,54 @@ public class MainController {
 	}
 
 	public void login(String username, String password) {
+		if (chatClient.getData().getMainController().getFrame().isLoggedIn()) {
+			logout();
+			return;
+		}
+
 		try {
 			chatClient.getChatServerThread().writeToServer(new LoginPacket(username, password));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void logout() {
+		try {
+			chatClient.getChatServerThread().writeToServer(new LogoutPacket());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	List<String> chatroomsToRemove = new ArrayList<>();
+
+	public void processChatroomOverviewStart() {
+		List<String> listElements = Collections.list(frame.listModel.elements());
+		chatroomsToRemove.addAll(listElements);
+	}
+
+	public void processChatroomOverviewElement(String chatroom) {
+		chatroomsToRemove.remove(chatroom);
+		addChatroomToList(chatroom);
+	}
+
+	public void processChatroomOverviewEnd() {
+		for (String chatroom : chatroomsToRemove) {
+			deleteChatroomFromList(chatroom);
+		}
+		chatroomsToRemove.clear();
+	}
+
+	public void addChatroomToList(String name) {
+		if (!frame.listModel.contains(name))
+			frame.listModel.addElement(name);
+	}
+
+	public void deleteChatroomFromList(String name) {
+		if (frame.listModel.contains(name))
+			frame.listModel.removeElement(name);
 	}
 
 
@@ -57,7 +110,7 @@ public class MainController {
 	public void processChatroomListStart(String chatroom) {
 		usersToRemove.put(chatroom, new ArrayList<>());
 		
-		List<String> listElements = Collections.list(frame.listModel.elements());
+		List<String> listElements = Collections.list(frame.chatroomUsers.get(chatroom).elements());
 		usersToRemove.get(chatroom).addAll(listElements);
 	}
 	
@@ -70,12 +123,9 @@ public class MainController {
 		for (String user : usersToRemove.get(chatroom)) {
 			deleteUserFromList(chatroom, user);
 		}
+		usersToRemove.get(chatroom).clear();
 	}
-	
-	
-	
-	
-	
+
 	private void addUserToList(String chatroom, String user) {
 		if (!frame.getChatroomUsers(chatroom).contains(user))
 			frame.getChatroomUsers(chatroom).addElement(user);
@@ -86,20 +136,8 @@ public class MainController {
 			frame.getChatroomUsers(chatroom).removeElement(user);
 	}
 	
-	
-	
-	
-	
-	public void addChatroomToList(String name) {
-		if (!frame.listModel.contains(name))
-			frame.listModel.addElement(name);
-	}
-	
-	public void deleteChatroomFromList(String name) {
-		if (frame.listModel.contains(name))
-			frame.listModel.removeElement(name);
-	}
-	
+
+
 	
 	
 	
@@ -134,7 +172,11 @@ public class MainController {
 	}
 	
 	public void requestCreateChatroom(String name, String password, int maxUserCount) {
-		System.out.println("TODO create: " + name + "   " + password + "   " + maxUserCount);
+		try {
+			chatClient.getChatServerThread().writeToServer(new ChatroomCreatePacket(name, maxUserCount, password));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void requestLeaveChatroom(String chatroom) {

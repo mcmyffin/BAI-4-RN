@@ -18,12 +18,6 @@ public class ChatroomMemberListEndPacket extends AbstractServerPacket {
 
     @Override
     public void process() {
-        // TODO: Implement processing logic
-        
-        // NOTES:
-        // - you can access client data with: getClientData()
-        // - you can access global server data with: getServerData()
-        // - you can send response to client with: sendToServer(ServerPacket)
-        throw new UnsupportedOperationException();
+        getClientData().getMainController().processChatroomListEnd(chatroomName);
     }
 }
