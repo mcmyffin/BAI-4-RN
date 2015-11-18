@@ -10,10 +10,7 @@ import java.util.Map;
 import de.haw_chat.client.network.implementations.ChatDeviceFactory;
 import de.haw_chat.client.network.interfaces.ChatClient;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
-import de.haw_chat.client.network.packets.client_packets.ChatroomCreatePacket;
-import de.haw_chat.client.network.packets.client_packets.ChatroomJoinPacket;
-import de.haw_chat.client.network.packets.client_packets.LoginPacket;
-import de.haw_chat.client.network.packets.client_packets.LogoutPacket;
+import de.haw_chat.client.network.packets.client_packets.*;
 import de.haw_chat.client.views.MainFrame;
 
 import javax.swing.*;
@@ -157,10 +154,6 @@ public class MainController {
 		frame.removeCurrentChatroomPanel();
 	}
 	
-	public void createChatroom(String name, String password, int maxUserCount) {
-		joinChatroom(name);
-	}
-	
 	
 	
 	public void receiveMessage(String chatroom, String user, String message) {
@@ -171,7 +164,11 @@ public class MainController {
 	
 	
 	public void requestSendMessage(String chatroom, String message) {
-		System.out.println("TODO send: " + chatroom + "   " + message);
+		try {
+			chatClient.getChatServerThread().writeToServer(new MessageSendPacket(chatroom, message));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void requestJoinChatroom(String name, String password) {

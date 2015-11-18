@@ -92,7 +92,7 @@ public class MainFrame {
 					while (isLoggedIn()) {
 						try {
 							controller.getChatClient().getChatServerThread().writeToServer(new ChatroomsRefreshPacket());
-							Thread.sleep(1000);
+							Thread.sleep(2000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						} catch (IOException e) {
