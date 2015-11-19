@@ -1,0 +1,35 @@
+// Login
+> 110 Dimitri my_password
+< 111 400 Dimitri
+
+// Liste der Chaträumen abfragen
+> 114
+< 115 1
+< 116 Chatraum001 1 4
+< 117
+
+// Chatraum beitreten
+> 118 Chatraum001 chat_password
+< 119 400 Chatraum001
+
+// Teilnehmerliste aktualisieren
+> 134 Chatraum001 2
+< 135 Chatraum001 Dimitri
+< 135 Chatraum001 Andi
+< 136 Chatraum001
+
+// Nachricht senden
+> 137 Chatraum001 MESSAGE
+< 138 400
+< 139 Chatraum001 1447934840431 Dimitri Hallo Andi
+
+// Nachricht empfangen
+< 139 Chatraum001 1447934844123 Andi Hallo Dimitri
+
+// Chatraum verlassen
+> 120 Chatraum001
+< 121 400
+
+// Logout
+> 112
+< 113 400
