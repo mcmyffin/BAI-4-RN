@@ -10,11 +10,13 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MainController {
 	private MainFrame frame;
 	private ChatClient chatClient;
+	private Map<String, Long> timeStarted = new HashMap<>();
 
 	public MainController(MainFrame frame) {
 		this.frame = frame;
@@ -128,21 +130,41 @@ public class MainController {
 	}
 
 	private void addUserToList(String chatroom, String user) {
-		if (!frame.getChatroomUsers(chatroom).contains(user))
+		if (!frame.getChatroomUsers(chatroom).contains(user)) {
 			frame.getChatroomUsers(chatroom).addElement(user);
+
+			boolean notJustStarted;
+			if (timeStarted.containsKey(chatroom))
+				notJustStarted = System.currentTimeMillis() > (timeStarted.get(chatroom) + 1000);
+			else
+				notJustStarted = false;
+
+			if (!user.equals(chatClient.getData().getUsername()) && notJustStarted) {
+				if (user.equals("unnamed")) {
+					playSound("joined_unnamed.wav");
+				} else {
+					playSound("joined.wav");
+				}
+			}
+		}
 	}
 	
 	private void deleteUserFromList(String chatroom, String user) {
-		if (frame.getChatroomUsers(chatroom).contains(user))
+		if (frame.getChatroomUsers(chatroom).contains(user)) {
 			frame.getChatroomUsers(chatroom).removeElement(user);
+			if (!user.equals(chatClient.getData().getUsername()))
+				playSound("leaved.wav");
+		}
 	}
-	
 
 
-	
+
+
 	Map<String, Thread> refreshThreads = new HashMap<>();
 	
 	public void joinChatroom(String name) {
+		timeStarted.put(name, System.currentTimeMillis());
+
 		frame.addChatroomPanel(name);
 		frame.gotoChatroomPanel();
 		refreshThreads.put(name, new Thread() {
@@ -166,6 +188,7 @@ public class MainController {
 	}
 	
 	public void leaveChatroom() {
+		refreshThreads.get(frame.getChatroomName()).interrupt();
 		frame.removeCurrentChatroomPanel();
 		frame.gotoChatroomOverview();
 	}
@@ -188,9 +211,13 @@ public class MainController {
 		}
 	}
 	
-	public void receiveMessage(String chatroom, String user, String message) {
-		frame.getChatroomMessages(chatroom).addElement("[" + user + "]: " + message);
-		if (!user.equals(chatClient.getData().getUsername()))
+	public void receiveMessage(String chatroom, String user, String message, long timestamp) {
+		SimpleDateFormat printFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date(timestamp);
+		String time = printFormat.format(date);
+
+		frame.getChatroomMessages(chatroom).addElement("[" + time + "] <" + user + "> " + message);
+		if (!user.equals(chatClient.getData().getUsername()) && frame.chckbxEnableSounds.isSelected())
 			playSound("post.wav");
 	}
 	

@@ -61,6 +61,8 @@ public class MainFrame {
 	public JButton buttonLogin;
 
 	private boolean loggedIn = false;
+	public JCheckBox chckbxEnableSounds;
+	public JCheckBox chckbxSaveprotocols;
 
 	public boolean isLoggedIn() {
 		return loggedIn;
@@ -174,7 +176,7 @@ public class MainFrame {
 		JButton btnSenden = new JButton("Senden");
 		btnSenden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String chatroom = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+				String chatroom = getChatroomName();
 				controller.requestSendMessage(chatroom , textField_3.getText());
 				textField_3.setText("");
 			}
@@ -205,10 +207,17 @@ public class MainFrame {
 		tabbedPane.addTab(chatroomName, null, chatroomPanel, null);
 	}
 
+
+
 	public void removeCurrentChatroomPanel() {
 		int selectedIndex = tabbedPane.getSelectedIndex();
 		tabbedPane.remove(selectedIndex);
 		tabbedPane.setSelectedIndex(0);
+	}
+
+	public String getChatroomName() {
+		String chatroom = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+		return chatroom;
 	}
 
 	public void gotoChatroomPanel() {
@@ -457,7 +466,7 @@ public class MainFrame {
 				int port;
 				try {
 					port = Integer.valueOf(textFieldPort.getText());
-				} catch(Exception ex) {
+				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null,
 							"Der Port '" + textFieldPort.getText() + "' ist ungültig!",
 							"Ungültiger Port!", JOptionPane.ERROR_MESSAGE);
@@ -552,16 +561,18 @@ public class MainFrame {
 		panelBackgroundColor.setBounds(230, 94, 22, 23);
 		panelChatSettings.add(panelBackgroundColor);
 
-		JCheckBox chckbxEnableSounds = new JCheckBox("   Sounds abspielen");
+		chckbxEnableSounds = new JCheckBox("   Sounds abspielen");
 		chckbxEnableSounds.setFont(new Font("Tahoma", Font.BOLD, 11));
 		components.add(chckbxEnableSounds);
 		chckbxEnableSounds.setBounds(615, 55, 184, 23);
+		chckbxEnableSounds.setSelected(true);
 		panelChatSettings.add(chckbxEnableSounds);
 
-		JCheckBox chckbxSaveprotocols = new JCheckBox("   Chatprotokolle speichern");
+		chckbxSaveprotocols = new JCheckBox("   Chatprotokolle speichern");
 		chckbxSaveprotocols.setFont(new Font("Tahoma", Font.BOLD, 11));
 		components.add(chckbxSaveprotocols);
 		chckbxSaveprotocols.setBounds(615, 94, 184, 23);
+		chckbxSaveprotocols.setEnabled(false);
 		panelChatSettings.add(chckbxSaveprotocols);
 
 		JPanel chatroomOverviewPanel = new JPanel();

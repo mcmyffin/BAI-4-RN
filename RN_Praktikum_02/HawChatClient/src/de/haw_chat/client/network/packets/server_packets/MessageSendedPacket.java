@@ -30,6 +30,6 @@ public class MessageSendedPacket extends AbstractServerPacket {
 
     @Override
     public void process() {
-        getClientData().getMainController().receiveMessage(chatroom, username, message);
+        getClientData().getMainController().receiveMessage(chatroom, username, message, timestamp);
     }
 }
