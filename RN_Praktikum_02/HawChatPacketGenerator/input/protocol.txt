@@ -165,7 +165,12 @@ SERVER MESSAGE_SEND_RESPONSE
 >> STATUS_CODE:Status // Status-Code der Antwort
 
 SERVER MESSAGE_SENDED
+// Server leitet gesendete Nachricht an Chatteilnehmer weiter
 >> CHATROOM_NAME:String // Name des Chatraumes
 >> USERNAME:String // Benutzername des Absenders
 >> TIMESTAMP:int // Zeitpunkt des Versandes (serverseitig)
 >> MESSAGE:String // Inhalt der Nachricht
+
+CLIENT CHATROOM_REFRESH
+// Client möchte Teilnehmerliste eines Chatraumes aktualisieren
+>> CHATROOM_NAME:String // Name des Chatraumes

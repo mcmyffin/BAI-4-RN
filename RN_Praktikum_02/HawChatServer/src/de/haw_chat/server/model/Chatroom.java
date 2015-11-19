@@ -56,6 +56,8 @@ public class Chatroom {
         }
         ChatroomCreateResponsePacket packet = new ChatroomCreateResponsePacket(response);
         sendSinglePacketAt(client, packet);
+
+        chatroom.join(client, password);
     }
 
     public synchronized void remove(ClientThread client){
@@ -258,7 +260,7 @@ public class Chatroom {
 
     /***************************************************/
 
-    private void sendDistributedMemberList(){
+    public void sendDistributedMemberList(){
         ChatroomMemberListBeginPacket packet_begin = new ChatroomMemberListBeginPacket(getName(),getNumberOfConnectedUser());
         ChatroomMemberListEndPacket   packet_end = new ChatroomMemberListEndPacket(getName());
         List<AbstractServerPacket> memberPackets = new ArrayList(getNumberOfConnectedUser());

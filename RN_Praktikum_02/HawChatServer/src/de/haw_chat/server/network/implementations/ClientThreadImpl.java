@@ -6,6 +6,7 @@ import de.haw_chat.server.network.interfaces.ClientData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.interfaces.Server;
 import de.haw_chat.server.network.packets.client_packets.AbstractClientPacket;
+import de.haw_chat.server.network.packets.client_packets.ChatroomRefreshPacket;
 import de.haw_chat.server.network.packets.client_packets.LogoutPacket;
 import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
 import de.haw_chat.server.network.packets.server_packets.UnsupportedServerPacket;
@@ -149,7 +150,7 @@ final class ClientThreadImpl implements ClientThread {
     }
 
     @Override
-    public void writeToClient(AbstractServerPacket serverPacket){
+    public synchronized void writeToClient(AbstractServerPacket serverPacket){
         checkNotNull(serverPacket, "serverPacket is null!");
         String reply = serverPacket.toMessageString();
         try {

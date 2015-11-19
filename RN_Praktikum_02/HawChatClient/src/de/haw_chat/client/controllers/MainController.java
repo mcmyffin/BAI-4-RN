@@ -143,15 +143,34 @@ public class MainController {
 
 
 	
-	
+	Map<String, Thread> refreshThreads = new HashMap<>();
 	
 	public void joinChatroom(String name) {
 		frame.addChatroomPanel(name);
 		frame.gotoChatroomPanel();
+		refreshThreads.put(name, new Thread() {
+			@Override
+			public void run() {
+				while (!Thread.currentThread().isInterrupted()) {
+					try {
+						try {
+							chatClient.getChatServerThread().writeToServer(new ChatroomRefreshPacket(name));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		refreshThreads.get(name).start();
 	}
 	
 	public void leaveChatroom() {
 		frame.removeCurrentChatroomPanel();
+		frame.gotoChatroomOverview();
 	}
 	
 	
@@ -182,13 +201,16 @@ public class MainController {
 	public void requestCreateChatroom(String name, String password, int maxUserCount) {
 		try {
 			chatClient.getChatServerThread().writeToServer(new ChatroomCreatePacket(name, maxUserCount, password));
-			requestJoinChatroom(name, password);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void requestLeaveChatroom(String chatroom) {
-		System.out.println("TODO leave: " + chatroom);
+		try {
+			chatClient.getChatServerThread().writeToServer(new ChatroomLeavePacket(chatroom));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

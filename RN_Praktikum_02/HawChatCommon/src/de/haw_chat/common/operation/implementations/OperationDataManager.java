@@ -74,6 +74,7 @@ public final class OperationDataManager {
         storeOperationData(CLIENT, 137, "MessageSend");
         storeOperationData(SERVER, 138, "MessageSendResponse");
         storeOperationData(SERVER, 139, "MessageSended");
+        storeOperationData(CLIENT, 140, "ChatroomRefresh");
     }
 
     public static OperationData getOperationData(int operationCode) {
