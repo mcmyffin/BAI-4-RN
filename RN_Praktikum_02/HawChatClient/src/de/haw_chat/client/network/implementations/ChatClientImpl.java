@@ -5,6 +5,7 @@ import de.haw_chat.client.network.interfaces.ChatClientData;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 
+import javax.net.ssl.SSLSocketFactory;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
@@ -95,7 +96,13 @@ final class ChatClientImpl implements ChatClient {
         Socket connectionSocket;
 
         try {
-            connectionSocket = new Socket(serverHost, serverPort);
+            if (configuration.isSslEnabled()) {
+                SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+                connectionSocket = sslsocketfactory.createSocket(serverHost, serverPort);
+            } else {
+                connectionSocket = new Socket(serverHost, serverPort);
+            }
+
             System.out.println("TCP Client is connected - TCP host " + serverHost + ", TCP port " + serverPort);
 
             ChatServerThread chatServerThread =

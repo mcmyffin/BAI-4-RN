@@ -5,6 +5,7 @@ import de.haw_chat.server.network.interfaces.Server;
 import de.haw_chat.server.network.interfaces.ServerConfiguration;
 import de.haw_chat.server.network.utils.IpChecker;
 
+import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -95,7 +96,14 @@ final class ServerImpl implements Server {
         int nextThreadNumber = 0;
 
         try {
-            welcomeSocket = new ServerSocket(serverPort);
+            if (configuration.isSslEnabled()) {
+                SSLServerSocketFactory sslserversocketfactory =
+                        (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+                welcomeSocket = sslserversocketfactory.createServerSocket(serverPort);
+            } else {
+                welcomeSocket = new ServerSocket(serverPort);
+            }
+
             while (serviceRequested) {
 
                 clientThreadsSemaphore.acquire();
