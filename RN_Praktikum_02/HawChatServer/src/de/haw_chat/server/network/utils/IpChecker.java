@@ -26,16 +26,15 @@ public class IpChecker {
             String ip = in.readLine();
             return ip;
         } catch (IOException e) {
-            e.printStackTrace();
+            return "No Internet 6Connection";
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    return "No Internet Connection";
                 }
             }
         }
-        return "No Internet Connection";
     }
 }
