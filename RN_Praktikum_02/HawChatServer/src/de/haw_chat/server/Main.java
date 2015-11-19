@@ -44,13 +44,13 @@ public class Main {
         else if(args.length == 1 && args[0] == opt_help) showUsage();
         else if(args.length == 3){
             try{
-                defaultPort = Integer.parseInt(args[0]);
-                defaultPort = Integer.parseInt(args[1]);
-                defaultSsl  = Integer.parseInt(args[2]) == 1;
+                defaultPort       = Integer.parseInt(args[0]);
+                defaultMaxClients = Integer.parseInt(args[1]);
+                defaultSsl        = Integer.parseInt(args[2]) == 1;
             }catch (NumberFormatException ex){
                 showUsage(">> INVALID ARGUMENT FORMAT");
             }
-        }
+        }else if (args.length != 0) showUsage();
 
         Scanner sc = new Scanner(System.in);
         ServerConfiguration configuration =
