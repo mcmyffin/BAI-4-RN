@@ -2,31 +2,18 @@ package de.haw_chat.client.views;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
+import javax.swing.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
 import de.haw_chat.client.controllers.MainController;
 import de.haw_chat.client.network.packets.client_packets.ChatroomsRefreshPacket;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -37,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.awt.event.ActionEvent;
-import javax.swing.JSeparator;
-import javax.swing.JList;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
@@ -149,7 +134,6 @@ public class MainFrame {
 	}
 
 	public void addChatroomPanel(String chatroomName) {
-
 		JPanel chatroomPanel = new JPanel();
 
 		textField_3 = new JTextField();
@@ -162,6 +146,12 @@ public class MainFrame {
 		chatroomPanel.setLayout(null);
 
 		JList list_1 = new JList();
+		list_1.setSelectionModel(new DefaultListSelectionModel() {
+			@Override
+			public void setSelectionInterval(int index0, int index1) {
+				super.setSelectionInterval(-1, -1);
+			}
+		});
 		DefaultListModel<String> messageModel = new DefaultListModel<>();
 		chatroomMessages.put(chatroomName, messageModel);
 		list_1.setModel(messageModel);
@@ -169,6 +159,12 @@ public class MainFrame {
 		chatroomPanel.add(list_1);
 
 		JList list_2 = new JList();
+		list_2.setSelectionModel(new DefaultListSelectionModel() {
+			@Override
+			public void setSelectionInterval(int index0, int index1) {
+				super.setSelectionInterval(-1, -1);
+			}
+		});
 		DefaultListModel<String> userModel = new DefaultListModel<>();
 		chatroomUsers.put(chatroomName, userModel);
 		list_2.setModel(userModel);

@@ -1,19 +1,16 @@
 package de.haw_chat.client.controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import de.haw_chat.client.network.implementations.ChatDeviceFactory;
 import de.haw_chat.client.network.interfaces.ChatClient;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
 import de.haw_chat.client.network.packets.client_packets.*;
 import de.haw_chat.client.views.MainFrame;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class MainController {
 	private MainFrame frame;
@@ -172,11 +169,29 @@ public class MainController {
 		frame.removeCurrentChatroomPanel();
 		frame.gotoChatroomOverview();
 	}
-	
-	
+
+	public static synchronized void playSound(final String filename) {
+		try{
+			File file = new File("sounds/" + filename);
+			System.out.println(file.exists());
+			AudioInputStream audioInputStream =
+					AudioSystem.getAudioInputStream(file);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void receiveMessage(String chatroom, String user, String message) {
 		frame.getChatroomMessages(chatroom).addElement("[" + user + "]: " + message);
+		if (!user.equals(chatClient.getData().getUsername()))
+			playSound("post.wav");
 	}
 	
 	
