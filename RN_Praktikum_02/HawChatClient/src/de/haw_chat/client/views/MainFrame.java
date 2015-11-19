@@ -183,6 +183,14 @@ public class MainFrame {
 				textField_3.setText("");
 			}
 		});
+		textField_3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String chatroom = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+				controller.requestSendMessage(chatroom , textField_3.getText());
+				textField_3.setText("");
+			}
+		});
 		btnSenden.setBounds(692, 504, 116, 28);
 		chatroomPanel.add(btnSenden);
 
@@ -572,7 +580,7 @@ public class MainFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String value = (String) list.getSelectedValue();
 				if (value != null)
-					controller.requestJoinChatroom(value, "test");
+					controller.requestJoinChatroom(value, "test"); // TODO: REMOVE!
 			}
 		});
 		btnChatraumBeitreten.setEnabled(false);
@@ -621,7 +629,7 @@ public class MainFrame {
 		textField.setBounds(720, 73, 175, 20);
 		chatroomOverviewPanel.add(textField);
 
-		textField_1 = new JTextField();
+		textField_1 = new JPasswordField();
 		textField_1.setColumns(10);
 		textField_1.setBounds(720, 112, 175, 20);
 		chatroomOverviewPanel.add(textField_1);
@@ -648,6 +656,7 @@ public class MainFrame {
 					return;
 				}
 				String password = textField_1.getText();
+				password = "test"; // TODO: REMOVE!
 				if (password.contains(" ")) {
 					JOptionPane.showMessageDialog(null,
 							"Ungueltiges Passwort!",

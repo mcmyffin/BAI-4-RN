@@ -34,7 +34,7 @@ public class LoginResponsePacket extends AbstractServerPacket {
             return;
         } else if (statusCode == USERNAME_ALREADY_LOGGED_IN) {
             JOptionPane.showMessageDialog(null,
-                    "Der Benutzername" + username + " ist bereits eingeloggt!",
+                    "Der Benutzername " + username + " ist bereits eingeloggt!",
                     "Fehler!", JOptionPane.ERROR_MESSAGE);
             return;
         } else if (statusCode == PASSWORD_WRONG) {
