@@ -181,7 +181,7 @@ final class ClientThreadImpl implements ClientThread {
             // simulate logout by client connection lost
             LogoutPacket packet = new LogoutPacket(this, Integer.toString(OperationDataManager.getOperationData("Logout").getOperationCode()));
             packet.process();
-            System.out.println("TCP Client " + clientId + " closed the connection");
+            System.out.println("TCP Thread " + clientId + " close connection");
         } finally {
             server.getClientThreadsSemaphore().release();
         }

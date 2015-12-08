@@ -15,7 +15,10 @@ import static com.google.common.base.Preconditions.*;
  */
 public final class ServerData {
 
-    private Map<String,ClientThread> takenUsernames;
+    private static ServerData               instance;
+    public static final String              defaultChatName = "defaultChat";
+    private Chatroom                        defaultChat;
+    private Map<String,ClientThread>        takenUsernames;
     private Map<String,Chatroom>            chatrooms;
 
     private ServerData() {
@@ -23,8 +26,18 @@ public final class ServerData {
         this.chatrooms = new HashMap();
     }
 
-    public static ServerData create() {
-        return new ServerData();
+    public static ServerData getInstance() {
+        if(instance == null) instance = new ServerData();
+        return instance;
+    }
+
+    void initServerData(int maxClients){
+        this.defaultChat = Chatroom.createDefault(defaultChatName,maxClients);
+    }
+
+    public Chatroom getDefaultChatRoom(){
+        return this.defaultChat;
+
     }
 
     public synchronized boolean addUserClient(String username, ClientThread clientThread){
@@ -66,6 +79,7 @@ public final class ServerData {
 
     public synchronized Chatroom getChatroomByName(String chatroom) throws ChatroomNotFoundExeption {
         checkNotNull(chatroom);
+        if(chatroom.equals(defaultChatName)) return defaultChat;
         if(!chatrooms.containsKey(chatroom)) throw new ChatroomNotFoundExeption(chatroom);
         return chatrooms.get(chatroom);
     }
@@ -78,6 +92,7 @@ public final class ServerData {
     public synchronized boolean addChatroom(Chatroom chatroom){
         checkNotNull(chatroom);
         if(isChatroomExisting(chatroom.getName())) return false;
+        if(chatroom.getName().equals(defaultChatName)) return false;
         chatrooms.put(chatroom.getName(), chatroom);
         return true;
     }
@@ -93,6 +108,7 @@ public final class ServerData {
         checkNotNull(chatroom);
         checkNotNull(newName);
         if(isChatroomExisting(newName)) return false;
+        if(newName.equals(defaultChatName)) return false;
 
         String oldName = chatroom.getName();
         chatrooms.remove(oldName);

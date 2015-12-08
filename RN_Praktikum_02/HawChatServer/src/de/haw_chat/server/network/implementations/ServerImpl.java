@@ -17,6 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Andreas on 31.10.2015.
  */
 final class ServerImpl implements Server {
+    private static ServerImpl instance;
     private final ServerConfiguration configuration;
     private ServerData serverData;
     private Semaphore clientThreadsSemaphore;
@@ -29,7 +30,9 @@ final class ServerImpl implements Server {
     }
 
     public static Server create(ServerConfiguration configuration) {
-        return new ServerImpl(configuration);
+        checkNotNull(configuration);
+        if(instance == null) instance = new ServerImpl(configuration);
+        return instance;
     }
 
     @Override
@@ -87,7 +90,8 @@ final class ServerImpl implements Server {
 
         final int serverPort = configuration.getServerPort();
         clientThreadsSemaphore = new Semaphore(configuration.getMaxClients());
-        serverData = ServerData.create();
+        serverData = ServerData.getInstance();
+        serverData.initServerData(configuration.getMaxClients());
 
         ServerSocket welcomeSocket;
         Socket connectionSocket;

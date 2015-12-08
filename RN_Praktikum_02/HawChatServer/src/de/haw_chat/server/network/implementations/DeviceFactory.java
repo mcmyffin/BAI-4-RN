@@ -26,7 +26,7 @@ public final class DeviceFactory {
     }
 
     static ServerData createChatServerData() {
-        return ServerData.create();
+        return ServerData.getInstance();
     }
 
     static ClientData createChatClientData() {
