@@ -16,13 +16,15 @@ public class ChatroomJoinPacket extends AbstractClientPacket {
 
     public ChatroomJoinPacket(ClientThread clientThread, String messageString) {
         super(clientThread);
-        this.chatroomName = messageString.split(" ")[1];
-        this.chatroomPassword = messageString.split(" ")[2];
+        String[] splitedMessageString = messageString.split(" ");
+        this.chatroomName = splitedMessageString[1];
+        this.chatroomPassword = (splitedMessageString.length < 3? "": splitedMessageString[2]);
     }
 
     @Override
     public void process() {
 
+        // if Client not Logged in
         if(!getClientData().isLoggedIn()){
             ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(Status.CLIENT_NOT_LOGGED_IN,chatroomName);
             getClientThread().writeToClient(packet);
