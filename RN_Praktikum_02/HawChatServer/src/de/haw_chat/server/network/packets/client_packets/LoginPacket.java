@@ -1,5 +1,6 @@
 package de.haw_chat.server.network.packets.client_packets;
 
+import de.haw_chat.server.network.implementations.ServerData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
 
@@ -14,21 +15,22 @@ public class LoginPacket extends AbstractClientPacket {
 
     public LoginPacket(ClientThread clientThread, String messageString) {
         super(clientThread);
-        this.username = messageString.split(" ")[1];
-        this.password = messageString.split(" ")[2];
+        String[] splitedMessageString = messageString.split(" ");
+        this.username = splitedMessageString[1];
+        this.password = (splitedMessageString.length < 3? "" : splitedMessageString[2]);
     }
 
     @Override
     public void process() {
         if (getClientData().isLoggedIn()) {
-            // Client already logged in with some username
+            // Client already logged in
             LoginResponsePacket response = new LoginResponsePacket(CLIENT_ALREADY_LOGGED_IN,username);
             sendToClient(response);
             return;
         }
 
         if (getServerData().containsUser(username)) {
-            // Username already logged in by other user
+            // Username already logged in by another user
             LoginResponsePacket response = new LoginResponsePacket(USERNAME_ALREADY_LOGGED_IN,username);
             sendToClient(response);
             return;
@@ -49,5 +51,8 @@ public class LoginPacket extends AbstractClientPacket {
         // Username successfully set
         LoginResponsePacket response = new LoginResponsePacket(OK,username);
         sendToClient(response);
+
+        // add user to defaultChat
+        getServerData().getDefaultChatRoom().join(getClientThread(),"");
     }
 }
