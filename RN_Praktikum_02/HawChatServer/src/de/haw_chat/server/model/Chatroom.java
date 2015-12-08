@@ -33,7 +33,15 @@ public class Chatroom {
         this.maxUser    = maxUser;
         this.connectedClients = new HashMap();
         this.connectedClients.put(owner, clientThread);
+    }
 
+    private Chatroom(String chatName, int maxUser){
+        this.id         = System.currentTimeMillis();
+        this.owner      = Long.toString(id);
+        this.chatName   = chatName;
+        this.password   = "";
+        this.maxUser    = maxUser;
+        this.connectedClients = new HashMap();
     }
 
     public synchronized static void create(ClientThread client, String chatName, String password, int maxUser){
@@ -58,6 +66,11 @@ public class Chatroom {
         sendSinglePacketAt(client, packet);
 
         chatroom.join(client, password);
+    }
+
+    public synchronized static Chatroom createDefault(String chatName, int maxUser){
+        checkNotNull(chatName);
+        return new Chatroom(chatName,maxUser);
     }
 
     public synchronized void remove(ClientThread client){
@@ -109,13 +122,14 @@ public class Chatroom {
             // add client to Chatroom
             connectedClients.put(client.getData().getUsername(), client);
             client.getData().addConnectedChats(getName());
-
-            // SEND NEW MEMBERLIST TO MEMBERS
-            sendDistributedMemberList();
         }
+
         // SEND JOIN_RESPONSE TO CLIENT
         ChatroomJoinResponsePacket packet = new ChatroomJoinResponsePacket(ResponseStatus,chatName);
         sendSinglePacketAt(client,packet);
+
+        // SEND NEW MEMBERLIST TO MEMBERS
+        if(ResponseStatus.equals(Status.OK)) sendDistributedMemberList();
     }
 
 
@@ -123,13 +137,13 @@ public class Chatroom {
         checkNotNull(client);
         checkNotNull(message);
 
-        Status responseStatus = Status.OK;
-        if(!isMember(client)) responseStatus = Status.CHATROOM_NOT_MEMBER;
-        else{
+        if(!isMember(client)){
+            MessageSendResponsePacket packet = new MessageSendResponsePacket(Status.CHATROOM_NOT_MEMBER);
+            sendSinglePacketAt(client,packet);
+        }else{
             sendDistributedMessage(client,message);
         }
-        MessageSendResponsePacket packet = new MessageSendResponsePacket(responseStatus);
-        sendSinglePacketAt(client,packet);
+
     }
 
 
