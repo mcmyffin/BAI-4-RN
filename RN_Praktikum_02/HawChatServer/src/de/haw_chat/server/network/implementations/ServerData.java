@@ -16,7 +16,7 @@ import static com.google.common.base.Preconditions.*;
 public final class ServerData {
 
     private static ServerData               instance;
-    public static final String              defaultChatName = "defaultChat";
+    public static final String              defaultChatName = "DefaultChatroom";
     private Chatroom                        defaultChat;
     private Map<String,ClientThread>        takenUsernames;
     private Map<String,Chatroom>            chatrooms;

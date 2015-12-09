@@ -1,5 +1,6 @@
 package de.haw_chat.server.network.packets.client_packets;
 
+import de.haw_chat.server.network.Exceptions.IllegalArgumentPacketException;
 import de.haw_chat.server.network.implementations.ServerData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
@@ -13,11 +14,14 @@ public class LoginPacket extends AbstractClientPacket {
     private String username;
     private String password;
 
-    public LoginPacket(ClientThread clientThread, String messageString) {
+    public LoginPacket(ClientThread clientThread, String messageString) throws IllegalArgumentPacketException {
         super(clientThread);
+
         String[] splitedMessageString = messageString.split(" ");
+        if(splitedMessageString.length != 2 ) throw new IllegalArgumentPacketException(messageString);
+
         this.username = splitedMessageString[1];
-        this.password = (splitedMessageString.length < 3? "" : splitedMessageString[2]);
+        this.password = "";
     }
 
     @Override

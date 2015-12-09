@@ -3,6 +3,7 @@ package de.haw_chat.server.network.packets.client_packets;
 import de.haw_chat.common.operation.implementations.Status;
 import de.haw_chat.server.model.Chatroom;
 import de.haw_chat.server.network.Exceptions.ChatroomNotFoundExeption;
+import de.haw_chat.server.network.Exceptions.IllegalArgumentPacketException;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.ChatroomChangePasswordResponsePacket;
 import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
@@ -14,8 +15,12 @@ public class ChatroomChangePasswordPacket extends AbstractClientPacket {
     private String chatroomName;
     private String chatroomPassword;
 
-    public ChatroomChangePasswordPacket(ClientThread clientThread, String messageString) {
+    public ChatroomChangePasswordPacket(ClientThread clientThread, String messageString) throws IllegalArgumentPacketException {
         super(clientThread);
+
+        String[] splitedMessageString = messageString.split(" ");
+        if(splitedMessageString.length != 3) throw new IllegalArgumentPacketException(messageString);
+
         this.chatroomName = messageString.split(" ")[1];
         this.chatroomPassword = messageString.split(" ")[2];
     }

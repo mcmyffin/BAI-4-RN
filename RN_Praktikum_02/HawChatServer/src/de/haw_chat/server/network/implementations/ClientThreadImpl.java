@@ -1,15 +1,16 @@
 package de.haw_chat.server.network.implementations;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import de.haw_chat.common.operation.implementations.OperationDataManager;
 import de.haw_chat.common.operation.interfaces.OperationData;
+import de.haw_chat.server.network.Exceptions.IllegalArgumentPacketException;
 import de.haw_chat.server.network.interfaces.ClientData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.interfaces.Server;
 import de.haw_chat.server.network.packets.client_packets.AbstractClientPacket;
-import de.haw_chat.server.network.packets.client_packets.ChatroomRefreshPacket;
 import de.haw_chat.server.network.packets.client_packets.LogoutPacket;
 import de.haw_chat.server.network.packets.server_packets.AbstractServerPacket;
-import de.haw_chat.server.network.packets.server_packets.UnsupportedServerPacket;
+import de.haw_chat.server.network.packets.server_packets.InvalidPacket;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -138,7 +139,12 @@ final class ClientThreadImpl implements ClientThread {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            Throwable throwable = e.getCause();
+            if(throwable instanceof IllegalArgumentPacketException){
+                String messageString = ((IllegalArgumentPacketException) throwable).getMessage();
+                AbstractServerPacket packet = new InvalidPacket(messageString);
+                writeToClient(packet);
+            }
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -159,7 +165,6 @@ final class ClientThreadImpl implements ClientThread {
         } catch (IOException e) {
             // will be already cleanup in logout
             System.out.println("TCP connection lost, packet can not be written");
-            // anzahlLeerzeichen(s_rest,summe)
         }
 
     }

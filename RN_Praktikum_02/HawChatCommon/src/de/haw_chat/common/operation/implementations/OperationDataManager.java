@@ -34,58 +34,53 @@ public final class OperationDataManager {
     }
 
     private static void storeOperationDatas() {
-        storeOperationData(CLIENT, 100, "UnknownClient");
-        storeOperationData(SERVER, 101, "UnknownServer");
-        storeOperationData(CLIENT, 102, "UnsupportedClient");
-        storeOperationData(SERVER, 103, "UnsupportedServer");
-        storeOperationData(CLIENT, 104, "PingToServer");
-        storeOperationData(SERVER, 105, "PongFromServer");
-        storeOperationData(SERVER, 106, "PingToClient");
-        storeOperationData(CLIENT, 107, "PongFromClient");
-        storeOperationData(CLIENT, 108, "RegisterAccount");
-        storeOperationData(SERVER, 109, "RegisterAccountResponse");
+        // Client
+        storeOperationData(CLIENT, 102, "UnknownClient");
         storeOperationData(CLIENT, 110, "Login");
-        storeOperationData(SERVER, 111, "LoginResponse");
         storeOperationData(CLIENT, 112, "Logout");
+        storeOperationData(CLIENT, 114, "RequestChatroomList");
+        storeOperationData(CLIENT, 118, "ChatroomJoin");
+        storeOperationData(CLIENT, 120, "ChatroomLeave");
+        storeOperationData(CLIENT, 122, "ChatroomCreate");
+        storeOperationData(CLIENT, 124, "ChatroomDelete");
+        storeOperationData(CLIENT, 126, "ChatroomChangeName");
+        storeOperationData(CLIENT, 128, "ChatroomChangePassword");
+        storeOperationData(CLIENT, 130, "ChatroomChangeMaxUserCount");
+        storeOperationData(CLIENT, 137, "MessageSend");
+        storeOperationData(CLIENT, 140, "RequestChatroomMemberList");
+        // Server
+        storeOperationData(SERVER, 103, "Unknown");
+        storeOperationData(SERVER, 104, "Invalid");
+        storeOperationData(SERVER, 111, "LoginResponse");
         storeOperationData(SERVER, 113, "LogoutResponse");
-        storeOperationData(CLIENT, 114, "ChatroomsRefresh");
         storeOperationData(SERVER, 115, "ChatroomListBegin");
         storeOperationData(SERVER, 116, "ChatroomListElement");
         storeOperationData(SERVER, 117, "ChatroomListEnd");
-        storeOperationData(CLIENT, 118, "ChatroomJoin");
         storeOperationData(SERVER, 119, "ChatroomJoinResponse");
-        storeOperationData(CLIENT, 120, "ChatroomLeave");
         storeOperationData(SERVER, 121, "ChatroomLeaveResponse");
-        storeOperationData(CLIENT, 122, "ChatroomCreate");
         storeOperationData(SERVER, 123, "ChatroomCreateResponse");
-        storeOperationData(CLIENT, 124, "ChatroomDelete");
         storeOperationData(SERVER, 125, "ChatroomDeleteResponse");
-        storeOperationData(CLIENT, 126, "ChatroomChangeName");
         storeOperationData(SERVER, 127, "ChatroomChangeNameResponse");
-        storeOperationData(CLIENT, 128, "ChatroomChangePassword");
         storeOperationData(SERVER, 129, "ChatroomChangePasswordResponse");
-        storeOperationData(CLIENT, 130, "ChatroomChangeMaxUserCount");
         storeOperationData(SERVER, 131, "ChatroomChangeMaxUserCountResponse");
         storeOperationData(SERVER, 132, "ChatroomNameChanged");
         storeOperationData(SERVER, 133, "ChatroomMaxUserCountChanged");
         storeOperationData(SERVER, 134, "ChatroomMemberListBegin");
         storeOperationData(SERVER, 135, "ChatroomMemberListElement");
         storeOperationData(SERVER, 136, "ChatroomMemberListEnd");
-        storeOperationData(CLIENT, 137, "MessageSend");
         storeOperationData(SERVER, 138, "MessageSendResponse");
         storeOperationData(SERVER, 139, "MessageSended");
-        storeOperationData(CLIENT, 140, "ChatroomRefresh");
     }
 
     public static OperationData getOperationData(int operationCode) {
         if (!operationCodeMap.containsKey(operationCode))
-            return getOperationData("UnknownClient"); // TODO: Change in Client version!
+            return getOperationData("UnknownClient");
         return operationCodeMap.get(operationCode);
     }
 
     public static OperationData getOperationData(String operationName) {
         if (!operationNameMap.containsKey(operationName))
-            return getOperationData("UnknownClient"); // TODO: Change in Client version!
+            return getOperationData("UnknownClient");
         return operationNameMap.get(operationName);
     }
 }

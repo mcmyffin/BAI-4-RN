@@ -16,7 +16,6 @@ public class LogoutPacket extends AbstractClientPacket {
 
     public LogoutPacket(ClientThread clientThread, String messageString) {
         super(clientThread);
-        
     }
 
     @Override

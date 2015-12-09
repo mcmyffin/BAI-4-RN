@@ -8,15 +8,15 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class PingToClientPacket extends AbstractServerPacket {
-    private long timestamp;
-
-    public PingToClientPacket(long timestamp) {
-        this.timestamp = timestamp;
+public class UnknownPacket extends AbstractServerPacket {
+    
+    private String message;
+    public UnknownPacket(String message) {
+        this.message = message;
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + timestamp;
+        return "" + getOperationCode()+" "+message;
     }
 }

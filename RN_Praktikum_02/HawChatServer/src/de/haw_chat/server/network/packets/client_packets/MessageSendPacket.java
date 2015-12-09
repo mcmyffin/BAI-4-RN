@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import de.haw_chat.common.operation.implementations.Status;
 import de.haw_chat.server.model.Chatroom;
 import de.haw_chat.server.network.Exceptions.ChatroomNotFoundExeption;
+import de.haw_chat.server.network.Exceptions.IllegalArgumentPacketException;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
 import de.haw_chat.server.network.packets.server_packets.MessageSendResponsePacket;
@@ -17,13 +18,16 @@ public class MessageSendPacket extends AbstractClientPacket {
     private String chatroomName;
     private String message;
 
-    public MessageSendPacket(ClientThread clientThread, String messageString) {
+    public MessageSendPacket(ClientThread clientThread, String messageString) throws IllegalArgumentPacketException {
         super(clientThread);
-        String[] splitedString = messageString.split(" ");
+
+        String[] splitedMessageString = messageString.split(" ");
+        if(splitedMessageString.length < 3) throw new IllegalArgumentPacketException(messageString);
+
         this.chatroomName = messageString.split(" ")[1];
 
-        splitedString = Arrays.copyOfRange(splitedString, 2, splitedString.length);
-        message = Joiner.on(" ").join(splitedString);
+        splitedMessageString = Arrays.copyOfRange(splitedMessageString, 2, splitedMessageString.length);
+        message = Joiner.on(" ").join(splitedMessageString);
     }
 
     @Override

@@ -15,10 +15,10 @@ import java.util.Set;
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomsRefreshPacket extends AbstractClientPacket {
+public class RequestChatroomListPacket extends AbstractClientPacket {
     
 
-    public ChatroomsRefreshPacket(ClientThread clientThread, String messageString) {
+    public RequestChatroomListPacket(ClientThread clientThread, String messageString) {
         super(clientThread);
         
     }
