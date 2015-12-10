@@ -4,6 +4,7 @@ import de.haw_chat.common.operation.implementations.Status;
 import de.haw_chat.server.model.Chatroom;
 import de.haw_chat.server.network.Exceptions.ChatroomNotFoundExeption;
 import de.haw_chat.server.network.Exceptions.IllegalArgumentPacketException;
+import de.haw_chat.server.network.implementations.ServerData;
 import de.haw_chat.server.network.interfaces.ClientThread;
 import de.haw_chat.server.network.packets.server_packets.ChatroomDeleteResponsePacket;
 import de.haw_chat.server.network.packets.server_packets.LoginResponsePacket;
@@ -32,12 +33,17 @@ public class ChatroomDeletePacket extends AbstractClientPacket {
             return;
         }
 
+        if (chatroomName.equals(ServerData.defaultChatName)) {
+            Status response = Status.CHATROOM_PERMISSION_DENIED;
+            ChatroomDeleteResponsePacket packet = new ChatroomDeleteResponsePacket(response);
+            getClientThread().writeToClient(packet);
+        }
+
         try {
             Chatroom chat = getServerData().getChatroomByName(chatroomName);
             chat.remove(getClientThread());
 
         } catch (ChatroomNotFoundExeption chatroomNotFoundExeption) {
-
             Status response = Status.CHATROOM_NOT_FOUND;
             ChatroomDeleteResponsePacket packet = new ChatroomDeleteResponsePacket(response);
             getClientThread().writeToClient(packet);
