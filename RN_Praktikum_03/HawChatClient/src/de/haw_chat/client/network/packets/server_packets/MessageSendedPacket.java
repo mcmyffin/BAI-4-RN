@@ -1,6 +1,7 @@
 package de.haw_chat.client.network.packets.server_packets;
 
 import com.google.common.base.Joiner;
+import de.haw_chat.client.Main;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.common.operation.implementations.Status;
 
@@ -15,17 +16,18 @@ public class MessageSendedPacket extends AbstractServerPacket {
     private String chatroom;
     private String username;
     private String message;
-    private long timestamp;
+    private String timestamp;
 
     public MessageSendedPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.chatroom = messageString.split(" ")[1];
-        this.timestamp = Long.parseLong(messageString.split(" ")[2]);
-        this.username = messageString.split(" ")[3];
+        //201 13:48:25 - dima: hallo
+        String[] splitedMessageString = messageString.split(" ");
+        this.chatroom   = Main.defaultChatroomName;
+        this.timestamp  = splitedMessageString[1];
+        this.username   = splitedMessageString[3].replace(":","");
 
-        String[] splitedString = messageString.split(" ");
-        splitedString = Arrays.copyOfRange(splitedString, 4, splitedString.length);
-        message = Joiner.on(" ").join(splitedString);
+        splitedMessageString= Arrays.copyOfRange(splitedMessageString, 5, splitedMessageString.length);
+        message = Joiner.on(" ").join(splitedMessageString);
     }
 
     @Override
