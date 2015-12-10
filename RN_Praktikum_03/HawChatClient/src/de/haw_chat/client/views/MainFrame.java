@@ -67,7 +67,7 @@ public class MainFrame {
 	}
 
 	public void setLoggedIn(boolean loggedIn) {
-		tabbedPane.setEnabledAt(1, loggedIn);
+		//tabbedPane.setEnabledAt(1, loggedIn);
 		this.loggedIn = loggedIn;
 
 		if (loggedIn) {
@@ -427,7 +427,7 @@ public class MainFrame {
 		textFieldHostname.setColumns(10);
 		textFieldHostname.setBounds(451, 62, 175, 20);
 		panelServerSettings.add(textFieldHostname);
-		textFieldHostname.setText("uni-kit.net");
+		textFieldHostname.setText("141.22.65.193");
 
 		JLabel labelPort = new JLabel("Port:");
 		labelPort.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -575,8 +575,8 @@ public class MainFrame {
 		panelChatSettings.add(chckbxSaveprotocols);
 
 		JPanel chatroomOverviewPanel = new JPanel();
-		components.add(chatroomOverviewPanel);
-		tabbedPane.addTab("Chatraeume", null, chatroomOverviewPanel, null);
+		//components.add(chatroomOverviewPanel);
+		//tabbedPane.addTab("Chatraeume", null, chatroomOverviewPanel, null);
 		chatroomOverviewPanel.setLayout(null);
 
 		JList list = new JList();

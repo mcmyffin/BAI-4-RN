@@ -1,5 +1,6 @@
 package de.haw_chat.client.controllers;
 
+import de.haw_chat.client.Main;
 import de.haw_chat.client.network.implementations.ChatDeviceFactory;
 import de.haw_chat.client.network.interfaces.ChatClient;
 import de.haw_chat.client.network.interfaces.ChatServerConfiguration;
@@ -73,72 +74,30 @@ public class MainController {
 	}
 
 
-	List<String> chatroomsOld = new ArrayList<>();
-	List<String> chatroomsNew = new ArrayList<>();
+	List<String> chatroomMembersOld = new ArrayList<>();
+	List<String> chatroomMembersNew = new ArrayList<>();
 
-	public void processChatroomOverviewStart() {
-		chatroomsOld = new ArrayList<>();
-		List<String> listElements = Collections.list(frame.listModel.elements());
-		chatroomsOld.addAll(listElements);
+	public void processChatroomList(List<String> members) {
+		String defaultChatroomName = Main.defaultChatroomName;
+		chatroomMembersOld = new ArrayList<>();
+		List<String> listElements = Collections.list(frame.chatroomUsers.get(defaultChatroomName).elements());
+		chatroomMembersOld.addAll(listElements);
 
-		chatroomsNew = new ArrayList<>();
-	}
+		chatroomMembersNew = new ArrayList<>(members);
 
-	public void processChatroomOverviewElement(String chatroom) {
-		chatroomsNew.add(chatroom);
-	}
+		List<String> toAdd = new ArrayList<>(chatroomMembersNew);
+		toAdd.removeAll(chatroomMembersOld);
 
-	public void processChatroomOverviewEnd() {
-		List<String> toAdd = new ArrayList<>(chatroomsNew);
-		toAdd.removeAll(chatroomsOld);
+		List<String> toRemove = new ArrayList<>(chatroomMembersOld);
+		toRemove.removeAll(chatroomMembersNew);
 
-		List<String> toRemove = new ArrayList<>(chatroomsOld);
-		toRemove.removeAll(chatroomsNew);
-
-		for (String chatroom : toRemove) {
-			deleteChatroomFromList(chatroom);
+		for (String user : toRemove) {
+			deleteUserFromList(defaultChatroomName, user);
 		}
 
-		for (String chatroom : toAdd) {
-			addChatroomToList(chatroom);
+		for (String user : toAdd) {
+			addUserToList(defaultChatroomName, user);
 		}
-	}
-
-	public void addChatroomToList(String name) {
-		if (!frame.listModel.contains(name))
-			frame.listModel.addElement(name);
-	}
-
-	public void deleteChatroomFromList(String name) {
-		if (frame.listModel.contains(name))
-			frame.listModel.removeElement(name);
-	}
-
-
-
-	private Map<String, List<String>> usersToRemove = new HashMap<>();
-	
-	public void processChatroomListStart(String chatroom) {
-		usersToRemove.put(chatroom, new ArrayList<>());
-
-		if (!frame.chatroomUsers.containsKey(chatroom)) {
-			frame.chatroomUsers.put(chatroom, new DefaultListModel<>());
-		}
-		
-		List<String> listElements = Collections.list(frame.chatroomUsers.get(chatroom).elements());
-		usersToRemove.get(chatroom).addAll(listElements);
-	}
-	
-	public void processChatroomListElement(String chatroom, String user) {
-		usersToRemove.get(chatroom).remove(user);
-		addUserToList(chatroom, user);
-	}
-	
-	public void processChatroomListEnd(String chatroom) {
-		for (String user : usersToRemove.get(chatroom)) {
-			deleteUserFromList(chatroom, user);
-		}
-		usersToRemove.get(chatroom).clear();
 	}
 
 	private void addUserToList(String chatroom, String user) {
