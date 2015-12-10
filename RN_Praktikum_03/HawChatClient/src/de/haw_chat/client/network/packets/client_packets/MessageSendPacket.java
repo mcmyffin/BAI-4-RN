@@ -9,16 +9,14 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  * Created by Andreas on 31.10.2015.
  */
 public class MessageSendPacket extends AbstractClientPacket {
-    private String chatroomName;
     private String message;
 
-    public MessageSendPacket(String chatroomName, String message) {
-        this.chatroomName = chatroomName;
+    public MessageSendPacket(String message) {
         this.message = message;
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + chatroomName + " " + message;
+        return "" + getOperationCode() + " " +  message;
     }
 }

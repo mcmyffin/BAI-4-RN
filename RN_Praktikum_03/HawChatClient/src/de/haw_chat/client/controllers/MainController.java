@@ -173,10 +173,8 @@ public class MainController {
 		}
 	}
 	
-	public void receiveMessage(String chatroom, String user, String message, long timestamp) {
-		SimpleDateFormat printFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date(timestamp);
-		String time = printFormat.format(date);
+	public void receiveMessage(String chatroom, String user, String message, String timestamp) {
+		String time = timestamp;
 
 		frame.getChatroomMessages(chatroom).addElement("[" + time + "] <" + user + "> " + message);
 		if (!user.equals(chatClient.getData().getUsername()) && frame.chckbxEnableSounds.isSelected())
