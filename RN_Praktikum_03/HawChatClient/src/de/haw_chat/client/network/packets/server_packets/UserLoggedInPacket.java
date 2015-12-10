@@ -32,7 +32,7 @@ public class UserLoggedInPacket extends AbstractServerPacket {
                 getClientData().getMainController().getFrame().buttonLogin.setText("Abmelden");
                 getClientData().getMainController().getFrame().gotoChatroomOverview();
                 LoginPacket.requestedUsername = null;
-                
+
                 try {
                     getClientData().getMainController().getChatClient().getChatServerThread().writeToServer(new RequestChatroomListPacket());
                 } catch (IOException e) {

@@ -31,7 +31,7 @@ public class MainFrame {
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
 	private static final String FRAME_TITLE = "HAW-Chat Client";
-	public static final String DEFAULT_HOST = "141.22.65.193"; //"141.22.65.113"
+	public static final String DEFAULT_HOST = "141.22.65.113"; // D:141.22.65.193, M:141.22.65.113
 
 	// Color settings
 	private static Color COLOR_FOREGROUND = Color.RED;
@@ -76,17 +76,6 @@ public class MainFrame {
 			Thread thread = new Thread() {
 				@Override
 				public void run() {
-					while (isLoggedIn()) {
-						try {
-							if (tabbedPane.getSelectedIndex() == 1)
-								controller.getChatClient().getChatServerThread().writeToServer(new RequestChatroomListPacket());
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
 				}
 			};
 			thread.start();
