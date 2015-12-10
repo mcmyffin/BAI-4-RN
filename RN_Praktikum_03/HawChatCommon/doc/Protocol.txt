@@ -1,0 +1,176 @@
+CLIENT UNKNOWN_CLIENT
+// Unbekanntes Client-Packet (wird ignoriert)
+
+SERVER UNKNOWN_SERVER
+// Unbekanntes Server-Packet (wird ignoriert)
+
+CLIENT UNSUPPORTED_CLIENT
+// Nicht-implementiertes Client-Packet (wird ignoriert)
+
+SERVER UNSUPPORTED_SERVER
+// Nicht-implementiertes Server-Packet (wird ignoriert)
+
+CLIENT PING_TO_SERVER
+// Client sendet eine Ping-Anfrage an den Server
+>> TIMESTAMP:int // Zeitpunkt des Ping-Versandes
+
+SERVER PONG_FROM_SERVER
+// Server sendet die Pong-Antwort an den Client
+>> TIMESTAMP:int // Zeitpunkt des Ping-Versandes
+
+SERVER PING_TO_CLIENT
+// Server sendet eine Ping-Anfrage an den Client
+>> TIMESTAMP:int // Zeitpunkt des Versandes
+
+CLIENT PONG_FROM_CLIENT
+// Client sendet die Pong-Antwort an den Server
+>> TIMESTAMP:int // Zeitpunkt des Ping-Versandes
+
+CLIENT REGISTER_ACCOUNT
+// Client möchte einen Benutzer-Account registrieren
+>> USERNAME:String // Benutzername des Accounts
+>> PASSWORD:String // Passwort des Accounts
+
+SERVER REGISTER_ACCOUNT_RESPONSE
+// Server beantwortet die Registrierung eines Benutzer-Accounts
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+CLIENT LOGIN
+// Client möchte sich mit Benutzernamen und Passwort anmelden
+>> USERNAME:String // Benutzername des Clients
+>> PASSWORD:String // Passwort des Clients
+
+SERVER LOGIN_RESPONSE
+// Server beantwortet die Anmeldung eines Clients
+>> STATUS_CODE:Status // Status-Code der Antwort
+>> USERNAME:String // Neuer Benutzername des Clients
+
+CLIENT LOGOUT
+// Client möchte sich abmelden
+
+SERVER LOGOUT_RESPONSE
+// Server beantwortet die Abmeldung eines Clients
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+CLIENT CHATROOMS_REFRESH
+// Client möchte die aktuelle Liste von Chaträumen haben
+
+SERVER CHATROOM_LIST_BEGIN
+// Server beginnt mit der Übertragung der aktuellen Liste von Chaträumen
+>> CHATROOM_COUNT:int // Gibt an, wieviele Chaträume es insgesamt gibt
+
+SERVER CHATROOM_LIST_ELEMENT
+// Server sendet Daten über einen konkreten Chatraum
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CURRENT_USER_COUNT:int // Aktuelle Anzahl an Teilnehmern
+>> MAX_USER_COUNT:int // Maximale Anzahl an Teilnehmern
+
+SERVER CHATROOM_LIST_END
+// Server endet mit der Übertragung der aktuellen Liste von Chaträumen
+
+CLIENT CHATROOM_JOIN
+// Client möchte einem Chatraum beitreten
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CHATROOM_PASSWORD:String // Passwort des Chatraumes (leerer Text, wenn nicht vorhanden)
+
+SERVER CHATROOM_JOIN_RESPONSE
+// Server beantwortet Anfrage zum Beitreten eines Chatraumes
+>> STATUS_CODE:Status // Status-Code der Antwort
+>> CHATROOM_NAME:String // Name des Chatraumes
+
+CLIENT CHATROOM_LEAVE
+// Client möchte einem Chatraum verlassen
+>> CHATROOM_NAME:String Name des Chatraumes
+
+SERVER CHATROOM_LEAVE_RESPONSE
+// Server beantwortet Anfrage zum Verlassen eines Chatraumes
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+CLIENT CHATROOM_CREATE
+// Client möchte einem Chatraum erstellen
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MAX_USER_COUNT:int // Anzahl an Teilnehmern des Chatraumes
+>> CHATROOM_PASSWORD:String // Passwort des Chatraumes
+
+SERVER CHATROOM_CREATE_RESPONSE
+// Server beantwortet Anfrage zum Erstellen eines Chatraumes
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+CLIENT CHATROOM_DELETE
+// Client möchte einem Chatraum löschen
+>> CHATROOM_NAME:String // Name des Chatraumes
+
+SERVER CHATROOM_DELETE_RESPONSE
+// Server beantwortet Anfrage zum Löschen eines Chatraumes
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+CLIENT CHATROOM_CHANGE_NAME              
+// Client möchte den Namen des Chatraumes ändern
+>> CHATROOM_NAME_OLD:String // Alter Name des Chatraumes
+>> CHATROOM_NAME_NEW:String // Neuer Name des Chatraumes
+
+SERVER CHATROOM_CHANGE_NAME_RESPONSE
+// Server beantwortet Anfrage zum Ändern des Passworts des Chatraumes
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+CLIENT CHATROOM_CHANGE_PASSWORD                
+// Client möchte das Passwort des Chatraumes ändern
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CHATROOM_PASSWORD:String // Neues Passwort des Chatraumes
+
+SERVER CHATROOM_CHANGE_PASSWORD_RESPONSE
+// Server beantwortet Anfrage zum Ändern des Passworts des Chatraumes
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+CLIENT CHATROOM_CHANGE_MAX_USER_COUNT                
+// Client möchte maximale Anzahl an Teilnehmern des Chatraumes ändern
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MAX_USER_COUNT:int // Neue Anzahl an Teilnehmern des Chatraumes
+
+SERVER CHATROOM_CHANGE_MAX_USER_COUNT_RESPONSE
+// Server beantwortet Anfrage zum Ändern der maximalen Anzahl an Teilnehmern des Chatraumes
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+SERVER CHATROOM_NAME_CHANGED
+// Server gibt Clients bekannt, dass sich der Name eines Chatrooms geändert hat
+>> CHATROOM_NAME_OLD:String // Alter Name des Chatraumes
+>> CHATROOM_NAME_NEW:String // Neuer Name des Chatraumes
+
+SERVER CHATROOM_MAX_USER_COUNT_CHANGED            
+// Server gibt Clients bekannt, dass sich die maximale Anzahl an Teilnehmern eines Chatraumes geändert hat
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MAX_USER_COUNT:int // Neue Anzahl an Teilnehmern des Chatraumes
+
+SERVER CHATROOM_MEMBER_LIST_BEGIN
+// Server beginnt mit der Übertragung der aktuellen Liste von Teilnehmern eines Chatraumes
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> CHATROOM_MEMBER_COUNT:int // Gibt an, wieviele Teilnehmer der Chatraum besitzt
+
+SERVER CHATROOM_MEMBER_LIST_ELEMENT
+// Server sendet Daten über einen konkreten Teilnehmern eines Chatraums
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> USERNAME:String // Benutzername des Teilnehmerns
+
+SERVER CHATROOM_MEMBER_LIST_END
+// Server endet mit der Übertragung der aktuellen Liste von Teilnehmern eines Chatraumes
+>> CHATROOM_NAME:String // Name des Chatraumes
+
+CLIENT MESSAGE_SEND
+// Client möchte eine Nachricht in einen Chatraum senden
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> MESSAGE:String // Inhalt der Nachricht
+
+SERVER MESSAGE_SEND_RESPONSE
+// Server bestätigt Ankunft der Nachricht
+>> STATUS_CODE:Status // Status-Code der Antwort
+
+SERVER MESSAGE_SENDED
+// Server leitet gesendete Nachricht an Chatteilnehmer weiter
+>> CHATROOM_NAME:String // Name des Chatraumes
+>> USERNAME:String // Benutzername des Absenders
+>> TIMESTAMP:int // Zeitpunkt des Versandes (serverseitig)
+>> MESSAGE:String // Inhalt der Nachricht
+
+CLIENT CHATROOM_REFRESH
+// Client möchte Teilnehmerliste eines Chatraumes aktualisieren
+>> CHATROOM_NAME:String // Name des Chatraumes
