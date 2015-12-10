@@ -3,21 +3,23 @@ package de.haw_chat.client.network.packets.server_packets;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.common.operation.implementations.Status;
 
+import java.util.regex.Pattern;
+
 import static de.haw_chat.common.operation.implementations.Status.*;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class MessageSendResponsePacket extends AbstractServerPacket {
-    private Status statusCode;
+public class UnknownPacket extends AbstractServerPacket {
+    private String messageString;
 
-    public MessageSendResponsePacket(ChatServerThread chatServerThread, String messageString) {
+    public UnknownPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.statusCode = Status.getStatus(Integer.parseInt(messageString.split(" ")[1]));
+        this.messageString = messageString.replaceFirst(Pattern.quote("103 "), "");
     }
 
     @Override
     public void process() {
-        // TODO?
+        System.err.println("Unbekanntes Paket: " + messageString);
     }
 }

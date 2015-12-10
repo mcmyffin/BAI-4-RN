@@ -19,6 +19,9 @@ public class ChatroomJoinPacket extends AbstractClientPacket {
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + chatroomName + " " + chatroomPassword;
+        if (chatroomPassword == null || chatroomPassword.isEmpty())
+            return "" + getOperationCode() + " " + chatroomName;
+        else
+            return "" + getOperationCode() + " " + chatroomName + " " + chatroomPassword;
     }
 }

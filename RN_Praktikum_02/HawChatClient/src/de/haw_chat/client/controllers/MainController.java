@@ -73,23 +73,35 @@ public class MainController {
 	}
 
 
-	List<String> chatroomsToRemove = new ArrayList<>();
+	List<String> chatroomsOld = new ArrayList<>();
+	List<String> chatroomsNew = new ArrayList<>();
 
 	public void processChatroomOverviewStart() {
+		chatroomsOld = new ArrayList<>();
 		List<String> listElements = Collections.list(frame.listModel.elements());
-		chatroomsToRemove.addAll(listElements);
+		chatroomsOld.addAll(listElements);
+
+		chatroomsNew = new ArrayList<>();
 	}
 
 	public void processChatroomOverviewElement(String chatroom) {
-		chatroomsToRemove.remove(chatroom);
-		addChatroomToList(chatroom);
+		chatroomsNew.add(chatroom);
 	}
 
 	public void processChatroomOverviewEnd() {
-		for (String chatroom : chatroomsToRemove) {
+		List<String> toAdd = new ArrayList<>(chatroomsNew);
+		toAdd.removeAll(chatroomsOld);
+
+		List<String> toRemove = new ArrayList<>(chatroomsOld);
+		toRemove.removeAll(chatroomsNew);
+
+		for (String chatroom : toRemove) {
 			deleteChatroomFromList(chatroom);
 		}
-		chatroomsToRemove.clear();
+
+		for (String chatroom : toAdd) {
+			addChatroomToList(chatroom);
+		}
 	}
 
 	public void addChatroomToList(String name) {
@@ -166,22 +178,13 @@ public class MainController {
 		timeStarted.put(name, System.currentTimeMillis());
 
 		frame.addChatroomPanel(name);
-		frame.gotoChatroomPanel();
+		if (!name.equals("DefaultChatroom"))
+			frame.gotoChatroomPanel();
+
 		refreshThreads.put(name, new Thread() {
 			@Override
 			public void run() {
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						try {
-							chatClient.getChatServerThread().writeToServer(new ChatroomRefreshPacket(name));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+
 			}
 		});
 		refreshThreads.get(name).start();

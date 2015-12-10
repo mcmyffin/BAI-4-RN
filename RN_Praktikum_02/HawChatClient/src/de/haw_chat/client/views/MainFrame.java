@@ -8,10 +8,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.border.EtchedBorder;
-
 import de.haw_chat.client.controllers.MainController;
-import de.haw_chat.client.network.packets.client_packets.ChatroomsRefreshPacket;
+import de.haw_chat.client.network.packets.client_packets.RequestChatroomListPacket;
 
 import java.awt.Font;
 import javax.swing.border.BevelBorder;
@@ -79,7 +77,7 @@ public class MainFrame {
 					while (isLoggedIn()) {
 						try {
 							if (tabbedPane.getSelectedIndex() == 1)
-								controller.getChatClient().getChatServerThread().writeToServer(new ChatroomsRefreshPacket());
+								controller.getChatClient().getChatServerThread().writeToServer(new RequestChatroomListPacket());
 							Thread.sleep(2000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
@@ -388,7 +386,8 @@ public class MainFrame {
 		textFieldPassword.setColumns(10);
 		textFieldPassword.setBounds(451, 99, 175, 20);
 		panelLogin.add(textFieldPassword);
-		textFieldPassword.setText("test");
+		textFieldPassword.setText("unnamed");
+		textFieldPassword.setEnabled(false);
 
 		buttonLogin = new JButton("Anmelden");
 		buttonLogin.addActionListener(new ActionListener() {
@@ -428,7 +427,7 @@ public class MainFrame {
 		textFieldHostname.setColumns(10);
 		textFieldHostname.setBounds(451, 62, 175, 20);
 		panelServerSettings.add(textFieldHostname);
-		textFieldHostname.setText("localhost");
+		textFieldHostname.setText("uni-kit.net");
 
 		JLabel labelPort = new JLabel("Port:");
 		labelPort.setHorizontalAlignment(SwingConstants.RIGHT);

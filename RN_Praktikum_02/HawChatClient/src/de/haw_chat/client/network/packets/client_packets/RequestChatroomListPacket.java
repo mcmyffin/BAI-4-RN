@@ -8,15 +8,15 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class PingToServerPacket extends AbstractClientPacket {
-    private int timestamp;
+public class RequestChatroomListPacket extends AbstractClientPacket {
+    
 
-    public PingToServerPacket(int timestamp) {
-        this.timestamp = timestamp;
+    public RequestChatroomListPacket() {
+        
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + timestamp;
+        return "" + getOperationCode();
     }
 }

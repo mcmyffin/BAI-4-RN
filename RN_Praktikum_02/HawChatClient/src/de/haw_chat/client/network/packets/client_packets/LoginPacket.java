@@ -10,15 +10,13 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  */
 public class LoginPacket extends AbstractClientPacket {
     private String username;
-    private String password;
 
     public LoginPacket(String username, String password) {
         this.username = username;
-        this.password = password;
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode() + " " + username + " " + password;
+        return "" + getOperationCode() + " " + username;
     }
 }
