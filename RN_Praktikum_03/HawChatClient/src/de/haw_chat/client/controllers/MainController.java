@@ -186,31 +186,7 @@ public class MainController {
 	
 	public void requestSendMessage(String chatroom, String message) {
 		try {
-			chatClient.getChatServerThread().writeToServer(new MessageSendPacket(chatroom, message));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void requestJoinChatroom(String name, String password) {
-		try {
-			chatClient.getChatServerThread().writeToServer(new ChatroomJoinPacket(name, password));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void requestCreateChatroom(String name, String password, int maxUserCount) {
-		try {
-			chatClient.getChatServerThread().writeToServer(new ChatroomCreatePacket(name, maxUserCount, password));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void requestLeaveChatroom(String chatroom) {
-		try {
-			chatClient.getChatServerThread().writeToServer(new ChatroomLeavePacket(chatroom));
+			chatClient.getChatServerThread().writeToServer(new MessageSendPacket(message));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

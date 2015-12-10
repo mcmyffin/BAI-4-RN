@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 
+import de.haw_chat.client.Main;
 import de.haw_chat.client.controllers.MainController;
 import de.haw_chat.client.network.packets.client_packets.RequestChatroomListPacket;
 
@@ -194,11 +195,12 @@ public class MainFrame {
 		btnChatraumVerlassen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String chatroom = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
-				controller.requestLeaveChatroom(chatroom);
+				//controller.requestLeaveChatroom(chatroom);
 			}
 		});
 		btnChatraumVerlassen.setBounds(829, 504, 150, 28);
 		chatroomPanel.add(btnChatraumVerlassen);
+		btnChatraumVerlassen.setVisible(false);
 
 		refreshColors();
 
@@ -224,6 +226,7 @@ public class MainFrame {
 	}
 
 	public void gotoChatroomOverview() {
+		addChatroomPanel(Main.defaultChatroomName);
 		tabbedPane.setSelectedIndex(1);
 	}
 
@@ -585,8 +588,8 @@ public class MainFrame {
 		btnChatraumBeitreten.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String value = (String) list.getSelectedValue();
-				if (value != null)
-					controller.requestJoinChatroom(value, "test"); // TODO: REMOVE!
+				//if (value != null)
+					//controller.requestJoinChatroom(value, "test"); // TODO: REMOVE!
 			}
 		});
 		btnChatraumBeitreten.setEnabled(false);
@@ -680,7 +683,7 @@ public class MainFrame {
 					return;
 				}
 
-				controller.requestCreateChatroom(name, password, maxUserCount);
+				//controller.requestCreateChatroom(name, password, maxUserCount);
 			}
 		});
 		btnErstellen.setBounds(806, 210, 89, 23);
