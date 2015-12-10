@@ -1,8 +1,10 @@
 package de.haw_chat.client.network.packets.server_packets;
 
+import com.google.common.base.Joiner;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.common.operation.implementations.Status;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static de.haw_chat.common.operation.implementations.Status.*;
@@ -15,7 +17,8 @@ public class UnknownPacket extends AbstractServerPacket {
 
     public UnknownPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.messageString = messageString.replaceFirst(Pattern.quote("103 "), "");
+
+        messageString = messageString.replace("999 ","");
     }
 
     @Override
