@@ -33,6 +33,7 @@ public final class ServerData {
 
     void initServerData(int maxClients){
         this.defaultChat = Chatroom.createDefault(defaultChatName,maxClients);
+        this.chatrooms.put(defaultChatName, defaultChat);
     }
 
     public Chatroom getDefaultChatRoom(){

@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Main {
 
     private static int defaultPort       = 12345;
-    private static int defaultMaxClients = 10;
+    private static int defaultMaxClients = 30;
     private static boolean defaultSsl    = false;
 
     private static final String opt_help =  "-h";
