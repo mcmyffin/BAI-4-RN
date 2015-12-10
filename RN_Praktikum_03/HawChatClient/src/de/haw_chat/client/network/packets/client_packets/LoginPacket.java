@@ -10,9 +10,11 @@ import static de.haw_chat.common.operation.implementations.OperationDataManager.
  */
 public class LoginPacket extends AbstractClientPacket {
     private String username;
+    public static String requestedUsername = null;
 
     public LoginPacket(String username, String password) {
         this.username = username;
+        requestedUsername = username;
     }
 
     @Override
