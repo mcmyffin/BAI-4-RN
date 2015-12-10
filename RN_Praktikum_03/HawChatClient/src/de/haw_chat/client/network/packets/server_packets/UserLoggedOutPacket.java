@@ -10,11 +10,11 @@ import static de.haw_chat.common.operation.implementations.Status.*;
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class LoginResponsePacket extends AbstractServerPacket {
+public class UserLoggedOutPacket extends AbstractServerPacket {
     private Status statusCode;
     private String username;
 
-    public LoginResponsePacket(ChatServerThread chatServerThread, String messageString) {
+    public UserLoggedOutPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
         this.statusCode = Status.getStatus(Integer.parseInt(messageString.split(" ")[1]));
         this.username = messageString.split(" ")[2];

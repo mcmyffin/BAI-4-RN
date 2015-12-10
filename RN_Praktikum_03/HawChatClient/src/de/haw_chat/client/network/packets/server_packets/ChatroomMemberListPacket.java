@@ -3,21 +3,23 @@ package de.haw_chat.client.network.packets.server_packets;
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.common.operation.implementations.Status;
 
+import java.util.regex.Pattern;
+
 import static de.haw_chat.common.operation.implementations.Status.*;
 
 /**
  * Created by Andreas on 31.10.2015.
  */
-public class ChatroomLeaveResponsePacket extends AbstractServerPacket {
-    private Status statusCode;
+public class ChatroomMemberListPacket extends AbstractServerPacket {
+    private String messageString;
 
-    public ChatroomLeaveResponsePacket(ChatServerThread chatServerThread, String messageString) {
+    public ChatroomMemberListPacket(ChatServerThread chatServerThread, String messageString) {
         super(chatServerThread);
-        this.statusCode = Status.getStatus(Integer.parseInt(messageString.split(" ")[1]));
+        this.messageString = messageString.replaceFirst(Pattern.quote("104 "), "");
     }
 
     @Override
     public void process() {
-        getClientData().getMainController().leaveChatroom();
+        System.err.println("Ung�ltiges Paket: " + messageString);
     }
 }
