@@ -2,10 +2,12 @@ package de.haw_chat.client.network.packets.server_packets;
 
 import de.haw_chat.client.network.interfaces.ChatServerThread;
 import de.haw_chat.client.network.packets.client_packets.LoginPacket;
+import de.haw_chat.client.network.packets.client_packets.RequestChatroomListPacket;
 import de.haw_chat.common.operation.implementations.Status;
 
 import javax.swing.*;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import static de.haw_chat.common.operation.implementations.Status.*;
@@ -30,6 +32,18 @@ public class UserLoggedInPacket extends AbstractServerPacket {
                 getClientData().getMainController().getFrame().buttonLogin.setText("Abmelden");
                 getClientData().getMainController().getFrame().gotoChatroomOverview();
                 LoginPacket.requestedUsername = null;
+                
+                try {
+                    getClientData().getMainController().getChatClient().getChatServerThread().writeToServer(new RequestChatroomListPacket());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                getClientData().getMainController().getChatClient().getChatServerThread().writeToServer(new RequestChatroomListPacket());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

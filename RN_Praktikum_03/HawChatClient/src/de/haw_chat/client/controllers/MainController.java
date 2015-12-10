@@ -143,14 +143,6 @@ public class MainController {
 		refreshThreads.put(name, new Thread() {
 			@Override
 			public void run() {
-				try {
-					getChatClient().getChatServerThread().writeToServer(new RequestChatroomListPacket());
-					Thread.sleep(2000);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
 		});
 		refreshThreads.get(name).start();

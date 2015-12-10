@@ -12,7 +12,6 @@ public class RequestChatroomListPacket extends AbstractClientPacket {
     
 
     public RequestChatroomListPacket() {
-        System.err.println("jonied");
     }
 
     @Override

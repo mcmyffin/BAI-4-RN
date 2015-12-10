@@ -31,6 +31,7 @@ public class MainFrame {
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
 	private static final String FRAME_TITLE = "HAW-Chat Client";
+	public static final String DEFAULT_HOST = "141.22.65.193"; //"141.22.65.113"
 
 	// Color settings
 	private static Color COLOR_FOREGROUND = Color.RED;
@@ -430,7 +431,7 @@ public class MainFrame {
 		textFieldHostname.setColumns(10);
 		textFieldHostname.setBounds(451, 62, 175, 20);
 		panelServerSettings.add(textFieldHostname);
-		textFieldHostname.setText("141.22.65.193");
+		textFieldHostname.setText(DEFAULT_HOST);
 
 		JLabel labelPort = new JLabel("Port:");
 		labelPort.setHorizontalAlignment(SwingConstants.RIGHT);
