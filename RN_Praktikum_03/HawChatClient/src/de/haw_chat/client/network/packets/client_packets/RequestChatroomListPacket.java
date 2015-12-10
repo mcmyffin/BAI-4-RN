@@ -12,11 +12,11 @@ public class RequestChatroomListPacket extends AbstractClientPacket {
     
 
     public RequestChatroomListPacket() {
-        
+        System.err.println("jonied");
     }
 
     @Override
     public String toMessageString() {
-        return "" + getOperationCode();
+        return "102";
     }
 }

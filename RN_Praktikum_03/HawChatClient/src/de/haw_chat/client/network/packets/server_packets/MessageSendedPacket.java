@@ -24,10 +24,10 @@ public class MessageSendedPacket extends AbstractServerPacket {
         String[] splitedMessageString = messageString.split(" ");
         this.chatroom   = Main.defaultChatroomName;
         this.timestamp  = splitedMessageString[1];
-        this.username   = splitedMessageString[3].replace(":","");
+        this.username   = splitedMessageString[3].replace(":", "");
 
-        splitedMessageString= Arrays.copyOfRange(splitedMessageString, 5, splitedMessageString.length);
-        message = Joiner.on(" ").join(splitedMessageString);
+        int index = messageString.indexOf(username);
+        message = messageString.substring(index + username.length() + 1);
     }
 
     @Override
